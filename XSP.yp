@@ -1,0 +1,443 @@
+#############################################################################
+## Name:        XSP.yp
+## Purpose:     Grammar file for xsubppp.pl
+## Author:      Mattia Barbon
+## Modified by:
+## Created:     01/03/2003
+## RCS-ID:      $Id: XSP.yp,v 1.5 2007/03/10 20:38:57 mbarbon Exp $
+## Copyright:   (c) 2003, 2007, 2009 Mattia Barbon
+## Licence:     This program is free software; you can redistribute it and/or
+##              modify it under the same terms as Perl itself
+#############################################################################
+
+%token OPCURLY CLCURLY OPPAR CLPAR SEMICOLON TILDE DCOLON
+%token STAR AMP COMMA EQUAL OPSPECIAL CLSPECIAL
+%token INTEGER RAW_CODE ID COLON
+%expect 1
+
+%%
+
+top_list:
+      top               { $_[1] ? [ $_[1] ] : [] }
+    | top_list top      { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+    ;
+
+top: raw | class | directive
+   | function { $_[1]->resolve_typemaps; $_[1] };
+
+directive:      perc_module SEMICOLON
+                    { ExtUtils::XSpp::Node::Module->new( module => $_[1] ) }
+              | perc_package SEMICOLON
+                    { ExtUtils::XSpp::Node::Package->new( perl_name => $_[1] ) }
+              | perc_file SEMICOLON
+                    { ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
+              | typemap { };
+
+typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
+                  special_blocks SEMICOLON
+                    { my $package = "ExtUtils::XSpp::Typemap::" . $_[6];
+                      my $type = $_[3]; my $c = 0;
+                      my %args = map { "arg" . ++$c => $_ }
+                                 map { join( '', @$_ ) }
+                                     @{$_[8] || []};
+                      my $tm = $package->new( type => $type, %args );
+                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+                      undef };
+
+raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
+      | special_block   { add_data_raw( $_[0], [ @{$_[1]} ] ) };
+
+class:    class_decl | decorate_class;
+function: function_decl | decorate_function;
+method:   method_decl | decorate_method;
+
+decorate_class:     perc_name class { $_[2]->set_perl_name( $_[1] ); $_[2] };
+decorate_function:  perc_name function { $_[2]->set_perl_name( $_[1] ); $_[2] };
+decorate_method:    perc_name method { $_[2]->set_perl_name( $_[1] ); $_[2] }
+                  | static method { $_[2]->set_static( $_[1] ); $_[2] }
+                  | virtual method { $_[2]->set_virtual( 1 ); $_[2] };
+
+class_decl: 'class' ID base_classes OPCURLY class_body_list CLCURLY SEMICOLON
+                { create_class( $_[0], $_[2], $_[3], $_[5] ) }
+          | 'class' ID base_classes OPCURLY CLCURLY SEMICOLON
+                { create_class( $_[0], $_[2], $_[3], [] ) };
+
+base_classes:
+      COLON base_class
+    | base_classes ',' base_class
+    | ;
+
+base_class:
+      'public' ID    { $_[2] }
+    | 'protected' ID { $_[2] }
+    | 'private' ID   { $_[2] }
+    ;
+    
+class_body_list:
+      class_body_element
+          { $_[1] ? [ $_[1] ] : [] }
+    | class_body_list class_body_element
+          { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+    ;
+
+class_body_element: method | raw | typemap | access_specifier;
+
+access_specifier:
+      'public' COLON    { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
+    | 'protected' COLON { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
+    | 'private' COLON   { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
+    ;
+
+method_decl:    function_decl
+                         { my $f = $_[1];
+                           my $m = add_data_method
+                             ( $_[0],
+                               name      => $f->cpp_name,
+                               ret_type  => $f->ret_type,
+                               arguments => $f->arguments,
+                               code      => $f->code,
+                               cleanup   => $f->cleanup,
+                               );
+                           $m
+                         }
+              | ctor
+              | dtor ;
+
+const: 'const'
+     | ;
+
+virtual: 'virtual';
+
+static: 'package_static'
+      | 'class_static'
+      ;
+
+function_decl:  type ID OPPAR arg_list CLPAR const metadata SEMICOLON
+                    { add_data_function( $_[0],
+                                         name      => $_[2],
+                                         ret_type  => $_[1],
+                                         arguments => $_[4],
+                                         @{ $_[7] } ) };
+
+ctor:           ID OPPAR arg_list CLPAR metadata SEMICOLON
+                    { add_data_ctor( $_[0], name      => $_[1],
+                                            arguments => $_[3],
+                                            @{ $_[5] } ) };
+
+dtor:           TILDE ID OPPAR CLPAR metadata SEMICOLON
+                    { add_data_dtor( $_[0], name  => $_[2],
+                                            @{ $_[5] },
+                                      ) };
+
+metadata:       metadata _metadata { [ @{$_[1]}, @{$_[2]} ] }
+              |                    { [] }
+              ;
+
+_metadata:      perc_code
+              | perc_cleanup
+              ;
+
+perc_name:      p_name OPCURLY class_name CLCURLY     { $_[3] };
+perc_package:   p_package OPCURLY class_name CLCURLY  { $_[3] };
+perc_module:    p_module OPCURLY class_name CLCURLY   { $_[3] };
+perc_file:      p_file OPCURLY file_name CLCURLY      { $_[3] };
+perc_code:      p_code special_block                  { [ code => $_[2] ] };
+perc_cleanup:   p_cleanup special_block               { [ cleanup => $_[2] ] };
+
+type:           'const' type_name      { make_const( make_type( $_[2] ) ) }
+              | type STAR              { make_ptr( $_[1] ) }
+              | type AMP               { make_ref( $_[1] ) }
+              | type_name              { make_type( $_[1] ) };
+
+type_name:    class_name | basic_type | 'unsigned' basic_type;
+
+basic_type:   'char' | 'short' | 'int' | 'long' | 'unsigned'
+            | 'long' 'int' | 'short' 'int';
+
+class_name:     ID
+              | ID DCOLON ID { $_[1] . '::' . $_[3] };
+
+file_name:      DASH                            { '-' }
+              | ID DOT ID                       { $_[1] . '.' . $_[3] }
+              | ID SLASH file_name              { $_[1] . '/' . $_[3] };
+
+arg_list:       argument                { [ $_[1] ] }
+              | arg_list COMMA argument { push @{$_[1]}, $_[3]; $_[1] }
+              | ;
+
+argument:       type ID                 { make_argument( @_ ) }
+              | type ID EQUAL value
+                    { make_argument( @_[0, 1, 2, 4] ) };
+
+value:          INTEGER
+              | DASH INTEGER    { '-' . $_[2] }
+              | FLOAT
+              | QUOTED_STRING
+              | ID
+              | ID DCOLON ID    { $_[1] . '::' . $_[3] }
+              | ID OPPAR value CLPAR { "$_[1]($_[3])" }
+              ;
+
+
+special_blocks:  special_block
+                     { [ $_[1] ] }
+               | special_blocks special_block
+                     { [ @{$_[1]}, $_[2] ] }
+               | ;
+
+special_block:          special_block_start lines special_block_end
+                            { $_[2] }
+              |         special_block_start special_block_end
+                            { [] }
+              ;
+
+special_block_start:    OPSPECIAL       { push_lex_mode( $_[0], 'special' ) };
+
+special_block_end:      CLSPECIAL       { pop_lex_mode( $_[0], 'special' ) };
+
+lines: line             { [ $_[1] ] } 
+     | lines line       { push @{$_[1]}, $_[2]; $_[1] };
+
+%%
+
+use strict;
+use warnings;
+
+use ExtUtils::XSpp::Node;
+use ExtUtils::XSpp::Typemap;
+
+my %tokens = ( '::' => 'DCOLON',
+               ':'  => 'COLON',
+               '%{' => 'OPSPECIAL',
+               '%}' => 'CLSPECIAL',
+               '{%' => 'OPSPECIAL',
+                '{' => 'OPCURLY',
+                '}' => 'CLCURLY',
+                '(' => 'OPPAR',
+                ')' => 'CLPAR',
+                ';' => 'SEMICOLON',
+                '%' => 'PERC',
+                '~' => 'TILDE',
+                '*' => 'STAR',
+                '&' => 'AMP',
+                ',' => 'COMMA',
+                '=' => 'EQUAL',
+                '/' => 'SLASH',
+                '.' => 'DOT',
+                '-' => 'DASH',
+               # these are here due to my lack of skill with yacc
+               '%name' => 'p_name',
+               '%typemap' => 'p_typemap',
+               '%file' => 'p_file',
+               '%module' => 'p_module',
+               '%code' => 'p_code',
+               '%cleanup' => 'p_cleanup',
+               '%package' => 'p_package',
+             );
+
+my %keywords = ( const => 1,
+                 class => 1,
+                 unsigned => 1,
+                 short => 1,
+                 long => 1,
+                 int => 1,
+                 char => 1,
+                 package_static => 1,
+                 class_static => 1,
+                 public => 1,
+                 private => 1,
+                 protected => 1,
+                 virtual => 1,
+                 );
+
+sub get_lex_mode { return $_[0]->YYData->{LEX}{MODES}[0] || '' }
+
+sub push_lex_mode {
+  my( $p, $mode ) = @_;
+
+  push @{$p->YYData->{LEX}{MODES}}, $mode;
+}
+
+sub pop_lex_mode {
+  my( $p, $mode ) = @_;
+
+  die "Unexpected mode: '$mode'"
+    unless get_lex_mode( $p ) eq $mode;
+
+  pop @{$p->YYData->{LEX}{MODES}};
+}
+
+sub read_more {
+  my( $fh, $buf ) = @_;
+  my $v = <$fh>;
+
+  return unless defined $v;
+
+  $$buf .= $v;
+
+  return 1;
+}
+
+sub yylex {
+  my $data = $_[0]->YYData->{LEX};
+  my $fh = $data->{FH};
+  my $buf = $data->{BUFFER};
+
+  for(;;) {
+    if( !length( $$buf ) && !read_more( $fh, $buf ) ) {
+      return ( '', undef );
+    }
+
+    if( get_lex_mode( $_[0] ) eq 'special' ) {
+      if( $$buf =~ s/^%}// ) {
+        return ( 'CLSPECIAL', '%}' );
+      } elsif( $$buf =~ s/^([^\n]*)\n$// ) {
+        my $line = $1;
+
+        if( $line =~ m/^(.*?)\%}(.*)$/ ) {
+          $$buf = "%}$2\n";
+          $line = $1;
+        }
+
+        return ( 'line', $line );
+      }
+    } else {
+      $$buf =~ s/^[\s\n\r]+//;
+      next unless length $$buf;
+
+      if( $$buf =~ s/^([+-]?(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?)// ) {
+        return ( 'FLOAT', $1 );
+      } elsif( $$buf =~ s/^\/\/(.*)(?:\r\n|\r|\n)// ) {
+        return ( 'RAW_CODE', '##' . $1 );
+      } elsif( $$buf =~ s/^\/\*// ) {
+        my $raw = '/*';
+        for(; length( $$buf ) || read_more( $fh, $buf ); $$buf = '') {
+          if( $$buf =~ s/(.*?\*\/)// ) {
+              return ( 'RAW_CODE', $raw . $1 );
+          }
+          $raw .= $$buf;
+        }
+      } elsif( $$buf =~ s/^( \%}
+                      | \%{ | {\%
+                      | \%name | \%typemap | \%module | \%code
+                      | \%file | \%cleanup | \%package
+                      | [{}();%~*&,=\/\.\-]
+                      | :: | :
+                       )//x ) {
+        return ( $tokens{$1}, $1 );
+      } elsif( $$buf =~ s/^(INCLUDE:.*)(?:\r\n|\r|\n)// ) {
+        return ( 'RAW_CODE', "$1\n" );
+      } elsif( $$buf =~ m/^([a-zA-Z_]\w*)\W/ ) {
+        $$buf =~ s/^(\w+)//;
+
+        return ( $1, $1 ) if exists $keywords{$1};
+
+        return ( 'ID', $1 );
+      } elsif( $$buf =~ s/^(\d+)// ) {
+        return ( 'INTEGER', $1 );
+      } elsif( $$buf =~ s/^("[^"]*")// ) {
+        return ( 'QUOTED_STRING', $1 );
+      } elsif( $$buf =~ s/^(#.*)(?:\r\n|\r|\n)// ) {
+        return ( 'RAW_CODE', $1 );
+      } else {
+        die $$buf;
+      }
+    }
+  }
+}
+
+sub yyerror {
+  my $data = $_[0]->YYData->{LEX};
+  my $buf = $data->{BUFFER};
+  my $fh = $data->{FH};
+   
+  print STDERR "Error: line " . $fh->input_line_number . " (",
+    $_[0]->YYCurtok, ') (',
+    $_[0]->YYCurval, ') "', ( $buf ? $$buf : '--empty buffer--' ),
+      q{"} . "\n";
+  print STDERR "Expecting: (", ( join ", ", map { "'$_'" } $_[0]->YYExpect ),
+        ")\n";
+}
+
+sub make_const { $_[0]->{CONST} = 1; $_[0] }
+sub make_ref   { $_[0]->{REFERENCE} = 1; $_[0] }
+sub make_ptr   { $_[0]->{POINTER}++; $_[0] }
+sub make_type  { ExtUtils::XSpp::Node::Type->new( base => $_[0] ) }
+
+sub add_data_raw {
+  my $p = shift;
+  my $rows = shift;
+
+  ExtUtils::XSpp::Node::Raw->new( rows => $rows );
+}
+
+sub make_argument {
+  my( $p, $type, $name, $default ) = @_;
+
+  ExtUtils::XSpp::Node::Argument->new( type    => $type,
+                              name    => $name,
+                              default => $default );
+}
+
+sub create_class {
+  my( $parser, $name, $bases, $methods ) = @_;
+  my $class = ExtUtils::XSpp::Node::Class->new( cpp_name     => $name,
+                                                base_classes => $bases );
+  $class->add_methods( @$methods );
+  return $class;
+}
+
+sub add_data_function {
+  my( $parser, %args ) = @_;
+
+  ExtUtils::XSpp::Node::Function->new( cpp_name  => $args{name},
+                                class     => $args{class},
+                                ret_type  => $args{ret_type},
+                                arguments => $args{arguments},
+                                code      => $args{code},
+                                cleanup   => $args{cleanup},
+                                );
+}
+
+sub add_data_method {
+  my( $parser, %args ) = @_;
+
+  ExtUtils::XSpp::Node::Method->new( cpp_name  => $args{name},
+                              ret_type  => $args{ret_type},
+                              arguments => $args{arguments},
+                              code      => $args{code},
+                              cleanup   => $args{cleanup},
+                              perl_name => $args{perl_name},
+                              );
+}
+
+sub add_data_ctor {
+  my( $parser, %args ) = @_;
+
+  ExtUtils::XSpp::Node::Constructor->new( cpp_name  => $args{name},
+                                   arguments => $args{arguments},
+                                   code      => $args{code},
+                                   );
+}
+
+sub add_data_dtor {
+  my( $parser, %args ) = @_;
+
+  ExtUtils::XSpp::Node::Destructor->new( cpp_name  => $args{name},
+                                  code      => $args{code},
+                                  );
+}
+
+sub is_directive {
+  my( $p, $d, $name ) = @_;
+
+  return $d->[0] eq $name;
+}
+
+#sub assert_directive {
+#  my( $p, $d, $name ) = @_;
+#
+#  if( $d->[0] ne $name )
+#    { $p->YYError }
+#  1;
+#}

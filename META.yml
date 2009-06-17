@@ -1,0 +1,62 @@
+---
+name: ExtUtils-XSpp
+version: 0.01
+author:
+  - 'Mattia Barbon <mbarbon@cpan.org>'
+abstract: XS for C++
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+requires:
+  perl: 5.6.1
+build_requires:
+  Test::Base: 0
+  Test::Differences: 0
+provides:
+  ExtUtils::XSpp:
+    file: lib/ExtUtils/XSpp.pm
+    version: 0.01
+  ExtUtils::XSpp::Driver:
+    file: lib/ExtUtils/XSpp/Driver.pm
+  ExtUtils::XSpp::Grammar:
+    file: lib/ExtUtils/XSpp/Grammar.pm
+  ExtUtils::XSpp::Node:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Access:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Argument:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Class:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Constructor:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Destructor:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::File:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Function:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Method:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Module:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Package:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Raw:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Node::Type:
+    file: lib/ExtUtils/XSpp/Node.pm
+  ExtUtils::XSpp::Parser:
+    file: lib/ExtUtils/XSpp/Parser.pm
+  ExtUtils::XSpp::Typemap:
+    file: lib/ExtUtils/XSpp/Typemap.pm
+  ExtUtils::XSpp::Typemap::parsed:
+    file: lib/ExtUtils/XSpp/Typemap.pm
+  ExtUtils::XSpp::Typemap::reference:
+    file: lib/ExtUtils/XSpp/Typemap.pm
+  ExtUtils::XSpp::Typemap::simple:
+    file: lib/ExtUtils/XSpp/Typemap.pm
+generated_by: Module::Build version 0.32
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
