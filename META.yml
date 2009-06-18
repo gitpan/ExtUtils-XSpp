@@ -1,6 +1,6 @@
 ---
 name: ExtUtils-XSpp
-version: 0.02
+version: 0.03
 author:
   - 'Mattia Barbon <mbarbon@cpan.org>'
 abstract: XS for C++
@@ -15,11 +15,14 @@ build_requires:
 provides:
   ExtUtils::XSpp:
     file: lib/ExtUtils/XSpp.pm
-    version: 0.02
+    version: 0.03
   ExtUtils::XSpp::Driver:
     file: lib/ExtUtils/XSpp/Driver.pm
   ExtUtils::XSpp::Grammar:
     file: lib/ExtUtils/XSpp/Grammar.pm
+  ExtUtils::XSpp::Grammar::YappDriver:
+    file: lib/ExtUtils/XSpp/Grammar.pm
+    version: 1.05
   ExtUtils::XSpp::Node:
     file: lib/ExtUtils/XSpp/Node.pm
   ExtUtils::XSpp::Node::Access:
