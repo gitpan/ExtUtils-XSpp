@@ -31,6 +31,10 @@ directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Package->new( perl_name => $_[1] ) }
               | perc_file SEMICOLON
                     { ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
+              | perc_loadplugin SEMICOLON
+                    { $_[0]->YYData->{PARSER}->load_plugin( $_[1] ); undef }
+              | perc_include SEMICOLON
+                    { $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
               | typemap { };
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
@@ -137,12 +141,14 @@ _metadata:      perc_code
               | perc_cleanup
               ;
 
-perc_name:      p_name OPCURLY class_name CLCURLY     { $_[3] };
-perc_package:   p_package OPCURLY class_name CLCURLY  { $_[3] };
-perc_module:    p_module OPCURLY class_name CLCURLY   { $_[3] };
-perc_file:      p_file OPCURLY file_name CLCURLY      { $_[3] };
-perc_code:      p_code special_block                  { [ code => $_[2] ] };
-perc_cleanup:   p_cleanup special_block               { [ cleanup => $_[2] ] };
+perc_name:       p_name OPCURLY class_name CLCURLY       { $_[3] };
+perc_package:    p_package OPCURLY class_name CLCURLY    { $_[3] };
+perc_module:     p_module OPCURLY class_name CLCURLY     { $_[3] };
+perc_file:       p_file OPCURLY file_name CLCURLY        { $_[3] };
+perc_loadplugin: p_loadplugin OPCURLY class_name CLCURLY { $_[3] };
+perc_include:    p_include OPCURLY file_name CLCURLY     { $_[3] };
+perc_code:       p_code special_block                    { [ code => $_[2] ] };
+perc_cleanup:    p_cleanup special_block                 { [ cleanup => $_[2] ] };
 
 type:           'const' type_name      { make_const( make_type( $_[2] ) ) }
               | type STAR              { make_ptr( $_[1] ) }
@@ -232,14 +238,16 @@ my %tokens = ( '::' => 'DCOLON',
                 '.' => 'DOT',
                 '-' => 'DASH',
                # these are here due to my lack of skill with yacc
-               '%name'    => 'p_name',
-               '%typemap' => 'p_typemap',
-               '%file'    => 'p_file',
-               '%module'  => 'p_module',
-               '%code'    => 'p_code',
-               '%cleanup' => 'p_cleanup',
-               '%package' => 'p_package',
-               '%length'  => 'p_length',
+               '%name'       => 'p_name',
+               '%typemap'    => 'p_typemap',
+               '%file'       => 'p_file',
+               '%module'     => 'p_module',
+               '%code'       => 'p_code',
+               '%cleanup'    => 'p_cleanup',
+               '%package'    => 'p_package',
+               '%length'     => 'p_length',
+               '%loadplugin' => 'p_loadplugin',
+               '%include'    => 'p_include',
              );
 
 my %keywords = ( const => 1,
@@ -275,23 +283,32 @@ sub pop_lex_mode {
 }
 
 sub read_more {
-  my( $fh, $buf ) = @_;
-  my $v = <$fh>;
+  my $v = readline $_[0]->YYData->{LEX}{FH};
+  my $buf = $_[0]->YYData->{LEX}{BUFFER};
 
-  return unless defined $v;
+  unless( defined $v ) {
+    if( $_[0]->YYData->{LEX}{NEXT} ) {
+      $_[0]->YYData->{LEX} = $_[0]->YYData->{LEX}{NEXT};
+      $buf = $_[0]->YYData->{LEX}{BUFFER};
+
+      return $buf if length $$buf;
+      return read_more( $_[0] );
+    } else {
+      return;
+    }
+  }
 
   $$buf .= $v;
 
-  return 1;
+  return $buf;
 }
 
 sub yylex {
   my $data = $_[0]->YYData->{LEX};
-  my $fh = $data->{FH};
   my $buf = $data->{BUFFER};
 
   for(;;) {
-    if( !length( $$buf ) && !read_more( $fh, $buf ) ) {
+    if( !length( $$buf ) && !( $buf = read_more( $_[0] ) ) ) {
       return ( '', undef );
     }
 
@@ -316,18 +333,19 @@ sub yylex {
         return ( 'FLOAT', $1 );
       } elsif( $$buf =~ s/^\/\/(.*)(?:\r\n|\r|\n)// ) {
         return ( 'RAW_CODE', '##' . $1 );
-      } elsif( $$buf =~ s/^\/\*// ) {
-        my $raw = '/*';
-        for(; length( $$buf ) || read_more( $fh, $buf ); $$buf = '') {
+      } elsif( $$buf =~ /^\/\*/ ) {
+        my $raw = '';
+        for(; length( $$buf ) || ( $buf = read_more( $_[0] ) ); $$buf = '') {
           if( $$buf =~ s/(.*?\*\/)// ) {
-              return ( 'RAW_CODE', $raw . $1 );
+              return ( 'RAW_CODE', $raw . '##' . $1 );
           }
-          $raw .= $$buf;
+          $raw .= '##' . $$buf;
         }
       } elsif( $$buf =~ s/^( \%}
                       | \%{ | {\%
                       | \%name | \%typemap | \%module  | \%code
                       | \%file | \%cleanup | \%package | \%length
+                      | \%loadplugin | \%include
                       | [{}();%~*&,=\/\.\-]
                       | :: | :
                        )//x ) {

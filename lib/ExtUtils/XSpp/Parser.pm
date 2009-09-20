@@ -60,11 +60,24 @@ sub parse {
   my $parser = $this->{PARSER};
   $parser->YYData->{LEX}{FH} = $fh;
   $parser->YYData->{LEX}{BUFFER} = \$buf;
+  local $parser->YYData->{PARSER} = $this;
 
   $this->{DATA} = $parser->YYParse( yylex   => \&ExtUtils::XSpp::Grammar::yylex,
                                     yyerror => \&ExtUtils::XSpp::Grammar::yyerror,
                                     yydebug => 0x00,
                                    );
+}
+
+sub include_file {
+  my $this = shift;
+  my( $file ) = @_;
+  my $buf = '';
+  my $new_lex = { FH     => _my_open( $file ),
+                  BUFFER => \$buf,
+                  NEXT   => $this->{PARSER}->YYData->{LEX},
+                  };
+
+  $this->{PARSER}->YYData->{LEX} = $new_lex;
 }
 
 =head2 ExtUtils::XSpp::Parser::get_data
@@ -93,5 +106,45 @@ sub get_errors {
 
   return @{$this->{ERRORS}};
 }
+
+=head2 ExtUtils::XSpp::Parser::load_plugin
+
+Loads the specified plugin and calls its C<register_plugin> method.
+
+=cut
+
+sub load_plugin {
+  my $this = shift;
+  my( $package ) = @_;
+
+  if (eval "require ExtUtils::XSpp::Plugin::$package;") {
+    $package = "ExtUtils::XSpp::Plugin::$package";
+    $package->register_plugin( $this );
+  }
+  elsif (eval "require $package;") {
+    $package->register_plugin( $this );
+  }
+  else {
+    die "Could not load XS++ plugin '$package' (neither via the namespace "
+       ."'ExtUtils::XS++::Plugin::$package' nor via '$package'). Reason: $@";
+  }
+  return 1;
+}
+
+=head2 ExtUtils::XSpp::Parser::add_post_process_plugin
+
+Adds the specified plugin to be called after parsing is complete to
+modify the parse tree before it is emitted.
+
+=cut
+
+sub add_post_process_plugin {
+  my $this = shift;
+  my( $plugin ) = @_;
+
+  push @{$this->{PLUGINS}{POST_PROCESS}}, $plugin;
+}
+
+sub post_process_plugins { $_[0]->{PLUGINS}{POST_PROCESS} || [] }
 
 1;

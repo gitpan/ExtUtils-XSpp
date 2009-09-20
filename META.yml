@@ -1,21 +1,25 @@
 ---
 name: ExtUtils-XSpp
-version: 0.04
+version: 0.05
 author:
   - 'Mattia Barbon <mbarbon@cpan.org>'
 abstract: XS for C++
 license: perl
 resources:
-  license: ~
-requires:
-  perl: 5.6.1
+  license: http://dev.perl.org/licenses/
 build_requires:
   Test::Base: 0
   Test::Differences: 0
+requires:
+  perl: v5.6.1
+configure_requires:
+  Module::Build: 0.34
 provides:
   ExtUtils::XSpp:
     file: lib/ExtUtils/XSpp.pm
-    version: 0.04
+    version: 0.05
+  ExtUtils::XSpp::Cmd:
+    file: lib/ExtUtils/XSpp/Cmd.pm
   ExtUtils::XSpp::Driver:
     file: lib/ExtUtils/XSpp/Driver.pm
   ExtUtils::XSpp::Grammar:
@@ -59,7 +63,7 @@ provides:
     file: lib/ExtUtils/XSpp/Typemap.pm
   ExtUtils::XSpp::Typemap::simple:
     file: lib/ExtUtils/XSpp/Typemap.pm
-generated_by: Module::Build version 0.31012
+generated_by: Module::Build version 0.34
 meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.2.html
-  version: 1.2
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
