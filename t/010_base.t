@@ -12,14 +12,13 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-%typemap{Foo*}{simple};
-
 class Foo
 {
     int foo( int a, int b, int c );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -32,13 +31,12 @@ Foo::foo( a, b, c )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-%typemap{Foo*}{simple};
-
 class Foo
 {
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 === Basic function
@@ -46,10 +44,10 @@ MODULE=Foo PACKAGE=Foo
 %module{Foo};
 %package{Foo::Bar};
 
-%typemap{int}{simple};
-
 int foo( int a );
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo::Bar
 
 int
@@ -60,14 +58,13 @@ foo( a )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-%typemap{Foo*}{simple};
-
 class Foo
 {
     int foo( int a = 1 );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -78,14 +75,13 @@ Foo::foo( a = 1 )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-%typemap{Foo*}{simple};
-
 class Foo
 {
     Foo( int a = 1 );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 Foo*
@@ -96,14 +92,13 @@ Foo::new( a = 1 )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-%typemap{Foo*}{simple};
-
 class Foo
 {
     ~Foo();
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void
@@ -113,14 +108,13 @@ Foo::DESTROY()
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-%typemap{void}{simple};
-
 class Foo
 {
     void foo( int a );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void
@@ -131,13 +125,13 @@ Foo::foo( a )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{void}{simple};
-
 class Foo
 {
     void foo();
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void
@@ -145,7 +139,13 @@ Foo::foo()
 
 === Comments and raw blocks
 --- xsp_stdout
+// comment before %module
+## comment before %module
+
 %module{Foo};
+
+## comment after %module
+// comment after %module
 
 {%
   Passed through verbatim
@@ -154,7 +154,6 @@ Foo::foo()
 
 # simple typemaps
 %typemap{int}{simple};
-%typemap{Foo*}{simple};
 
 # before class
 class Foo
@@ -168,6 +167,15 @@ class Foo
  * class
  */
 --- expected
+## comment before %module
+
+
+MODULE=Foo
+## comment after %module
+
+
+
+
   Passed through verbatim
   as written in sources
 
@@ -192,24 +200,17 @@ Foo::foo( a, b, c )
 
 # after method
 
-
-##/* long comment
-## * right after
-## * class
-## */
 === %length and ANSI style
 --- xsp_stdout
 %module{Foo};
 
 %package{Bar};
 
-%typemap{unsigned int}{simple};
-%typemap{unsigned long}{simple};
-%typemap{char*}{simple};
-
 unsigned int
 bar( char* line, unsigned long %length{line} );
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Bar
 
 unsigned int
@@ -220,24 +221,20 @@ bar( char* line, unsigned long length(line) )
 
 %package{Bar};
 
-%typemap{short int}{simple};
-%typemap{short}{simple};
-%typemap{unsigned short int}{simple};
-%typemap{unsigned}{simple};
-%typemap{unsigned int}{simple};
-%typemap{int}{simple};
-%typemap{unsigned short}{simple};
-
 short int
-bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned short f );
+bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned short f, long int g, unsigned long int h );
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Bar
 
-short int
-bar( a, b, c, d, e, f )
+short
+bar( a, b, c, d, e, f, g, h )
     short a
-    unsigned short int b
-    unsigned c
+    unsigned short b
+    unsigned int c
     unsigned int d
     int e
     unsigned short f
+    long g
+    unsigned long h

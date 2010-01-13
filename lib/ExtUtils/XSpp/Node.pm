@@ -53,6 +53,31 @@ Returns an array reference holding the rows to be output in the final file.
 sub rows { $_[0]->{ROWS} }
 sub print { join( "\n", @{$_[0]->rows} ) . "\n" }
 
+package ExtUtils::XSpp::Node::Comment;
+
+=head1 ExtUtils::XSpp::Node::Comment
+
+Contains data that should be output prefixed with a comment marker
+
+=cut
+
+use strict;
+use base 'ExtUtils::XSpp::Node::Raw';
+
+sub init {
+  my $this = shift;
+  my %args = @_;
+
+  $this->{ROWS} = $args{rows};
+}
+
+sub print {
+  my $this = shift;
+  my $state = shift;
+
+  return "\n";
+}
+
 package ExtUtils::XSpp::Node::Package;
 
 =head1 ExtUtils::XSpp::Node::Package
@@ -155,7 +180,32 @@ sub print {
   my $out = $this->SUPER::print( $state );
 
   foreach my $m ( @{$this->methods} ) {
-    $out .= $m->print;
+    $out .= $m->print( $state );
+  }
+
+  # add a BOOT block for base classes
+  if( @{$this->base_classes} ) {
+      my $class = $this->perl_name;
+
+      $out .= <<EOT;
+BOOT:
+    {
+        AV* isa = get_av( "${class}::ISA", 1 );
+EOT
+
+    foreach my $b ( @{$this->base_classes} ) {
+      my $base = $b->perl_name;
+
+      $out .= <<EOT;
+        av_store( isa, 0, newSVpv( "$base", 0 ) );
+EOT
+    }
+
+      # close block in BOOT
+      $out .= <<EOT;
+    } // blank line here is important
+
+EOT
   }
 
   return $out;
@@ -202,6 +252,7 @@ sub init {
   $this->{RET_TYPE} = $args{ret_type};
   $this->{CODE} = $args{code};
   $this->{CLEANUP} = $args{cleanup};
+  $this->{POSTCALL} = $args{postcall};
   $this->{CLASS} = $args{class};
 }
 
@@ -230,6 +281,8 @@ sub resolve_typemaps {
 
 =head2 ExtUtils::XSpp::Node::Function::cleanup
 
+=head2 ExtUtils::XSpp::Node::Function::postcall
+
 =head2 ExtUtils::XSpp::Node::Function::argument_style
 
 Returns either C<ansi> or C<kr>. C<kr> is the default.
@@ -244,6 +297,7 @@ sub arguments { $_[0]->{ARGUMENTS} }
 sub ret_type { $_[0]->{RET_TYPE} }
 sub code { $_[0]->{CODE} }
 sub cleanup { $_[0]->{CLEANUP} }
+sub postcall { $_[0]->{POSTCALL} }
 sub package_static { ( $_[0]->{STATIC} || '' ) eq 'package_static' }
 sub class_static { ( $_[0]->{STATIC} || '' ) eq 'class_static' }
 sub virtual { $_[0]->{VIRTUAL} }
@@ -270,6 +324,8 @@ sub argument_style {
 #     aux vars
 #   [PP]CODE:
 #     RETVAL = new Foo( THIS->method( arg1, *arg2 ) );
+#   POSTCALL:
+#     /* anything */
 #   OUTPUT:
 #     RETVAL
 #   CLEANUP:
@@ -291,8 +347,9 @@ sub print {
   my $ret_type = $this->ret_type;
   my $ret_typemap = $this->{TYPEMAPS}{RET_TYPE};
   my $need_call_function = 0;
-  my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup, $precall ) =
-    ( '', '', '', '', '', '', '' );
+  my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup,
+      $postcall, $precall ) =
+    ( '', '', '', '', '', '', '', '' );
   my $use_ansi_style = $this->argument_style() eq 'ansi';
 
   if( $args && @$args ) {
@@ -339,8 +396,8 @@ sub print {
     $retstr = "static $retstr";
   }
 
+  my $has_ret = $ret_typemap && !$ret_typemap->type->is_void;
   if( $need_call_function ) {
-    my $has_ret = $ret_typemap && !$ret_typemap->type->is_void;
     my $ccode = $this->_call_code( $call_arg_list );
     if( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
       $ccode = $ret_typemap->call_function_code( $ccode, 'RETVAL' );
@@ -367,6 +424,10 @@ sub print {
     $code = "  CODE:\n    " . join( "\n", @{$this->code} ) . "\n";
     $output = "  OUTPUT: RETVAL\n" if $code =~ m/RETVAL/;
   }
+  if( $this->postcall ) {
+    $postcall = "  POSTCALL:\n    " . join( "\n", @{$this->postcall} ) . "\n";
+    $output ||= "  OUTPUT: RETVAL\n" if $has_ret;
+  }
   if( $this->cleanup ) {
     $cleanup ||= "  CLEANUP:\n";
     my $clcode = join( "\n", @{$this->cleanup} );
@@ -387,6 +448,7 @@ EOT
   $out .= "$fname($arg_list)\n";
   $out .= $init;
   $out .= $code;
+  $out .= $postcall;
   $out .= $output;
   $out .= $cleanup;
   $out .= "\n";
@@ -496,9 +558,10 @@ sub init {
 
 sub print {
   my $this = shift;
+  my $state = shift;
 
   return join( ' ',
-               $this->type->print,
+               $this->type->print( $state ),
                $this->name,
                ( $this->default ?
                  ( '=', $this->default ) : () ) );
@@ -514,23 +577,41 @@ package ExtUtils::XSpp::Node::Type;
 use strict;
 use base 'ExtUtils::XSpp::Node';
 
+# normalized names for some integral C types
+my %normalize =
+  ( 'unsigned'           => 'unsigned int',
+    'long int'           => 'long',
+    'unsigned long int'  => 'unsigned long',
+    'short int'          => 'short',
+    'unsigned short int' => 'unsigned short',
+    );
+
 sub init {
   my $this = shift;
   my %args = @_;
 
-  $this->{BASE} = $args{base};
+  $this->{BASE} = $normalize{$args{base}} || $args{base};
   $this->{POINTER} = $args{pointer} ? 1 : 0;
   $this->{REFERENCE} = $args{reference} ? 1 : 0;
   $this->{CONST} = $args{const} ? 1 : 0;
+  $this->{TEMPLATE_ARGS} = $args{template_args} || [];
 }
 
 sub is_const { $_[0]->{CONST} }
 sub is_reference { $_[0]->{REFERENCE} }
 sub is_pointer { $_[0]->{POINTER} }
 sub base_type { $_[0]->{BASE} }
+sub template_args { $_[0]->{TEMPLATE_ARGS} }
 
 sub equals {
   my( $f, $s ) = @_;
+
+  return 0 if @{$f->template_args} != @{$s->template_args};
+
+  for( my $i = 0; $i < @{$f->template_args}; ++$i ) {
+      return 0
+          unless $f->template_args->[$i]->equals( $s->template_args->[$i] );
+  }
 
   return $f->is_const == $s->is_const
       && $f->is_reference == $s->is_reference
@@ -543,10 +624,20 @@ sub is_void { return $_[0]->base_type eq 'void' &&
 
 sub print {
   my $this = shift;
+  my $state = shift;
+
+  my $tmpl_args = '';
+  if( @{$this->template_args} ) {
+      $tmpl_args =   '< '
+                   . join( ', ',
+                           map $_->print( $state ), @{$this->template_args} )
+                   . ' >';
+  }
 
   return join( '',
                ( $this->is_const ? 'const ' : '' ),
                $this->base_type,
+               $tmpl_args,
                ( $this->is_pointer ? ( '*' x $this->is_pointer ) :
                  $this->is_reference ? '&' : '' ) );
 }
@@ -565,7 +656,7 @@ sub init {
 
 sub module { $_[0]->{MODULE} }
 sub to_string { 'MODULE=' . $_[0]->module }
-sub print { "" }
+sub print { return $_[0]->to_string . "\n" }
 
 package ExtUtils::XSpp::Node::File;
 

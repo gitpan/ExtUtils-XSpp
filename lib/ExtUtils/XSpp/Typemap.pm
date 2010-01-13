@@ -57,9 +57,23 @@ sub call_function_code { undef }
 
 my @typemaps;
 
+# add typemaps for basic C types
+add_default_typemaps();
+
 sub add_typemap_for_type {
   my( $type, $typemap ) = @_;
 
+  unshift @typemaps, [ $type, $typemap ];
+}
+
+# a weak typemap does not override an already existing typemap for the
+# same type
+sub add_weak_typemap_for_type {
+  my( $type, $typemap ) = @_;
+
+  foreach my $t ( @typemaps ) {
+    return if $t->[0]->equals( $type );
+  }
   unshift @typemaps, [ $type, $typemap ];
 }
 
@@ -70,7 +84,38 @@ sub get_typemap_for_type {
     return ${$t}[1] if $t->[0]->equals( $type );
   }
 
-  die "No typemap for type ", $type->print;
+  Carp::confess( "No typemap for type ", $type->print );
+}
+
+sub add_default_typemaps {
+  # void, integral and floating point types
+  foreach my $t ( 'char', 'short', 'int', 'long',
+                  'unsigned char', 'unsigned short', 'unsigned int',
+                  'unsigned long', 'void',
+                  'float', 'double', 'long double' ) {
+    my $type = ExtUtils::XSpp::Node::Type->new( base => $t );
+
+    ExtUtils::XSpp::Typemap::add_typemap_for_type
+        ( $type, ExtUtils::XSpp::Typemap::simple->new( type => $type ) );
+  }
+
+  # char*, const char*
+  my $char_p = ExtUtils::XSpp::Node::Type->new
+                   ( base    => 'char',
+                     pointer => 1,
+                     );
+
+  ExtUtils::XSpp::Typemap::add_typemap_for_type
+      ( $char_p, ExtUtils::XSpp::Typemap::simple->new( type => $char_p ) );
+
+  my $const_char_p = ExtUtils::XSpp::Node::Type->new
+                         ( base    => 'char',
+                           pointer => 1,
+                           const   => 1,
+                           );
+
+  ExtUtils::XSpp::Typemap::add_typemap_for_type
+      ( $const_char_p, ExtUtils::XSpp::Typemap::simple->new( type => $const_char_p ) );
 }
 
 package ExtUtils::XSpp::Typemap::parsed;

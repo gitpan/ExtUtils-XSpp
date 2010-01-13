@@ -17,6 +17,8 @@ __DATA__
 Straight to XS, no checks...
 %}
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 
@@ -25,7 +27,6 @@ Straight to XS, no checks...
 === Space after verbatim blocks
 --- xsp_stdout
 %module{Foo};
-%typemap{int}{simple};
 
 class X
 {
@@ -35,6 +36,8 @@ Straight to XS, no checks...
     int foo(int a);
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=X
 
 

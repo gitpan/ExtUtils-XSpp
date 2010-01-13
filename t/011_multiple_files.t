@@ -13,8 +13,6 @@ __DATA__
 %module{Foo};
 %package{Foo};
 
-%typemap{int}{simple};
-
 %file{foo.h};
 {%
 Some verbatim
@@ -24,6 +22,8 @@ text
 
 int foo( int a, int b, int c );
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 
@@ -37,8 +37,6 @@ foo( a, b, c )
 --- process xsp_file=foo.h
 %module{Foo};
 %package{Foo};
-
-%typemap{int}{simple};
 
 %file{foo.h};
 %{
@@ -56,8 +54,6 @@ text
 --- process xsp_file=foo.h
 %module{Foo};
 %package{Foo};
-
-%typemap{int}{simple};
 
 %file{foo.h};
 int bar( int x );

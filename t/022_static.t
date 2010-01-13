@@ -12,14 +12,13 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 
-%typemap{Foo*}{simple};
-%typemap{int}{simple};
-
 class Foo
 {
     package_static int foo(int a);
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int

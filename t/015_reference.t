@@ -12,14 +12,13 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 
-%typemap{void}{simple};
-%typemap{Foo&}{reference};
-
 class Foo
 {
     void foo( Foo& a );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 void
@@ -32,13 +31,13 @@ Foo::foo( a )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{Foo&}{reference};
-
 class Foo
 {
     Foo& foo();
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 Foo*

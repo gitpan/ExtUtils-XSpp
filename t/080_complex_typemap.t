@@ -13,13 +13,14 @@ __DATA__
 %module{Foo};
 
 %typemap{int}{parsed}{%foobar%};
-%typemap{Foo*}{simple};
 
 class Foo
 {
     int foo( int a, int b );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 foobar
@@ -32,13 +33,14 @@ Foo::foo( a, b )
 %module{Foo};
 
 %typemap{int}{parsed}{%int%}{% $$ = fancy_conversion( $1 ) %};
-%typemap{Foo*}{simple};
 
 class Foo
 {
     int foo( int a, int b );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -54,13 +56,14 @@ Foo::foo( a, b )
 %module{Foo};
 
 %typemap{int}{parsed}{%int%}{%%}{% custom_code( RETVAL ) %};
-%typemap{Foo*}{simple};
 
 class Foo
 {
     int foo( int a, int b );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -77,13 +80,14 @@ Foo::foo( a, b )
 %module{Foo};
 
 %typemap{int}{parsed}{%int%}{%%}{%%}{% custom_code( ST(0), RETVAL ) %};
-%typemap{Foo*}{simple};
 
 class Foo
 {
     int foo( int a, int b );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -102,13 +106,14 @@ Foo::foo( a, b )
 
 %typemap{int}{parsed}{%int%}{%%}{%%}{%%}
     {% custom_code( $1, RETVAL ) %};
-%typemap{Foo*}{simple};
 
 class Foo
 {
     int foo( int a, int b );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int

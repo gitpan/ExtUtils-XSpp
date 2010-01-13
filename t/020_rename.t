@@ -12,11 +12,12 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 %package{Foo::Bar};
-%typemap{int}{simple};
 
 %name{boo} int foo(int a);
 %name{moo::boo} int foo(int a);
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo::Bar
 
 int
@@ -39,14 +40,13 @@ boo( a )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-%typemap{Foo*}{simple};
-
 class Foo
 {
     %name{bar} int foo( int a );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 int
@@ -60,14 +60,13 @@ Foo::bar( a )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-%typemap{Foo*}{simple};
-
 class Foo
 {
     %name{newFoo} Foo( int a );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Foo
 
 static Foo*
@@ -81,15 +80,14 @@ Foo::newFoo( a )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{simple};
-%typemap{void}{simple};
-
 %name{Bar::Baz} class Foo
 {
     void foo();
     %name{foo_int} int foo( int a );
 };
 --- expected
+MODULE=Foo
+
 MODULE=Foo PACKAGE=Bar::Baz
 
 void

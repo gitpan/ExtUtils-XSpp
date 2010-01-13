@@ -18,6 +18,7 @@ lib/ExtUtils/XSpp.pod
 lib/ExtUtils/XSpp/Cmd.pm
 lib/ExtUtils/XSpp/Driver.pm
 lib/ExtUtils/XSpp/Grammar.pm
+lib/ExtUtils/XSpp/Lexer.pm
 lib/ExtUtils/XSpp/Node.pm
 lib/ExtUtils/XSpp/Parser.pm
 lib/ExtUtils/XSpp/Typemap.pm
@@ -32,6 +33,7 @@ t/011_multiple_files.t
 t/015_reference.t
 t/020_rename.t
 t/022_static.t
+t/023_base_classes.t
 t/030_code_blocks.t
 t/031_verbatim_blocks.t
 t/035_include.t
