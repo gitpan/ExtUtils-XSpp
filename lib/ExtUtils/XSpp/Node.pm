@@ -397,21 +397,37 @@ sub print {
   }
 
   my $has_ret = $ret_typemap && !$ret_typemap->type->is_void;
+
+  # Hardcoded to one because we force the exception handling for now
+  # All the hard work above about determining whether $need_call_function
+  # needs to be enabled is left in as exception handling may be subject
+  # to configuration later. --Steffen
+  $need_call_function = 1;
+
   if( $need_call_function ) {
     my $ccode = $this->_call_code( $call_arg_list );
-    if( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
+    if ($this->isa('ExtUtils::XSpp::Node::Destructor')) {
+      $ccode = 'delete THIS';
+      $has_ret = 0;
+    } elsif( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
       $ccode = $ret_typemap->call_function_code( $ccode, 'RETVAL' );
     } elsif( $has_ret ) {
       $ccode = "RETVAL = $ccode";
     }
 
     $code .= "  CODE:\n";
-    $code .= '    ' . $precall if $precall;
-    $code .= '    ' . $ccode . ";\n";
-
+    $code .= "    try {\n";
+    $code .= '      ' . $precall if $precall;
+    $code .= '      ' . $ccode . ";\n";
     if( $has_ret && defined $ret_typemap->output_code ) {
-      $code .= '    ' . $ret_typemap->output_code . ";\n";
+      $code .= '      ' . $ret_typemap->output_code . ";\n";
     }
+    $code .= "    } catch (std::exception& e) {\n";
+    $code .= '      croak("Caught unhandled C++ exception: %s", e.what());' . "\n";
+    $code .= "    } catch (...) {\n";
+    $code .= '      croak("Caught unhandled C++ exception of unknown type");' . "\n";
+    $code .= "    }\n";
+
     $output = "  OUTPUT: RETVAL\n" if $has_ret;
 
     if( $has_ret && defined $ret_typemap->cleanup_code ) {
@@ -422,7 +438,9 @@ sub print {
 
   if( $this->code ) {
     $code = "  CODE:\n    " . join( "\n", @{$this->code} ) . "\n";
-    $output = "  OUTPUT: RETVAL\n" if $code =~ m/RETVAL/;
+    # cleanup potential multiple newlines because they break XSUBs
+    $code =~ s/^\s*\z//m;
+    $output = "  OUTPUT: RETVAL\n" if $code =~ m/\bRETVAL\b/;
   }
   if( $this->postcall ) {
     $postcall = "  POSTCALL:\n    " . join( "\n", @{$this->postcall} ) . "\n";

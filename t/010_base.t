@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 11;
+use t::lib::XSP::Test tests => 12;
 
 run_diff xsp_stdout => 'expected';
 
@@ -26,6 +26,15 @@ Foo::foo( a, b, c )
     int a
     int b
     int c
+  CODE:
+    try {
+      RETVAL = THIS->foo( a, b, c );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 === Empty class
 --- xsp_stdout
@@ -53,6 +62,15 @@ MODULE=Foo PACKAGE=Foo::Bar
 int
 foo( a )
     int a
+  CODE:
+    try {
+      RETVAL = foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 === Default arguments
 --- xsp_stdout
@@ -70,6 +88,15 @@ MODULE=Foo PACKAGE=Foo
 int
 Foo::foo( a = 1 )
     int a
+  CODE:
+    try {
+      RETVAL = THIS->foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 === Constructor
 --- xsp_stdout
@@ -87,6 +114,15 @@ MODULE=Foo PACKAGE=Foo
 Foo*
 Foo::new( a = 1 )
     int a
+  CODE:
+    try {
+      RETVAL = new Foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 === Destructor
 --- xsp_stdout
@@ -103,6 +139,14 @@ MODULE=Foo PACKAGE=Foo
 
 void
 Foo::DESTROY()
+  CODE:
+    try {
+      delete THIS;
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 
 === Void function
 --- xsp_stdout
@@ -120,6 +164,14 @@ MODULE=Foo PACKAGE=Foo
 void
 Foo::foo( a )
     int a
+  CODE:
+    try {
+      THIS->foo( a );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 
 === No parameters
 --- xsp_stdout
@@ -136,6 +188,14 @@ MODULE=Foo PACKAGE=Foo
 
 void
 Foo::foo()
+  CODE:
+    try {
+      THIS->foo();
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
 
 === Comments and raw blocks
 --- xsp_stdout
@@ -197,6 +257,15 @@ Foo::foo( a, b, c )
     int a
     int b
     int c
+  CODE:
+    try {
+      RETVAL = THIS->foo( a, b, c );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 
 # after method
 
@@ -215,6 +284,15 @@ MODULE=Foo PACKAGE=Bar
 
 unsigned int
 bar( char* line, unsigned long length(line) )
+  CODE:
+    try {
+      RETVAL = bar( line, length(line) );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
 === various integer types
 --- xsp_stdout
 %module{Foo};
@@ -238,3 +316,35 @@ bar( a, b, c, d, e, f, g, h )
     unsigned short f
     long g
     unsigned long h
+  CODE:
+    try {
+      RETVAL = bar( a, b, c, d, e, f, g, h );
+    } catch (std::exception& e) {
+      croak("Caught unhandled C++ exception: %s", e.what());
+    } catch (...) {
+      croak("Caught unhandled C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+=== verbatim code blocks for xsubs
+--- xsp_stdout
+%module{Wx};
+
+%typemap{wxRichTextCtrl}{simple};
+%name{Wx::RichTextCtrl} class wxRichTextCtrl
+{
+    %name{newDefault} wxRichTextCtrl()
+        %code{% RETVAL = new wxRichTextCtrl();
+                wxPli_create_evthandler( aTHX_ RETVAL, CLASS );
+             %};
+};
+--- expected
+MODULE=Wx
+
+MODULE=Wx PACKAGE=Wx::RichTextCtrl
+
+static wxRichTextCtrl*
+wxRichTextCtrl::newDefault()
+  CODE:
+     RETVAL = new wxRichTextCtrl();
+                wxPli_create_evthandler( aTHX_ RETVAL, CLASS );
+  OUTPUT: RETVAL
