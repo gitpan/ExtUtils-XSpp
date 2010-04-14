@@ -1,5 +1,6 @@
 package ExtUtils::XSpp::Node::Class;
 use strict;
+use warnings;
 use base 'ExtUtils::XSpp::Node::Package';
 
 =head1 NAME
@@ -30,6 +31,8 @@ C<methods> can be a reference to an array of methods
 (L<ExtUtils::XSpp::Node::Method>) of the class,
 and C<base_classes>, a reference to an array of
 base classes (C<ExtUtils::XSpp::Node::Class> objects).
+C<catch> may be a list of exception names that all
+methods in the class handle.
 
 =cut
 
@@ -38,8 +41,10 @@ sub init {
   my %args = @_;
 
   $this->SUPER::init( @_ );
-  $this->{METHODS} = $args{methods} || [];
+  $this->{METHODS} = [];
   $this->{BASE_CLASSES} = $args{base_classes} || [];
+  $this->add_methods( @{$args{methods}} ) if $args{methods};
+  $this->{CATCH}     = $args{catch};
 }
 
 =head2 add_methods
@@ -66,7 +71,9 @@ sub add_methods {
       if( $meth->isa( 'ExtUtils::XSpp::Node::Method' ) ) {
           $meth->{CLASS} = $this;
           $meth->{ACCESS} = $access;
+          $meth->add_exception_handlers( @{$this->{CATCH} || []} );
           $meth->resolve_typemaps;
+          $meth->resolve_exceptions;
       } elsif( $meth->isa( 'ExtUtils::XSpp::Node::Access' ) ) {
           $access = $meth->access;
           next;

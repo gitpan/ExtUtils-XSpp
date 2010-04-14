@@ -7,7 +7,7 @@ build_requires:
   Test::Differences: 0
 configure_requires:
   Module::Build: 0.36
-generated_by: 'Module::Build version 0.3603'
+generated_by: 'Module::Build version 0.3605'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -16,11 +16,25 @@ name: ExtUtils-XSpp
 provides:
   ExtUtils::XSpp:
     file: lib/ExtUtils/XSpp.pm
-    version: 0.09
+    version: 0.10
   ExtUtils::XSpp::Cmd:
     file: lib/ExtUtils/XSpp/Cmd.pm
   ExtUtils::XSpp::Driver:
     file: lib/ExtUtils/XSpp/Driver.pm
+  ExtUtils::XSpp::Exception:
+    file: lib/ExtUtils/XSpp/Exception.pm
+  ExtUtils::XSpp::Exception::code:
+    file: lib/ExtUtils/XSpp/Exception/code.pm
+  ExtUtils::XSpp::Exception::object:
+    file: lib/ExtUtils/XSpp/Exception/object.pm
+  ExtUtils::XSpp::Exception::perlcode:
+    file: lib/ExtUtils/XSpp/Exception/perlcode.pm
+  ExtUtils::XSpp::Exception::simple:
+    file: lib/ExtUtils/XSpp/Exception/simple.pm
+  ExtUtils::XSpp::Exception::stdmessage:
+    file: lib/ExtUtils/XSpp/Exception/stdmessage.pm
+  ExtUtils::XSpp::Exception::unknown:
+    file: lib/ExtUtils/XSpp/Exception/unknown.pm
   ExtUtils::XSpp::Grammar:
     file: lib/ExtUtils/XSpp/Grammar.pm
   ExtUtils::XSpp::Grammar::YappDriver:
@@ -65,8 +79,8 @@ provides:
   ExtUtils::XSpp::Typemap::simple:
     file: lib/ExtUtils/XSpp/Typemap/simple.pm
 requires:
-  ExtUtils::ParseXS: 2.22
+  ExtUtils::ParseXS: 2.2202
   perl: v5.6.1
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.09
+version: 0.10

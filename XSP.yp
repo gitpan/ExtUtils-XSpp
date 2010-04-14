@@ -13,7 +13,7 @@
 %token OPCURLY CLCURLY OPPAR CLPAR OPANG CLANG SEMICOLON TILDE DCOLON
 %token STAR AMP COMMA EQUAL OPSPECIAL CLSPECIAL
 %token INTEGER RAW_CODE COMMENT ID COLON
-%expect 1
+%expect 2
 
 %%
 
@@ -23,7 +23,7 @@ top_list:
     ;
 
 top: raw | class | directive
-   | function { $_[1]->resolve_typemaps; $_[1] };
+   | function { $_[1]->resolve_typemaps; $_[1]->resolve_exceptions; $_[1] };
 
 directive:      perc_module SEMICOLON
                     { ExtUtils::XSpp::Node::Module->new( module => $_[1] ) }
@@ -35,7 +35,8 @@ directive:      perc_module SEMICOLON
                     { $_[0]->YYData->{PARSER}->load_plugin( $_[1] ); undef }
               | perc_include SEMICOLON
                     { $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
-              | typemap { };
+              | typemap { }
+              | exceptionmap { };
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                   special_blocks SEMICOLON
@@ -48,24 +49,44 @@ typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                       ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
                       undef };
 
+exceptionmap:   p_exceptionmap OPCURLY ID CLCURLY OPCURLY type_name CLCURLY
+                  OPCURLY ID CLCURLY
+                  mixed_blocks SEMICOLON
+                    { my $package = "ExtUtils::XSpp::Exception::" . $_[9];
+                      my $type = make_type($_[6]); my $c = 0;
+                      my %args = map { "arg" . ++$c => $_ }
+                                 map { join( "\n", @$_ ) }
+                                     @{$_[11] || []};
+                      my $e = $package->new( name => $_[3], type => $type, %args );
+                      ExtUtils::XSpp::Exception->add_exception( $e );
+                      undef };
+
+mixed_blocks:  special_block
+                     { [ $_[1] ] }
+               | simple_block
+                     { [ [$_[1]] ] }
+               | mixed_blocks special_block
+                     { [ @{$_[1]}, $_[2] ] }
+               | mixed_blocks simple_block
+                     { [ @{$_[1]}, $_[2] ] }
+               | ;
+
+simple_block:  OPCURLY ID CLCURLY
+                { $_[2] };
+
 raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
       | COMMENT         { add_data_comment( $_[0], $_[1] ) }
       | special_block   { add_data_raw( $_[0], [ @{$_[1]} ] ) };
 
-class:    class_decl | decorate_class;
-function: function_decl | decorate_function;
-method:   method_decl | decorate_method;
+class:    class_decl SEMICOLON | decorate_class SEMICOLON;
+function: function_decl SEMICOLON;
+method:   method_decl SEMICOLON;
 
-decorate_class:     perc_name class { $_[2]->set_perl_name( $_[1] ); $_[2] };
-decorate_function:  perc_name function { $_[2]->set_perl_name( $_[1] ); $_[2] };
-decorate_method:    perc_name method { $_[2]->set_perl_name( $_[1] ); $_[2] }
-                  | static method { $_[2]->set_static( $_[1] ); $_[2] }
-                  | virtual method { $_[2]->set_virtual( 1 ); $_[2] };
+decorate_class:
+    perc_name class_decl { $_[2]->set_perl_name( $_[1] ); $_[2] };
 
-class_decl: 'class' ID base_classes OPCURLY class_body_list CLCURLY SEMICOLON
-                { create_class( $_[0], $_[2], $_[3], $_[5] ) }
-          | 'class' ID base_classes OPCURLY CLCURLY SEMICOLON
-                { create_class( $_[0], $_[2], $_[3], [] ) };
+class_decl: 'class' ID base_classes class_metadata OPCURLY class_body_list CLCURLY
+                { create_class( $_[0], $_[2], $_[3], $_[4], $_[6] ) };
 
 base_classes:
       COLON base_class              { [ $_[2] ] }
@@ -86,14 +107,17 @@ class_name_rename:
                              }
     ;
 
+class_metadata:   class_metadata perc_catch { [ @{$_[1]}, @{$_[2]} ] }
+                |                           { [] }
+                ;
+
 class_body_list:
-      class_body_element
-          { $_[1] ? [ $_[1] ] : [] }
+          { [] }
     | class_body_list class_body_element
           { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
     ;
 
-class_body_element: method | raw | typemap | access_specifier;
+class_body_element: method | raw | typemap | exceptionmap | access_specifier;
 
 access_specifier:
       'public' COLON    { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
@@ -101,56 +125,114 @@ access_specifier:
     | 'private' COLON   { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
     ;
 
-method_decl:    function_decl
-                         { my $f = $_[1];
-                           my $m = add_data_method
-                             ( $_[0],
-                               name      => $f->cpp_name,
-                               ret_type  => $f->ret_type,
-                               arguments => $f->arguments,
-                               code      => $f->code,
-                               cleanup   => $f->cleanup,
-                               postcall  => $f->postcall,
-                               );
-                           $m
-                         }
-              | ctor
-              | dtor ;
+method_decl: nmethod | vmethod | ctor | dtor;
 
-const: 'const'
-     | ;
+const: 'const'   { 1 }
+     |           { 0 };
 
 virtual: 'virtual';
 
 static: 'package_static'
       | 'class_static'
+      | 'static'         { 'package_static' }
       ;
 
-function_decl:  type ID OPPAR arg_list CLPAR const metadata SEMICOLON
-                    { add_data_function( $_[0],
-                                         name      => $_[2],
-                                         ret_type  => $_[1],
-                                         arguments => $_[4],
-                                         @{ $_[7] } ) };
+looks_like_function:
+      type ID OPPAR arg_list CLPAR const
+          {
+              return { ret_type  => $_[1],
+                       name      => $_[2],
+                       arguments => $_[4],
+                       const     => $_[6],
+                       };
+          };
 
-ctor:           ID OPPAR arg_list CLPAR metadata SEMICOLON
+looks_like_renamed_function:
+      looks_like_function
+    | perc_name looks_like_function
+          { $_[2]->{perl_name} = $_[1]; $_[2] };
+
+function_decl:  looks_like_renamed_function function_metadata
+                    { add_data_function( $_[0],
+                                         name      => $_[1]->{name},
+                                         perl_name => $_[1]->{perl_name},
+                                         ret_type  => $_[1]->{ret_type},
+                                         arguments => $_[1]->{arguments},
+                                         @{$_[2]} ) };
+
+ctor:           ID OPPAR arg_list CLPAR function_metadata
                     { add_data_ctor( $_[0], name      => $_[1],
                                             arguments => $_[3],
-                                            @{ $_[5] } ) };
+                                            @{ $_[5] } ) }
+              | perc_name ctor { $_[2]->set_perl_name( $_[1] ); $_[2] };
 
-dtor:           TILDE ID OPPAR CLPAR metadata SEMICOLON
+dtor:           TILDE ID OPPAR CLPAR function_metadata
                     { add_data_dtor( $_[0], name  => $_[2],
                                             @{ $_[5] },
-                                      ) };
+                                      ) }
+              | perc_name dtor { $_[2]->set_perl_name( $_[1] ); $_[2] };
 
-metadata:       metadata _metadata { [ @{$_[1]}, @{$_[2]} ] }
-              |                    { [] }
-              ;
+function_metadata:   function_metadata _function_metadata { [ @{$_[1]}, @{$_[2]} ] }
+                   |                                      { [] }
+                   ;
 
-_metadata:      perc_code
-              | perc_cleanup
-              | perc_postcall
-              ;
+nmethod:
+      looks_like_renamed_function function_metadata
+          { my $m = add_data_method
+                        ( $_[0],
+                          name      => $_[1]->{name},
+                          perl_name => $_[1]->{perl_name},
+                          ret_type  => $_[1]->{ret_type},
+                          arguments => $_[1]->{arguments},
+                          const     => $_[1]->{const},
+                          @{$_[2]},
+                          );
+            $m
+          }
+    | static nmethod
+          { $_[2]->set_static( $_[1] ); $_[2] };
+
+vmethod:
+      _vmethod
+    | perc_name vmethod
+          { $_[2]->set_perl_name( $_[1] ); $_[2] }
+    ;
+
+_vmethod:
+      virtual looks_like_function function_metadata
+          { my $m = add_data_method
+                        ( $_[0],
+                          name      => $_[2]->{name},
+                          perl_name => $_[2]->{perl_name},
+                          ret_type  => $_[2]->{ret_type},
+                          arguments => $_[2]->{arguments},
+                          const     => $_[2]->{const},
+                          @{$_[3]},
+                          );
+            $m->set_virtual( 1 );
+            $m
+          }
+    | virtual looks_like_function EQUAL INTEGER function_metadata
+          { my $m = add_data_method
+                        ( $_[0],
+                          name      => $_[2]->{name},
+                          perl_name => $_[2]->{perl_name},
+                          ret_type  => $_[2]->{ret_type},
+                          arguments => $_[2]->{arguments},
+                          const     => $_[2]->{const},
+                          @{$_[5]},
+                          );
+            die "Invalid pure virtual method" unless $_[4] eq '0';
+            $m->set_virtual( 2 );
+            $m
+          }
+    ;
+
+_function_metadata:    perc_code
+                     | perc_cleanup
+                     | perc_postcall
+                     | perc_catch
+                     ;
 
 perc_name:       p_name OPCURLY class_name CLCURLY       { $_[3] };
 perc_package:    p_package OPCURLY class_name CLCURLY    { $_[3] };
@@ -161,6 +243,7 @@ perc_include:    p_include OPCURLY file_name CLCURLY     { $_[3] };
 perc_code:       p_code special_block                    { [ code => $_[2] ] };
 perc_cleanup:    p_cleanup special_block                 { [ cleanup => $_[2] ] };
 perc_postcall:   p_postcall special_block                { [ postcall => $_[2] ] };
+perc_catch:      p_catch OPCURLY class_name_list CLCURLY { [ map {(catch => $_)} @{$_[3]} ] };
 
 type:
     'const' nconsttype          { make_const( $_[2] ) }
@@ -194,6 +277,11 @@ type_list:
 
 class_name:     ID
               | ID class_suffix { $_[1] . '::' . $_[2] };
+
+class_name_list:
+    class_name                          { [ $_[1] ] }
+  | class_name_list COMMA class_name    { push @{$_[1]}, $_[3]; $_[1] }
+  ;
 
 class_suffix:   DCOLON ID                   { $_[2] }
               | class_suffix DCOLON ID { $_[1] . '::' . $_[3] };

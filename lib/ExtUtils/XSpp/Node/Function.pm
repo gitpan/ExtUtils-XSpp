@@ -1,6 +1,7 @@
 package ExtUtils::XSpp::Node::Function;
-
 use strict;
+use warnings;
+use Carp ();
 use base 'ExtUtils::XSpp::Node';
 
 =head1 NAME
@@ -26,14 +27,14 @@ Creates a new C<ExtUtils::XSpp::Node::Function>.
 Named parameters: C<cpp_name> indicating the C++ name of the function,
 C<perl_name> indicating the Perl name of the function (defaults to the
 same as C<cpp_name>), C<arguments> can be a reference to an
-array of C<ExtUtils::XSpp::Node::Argument> objects,
-C<ret_type> indicates the (C++) return type of the function,
-and finally, C<class>, which can be an L<ExtUtils::XSpp::Node::Class>
-object (FIXME: Should this be part of ::Function, not ::Method?)
+array of C<ExtUtils::XSpp::Node::Argument> objects and finally
+C<ret_type> indicates the (C++) return type of the function.
 
 Additionally, there are several optional decorators for a function
 declaration (see L<ExtUtils::XSpp> for a list). These can be
-passed to the constructor as C<code>, C<cleanup>, and C<postcall>.
+passed to the constructor as C<code>, C<cleanup>, C<postcall>,
+and C<catch>. C<catch> is special in that it must be a reference
+to an array of class names.
 
 =cut
 
@@ -41,17 +42,33 @@ sub init {
   my $this = shift;
   my %args = @_;
 
-  $this->{CPP_NAME} = $args{cpp_name};
+  $this->{CPP_NAME}  = $args{cpp_name};
   $this->{PERL_NAME} = $args{perl_name} || $args{cpp_name};
   $this->{ARGUMENTS} = $args{arguments} || [];
-  $this->{RET_TYPE} = $args{ret_type};
-  $this->{CODE} = $args{code};
-  $this->{CLEANUP} = $args{cleanup};
-  $this->{POSTCALL} = $args{postcall};
-  $this->{CLASS} = $args{class};
+  $this->{RET_TYPE}  = $args{ret_type};
+  $this->{CODE}      = $args{code};
+  $this->{CLEANUP}   = $args{cleanup};
+  $this->{POSTCALL}  = $args{postcall};
+  $this->{CLASS}     = $args{class};
+  $this->{CATCH}     = $args{catch};
+
+  if (ref($this->{CATCH})
+      and @{$this->{CATCH}} > 1
+      and grep {$_ eq 'nothing'} @{$this->{CATCH}})
+  {
+    Carp::croak( ref($this) . " '" . $this->{CPP_NAME}
+                 . "' is supposed to catch no exceptions, yet"
+                 . " there are exception handlers ("
+                 . join(", ", @{$this->{CATCH}}) . ")" );
+  }
+  return $this;
 }
 
 =head2 resolve_typemaps
+
+Fetches the L<ExtUtils::XSpp::Typemap> object for
+the return type and the arguments from the typemap registry
+and stores a reference to those objects.
 
 =cut
 
@@ -67,6 +84,79 @@ sub resolve_typemaps {
     push @{$this->{TYPEMAPS}{ARGUMENTS}}, $t;
   }
 }
+
+
+=head2 resolve_exceptions
+
+Fetches the L<ExtUtils::XSpp::Exception> object for
+the C<%catch> directives associated with this function.
+
+=cut
+
+sub resolve_exceptions {
+  my $this = shift;
+
+  my @catch = @{$this->{CATCH} || []};
+
+  my @exceptions;
+
+  # If this method is not hard-wired to catch nothing...
+  if (not grep {$_ eq 'nothing'} @catch) {
+    my %seen;
+    foreach my $catch (@catch) {
+      next if $seen{$catch}++;
+      push @exceptions,
+        ExtUtils::XSpp::Exception->get_exception_for_name($catch);
+    }
+
+    # If nothing else, catch std::exceptions nicely
+    if (not @exceptions) {
+      my $typenode = ExtUtils::XSpp::Node::Type->new(base => 'std::exception');
+      push @exceptions,
+        ExtUtils::XSpp::Exception::stdmessage->new( name => 'default',
+                                                    type => $typenode );
+    }
+  }
+
+  # Always catch the rest with an unspecific error message.
+  # If the method is hard-wired to catch nothing, we lie to the user
+  # for his own safety! (FIXME: debate this)
+  push @exceptions,
+    ExtUtils::XSpp::Exception::unknown->new( name => '', type => '' );
+
+  $this->{EXCEPTIONS} = \@exceptions;
+}
+
+=head2 add_exception_handlers
+
+Adds a list of exception names to the list of exception handlers.
+This is mainly called by a class' C<add_methods> method.
+If the function is hard-wired to have no exception handlers,
+any extra handlers from the class are ignored.
+
+=cut
+
+
+sub add_exception_handlers {
+  my $this = shift;
+
+  # ignore class %catch'es if overridden with "nothing" in the method
+  if ($this->{CATCH} and @{$this->{CATCH}} == 1
+      and $this->{CATCH} eq 'nothing') {
+    return();
+  }
+
+  # ignore class %catch{nothing} if overridden in the method
+  if (@_ == 1 and $_[0] eq 'nothing' and @{$this->{CATCH}}) {
+    return();
+  }
+
+  $this->{CATCH} ||= [];
+  push @{$this->{CATCH}}, @_;
+
+  return();
+}
+
 
 =head2 argument_style
 
@@ -109,17 +199,20 @@ sub argument_style {
 # (rest as above)
 
 sub print {
-  my $this = shift;
-  my $state = shift;
-  my $out = '';
-  my $fname = $this->perl_function_name;
-  my $args = $this->arguments;
-  my $ret_type = $this->ret_type;
-  my $ret_typemap = $this->{TYPEMAPS}{RET_TYPE};
+  my $this               = shift;
+  my $state              = shift;
+
+  my $out                = '';
+  my $fname              = $this->perl_function_name;
+  my $args               = $this->arguments;
+  my $ret_type           = $this->ret_type;
+  my $ret_typemap        = $this->{TYPEMAPS}{RET_TYPE};
   my $need_call_function = 0;
+
   my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup,
       $postcall, $precall ) =
     ( '', '', '', '', '', '', '', '' );
+
   my $use_ansi_style = $this->argument_style() eq 'ansi';
 
   if( $args && @$args ) {
@@ -127,14 +220,15 @@ sub print {
     my( @arg_list, @call_arg_list );
     foreach my $i ( 0 .. $#$args ) {
       my $arg = ${$args}[$i];
-      my $t = $this->{TYPEMAPS}{ARGUMENTS}[$i];
-      my $pc = $t->precall_code( sprintf( 'ST(%d)', $i + $has_self ),
-                                 $arg->name );
+      my $t   = $this->{TYPEMAPS}{ARGUMENTS}[$i];
+      my $pc  = $t->precall_code( sprintf( 'ST(%d)', $i + $has_self ),
+                                  $arg->name );
 
       $need_call_function ||=    defined $t->call_parameter_code( '' )
                               || defined $pc;
       my $type = $use_ansi_style ? $t->cpp_type . ' ' : '';
-      push @arg_list, $type . $arg->name . ( $arg->has_default ? ' = ' . $arg->default : '' );
+      push @arg_list, $type . $arg->name .
+                      ( $arg->has_default ? ' = ' . $arg->default : '' );
       if (!$use_ansi_style) {
         $init .= '    ' . $t->cpp_type . ' ' . $arg->name . "\n";
       }
@@ -147,6 +241,7 @@ sub print {
     $arg_list = ' ' . join( ', ', @arg_list ) . ' ';
     $call_arg_list = ' ' . join( ', ', @call_arg_list ) . ' ';
   }
+
   # same for return value
   $need_call_function ||= $ret_typemap &&
     ( defined $ret_typemap->call_function_code( '', '' ) ||
@@ -192,11 +287,11 @@ sub print {
     if( $has_ret && defined $ret_typemap->output_code ) {
       $code .= '      ' . $ret_typemap->output_code . ";\n";
     }
-    $code .= "    } catch (std::exception& e) {\n";
-    $code .= '      croak("Caught unhandled C++ exception: %s", e.what());' . "\n";
-    $code .= "    } catch (...) {\n";
-    $code .= '      croak("Caught unhandled C++ exception of unknown type");' . "\n";
     $code .= "    }\n";
+    my @catchers = @{$this->{EXCEPTIONS}};
+    foreach my $exception_handler (@catchers) {
+      $code .= $exception_handler->handler_code;
+    }
 
     $output = "  OUTPUT: RETVAL\n" if $has_ret;
 
@@ -308,13 +403,10 @@ Returns the C<%cleanup> decorator if any.
 
 Returns the C<%postcall> decorator if any.
 
-=head2 virtual
+=head2 catch
 
-Returns whether the method was declared virtual.
-
-=head2 set_virtual
-
-Set whether the method is to be considered virtual.
+Returns the set of exception types that were associated
+with the function via C<%catch>. (array reference)
 
 =cut
 
@@ -326,8 +418,7 @@ sub ret_type { $_[0]->{RET_TYPE} }
 sub code { $_[0]->{CODE} }
 sub cleanup { $_[0]->{CLEANUP} }
 sub postcall { $_[0]->{POSTCALL} }
-sub virtual { $_[0]->{VIRTUAL} }
-sub set_virtual { $_[0]->{VIRTUAL} = $_[1] }
+sub catch { $_[0]->{CATCH} ? $_[0]->{CATCH} : [] }
 
 =head2 set_static
 
@@ -337,17 +428,22 @@ or C<class_static>.
 
 =head2 package_static
 
-Returns whether the function is package static.
+Returns whether the function is package static.  A package static
+function can be invoked as:
+
+    My::Package::Function( ... );
 
 =head2 class_static
 
-Returns whether the function is class static.
+Returns whether the function is class static. A class static function
+can be invoked as:
+
+    My::Package->Function( ... );
 
 =cut
 
 sub set_static { $_[0]->{STATIC} = $_[1] }
 sub package_static { ( $_[0]->{STATIC} || '' ) eq 'package_static' }
 sub class_static { ( $_[0]->{STATIC} || '' ) eq 'class_static' }
-
 
 1;

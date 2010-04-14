@@ -21,6 +21,7 @@ use ExtUtils::XSpp::Node::Raw;
 use ExtUtils::XSpp::Node::Type;
 
 use ExtUtils::XSpp::Typemap;
+use ExtUtils::XSpp::Exception;
 
 my %tokens = ( '::' => 'DCOLON',
                ':'  => 'COLON',
@@ -46,6 +47,8 @@ my %tokens = ( '::' => 'DCOLON',
                # these are here due to my lack of skill with yacc
                '%name'       => 'p_name',
                '%typemap'    => 'p_typemap',
+               '%exception'  => 'p_exceptionmap',
+               '%catch'      => 'p_catch',
                '%file'       => 'p_file',
                '%module'     => 'p_module',
                '%code'       => 'p_code',
@@ -66,6 +69,7 @@ my %keywords = ( const => 1,
                  char => 1,
                  package_static => 1,
                  class_static => 1,
+                 static => 1,
                  public => 1,
                  private => 1,
                  protected => 1,
@@ -137,7 +141,9 @@ sub yylex {
       next unless length $$buf;
 
       if( $$buf =~ s/^([+-]?(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?)// ) {
-        return ( 'FLOAT', $1 );
+        my $v = $1;
+        return ( 'INTEGER', $v ) if $v =~ /^[+-]?\d+$/;
+        return ( 'FLOAT', $v );
       } elsif( $$buf =~ s/^\/\/(.*)(?:\r\n|\r|\n)// ) {
         return ( 'COMMENT', [ $1 ] );
       } elsif( $$buf =~ /^\/\*/ ) {
@@ -155,6 +161,7 @@ sub yylex {
                       | \%name | \%typemap | \%module  | \%code
                       | \%file | \%cleanup | \%package | \%length
                       | \%loadplugin | \%include | \%postcall
+                      | \%exception | \%catch
                       | [{}();%~*&,=\/\.\-<>]
                       | :: | :
                        )//x ) {
@@ -165,8 +172,6 @@ sub yylex {
         return ( $1, $1 ) if exists $keywords{$1};
 
         return ( 'ID', $1 );
-      } elsif( $$buf =~ s/^(\d+)// ) {
-        return ( 'INTEGER', $1 );
       } elsif( $$buf =~ s/^("[^"]*")// ) {
         return ( 'QUOTED_STRING', $1 );
       } elsif( $$buf =~ s/^(#.*)(?:\r\n|\r|\n)// ) {
@@ -225,8 +230,12 @@ sub make_argument {
 }
 
 sub create_class {
-  my( $parser, $name, $bases, $methods ) = @_;
-  my $class = ExtUtils::XSpp::Node::Class->new( cpp_name     => $name,
+  my( $parser, $name, $bases, $metadata, $methods ) = @_;
+  my %metadata = @$metadata;
+  _merge_keys('catch', \%metadata, $metadata);
+
+  my $class = ExtUtils::XSpp::Node::Class->new( %metadata, # <-- catch only for now
+                                                cpp_name     => $name,
                                                 base_classes => $bases );
 
   # when adding a class C, automatically add weak typemaps for C* and C&
@@ -250,36 +259,62 @@ sub create_class {
   return $class;
 }
 
+# support multiple occurrances of specific keys
+# => transform to flattened array ref
+sub _merge_keys {
+  my $key = shift;
+  my $argshash = shift;
+  my $paramlist = shift;
+  my @occurrances;
+  for (my $i = 0; $i < @$paramlist; $i += 2) {
+    if (defined $paramlist->[$i] and $paramlist->[$i] eq $key) {
+      push @occurrances, $paramlist->[$i+1];
+    }
+  }
+  @occurrances = map {ref($_) eq 'ARRAY' ? @$_ : $_}  @occurrances;
+  $argshash->{$key} = \@occurrances;
+}
+
 sub add_data_function {
-  my( $parser, %args ) = @_;
+  my $parser = shift @_;
+  my %args   = @_;
+  _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Function->new
       ( cpp_name  => $args{name},
+        perl_name => $args{perl_name},
         class     => $args{class},
         ret_type  => $args{ret_type},
         arguments => $args{arguments},
         code      => $args{code},
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
+        catch     => $args{catch},
         );
 }
 
 sub add_data_method {
-  my( $parser, %args ) = @_;
+  my $parser = shift @_;
+  my %args   = @_;
+  _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Method->new
       ( cpp_name  => $args{name},
         ret_type  => $args{ret_type},
         arguments => $args{arguments},
+        const     => $args{const},
         code      => $args{code},
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
         perl_name => $args{perl_name},
+        catch     => $args{catch},
         );
 }
 
 sub add_data_ctor {
-  my( $parser, %args ) = @_;
+  my $parser = shift @_;
+  my %args   = @_;
+  _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Constructor->new
       ( cpp_name  => $args{name},
@@ -287,17 +322,21 @@ sub add_data_ctor {
         code      => $args{code},
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
+        catch     => $args{catch},
         );
 }
 
 sub add_data_dtor {
-  my( $parser, %args ) = @_;
+  my $parser = shift @_;
+  my %args   = @_;
+  _merge_keys('catch', \%args, \@_);
 
   ExtUtils::XSpp::Node::Destructor->new
       ( cpp_name  => $args{name},
         code      => $args{code},
         cleanup   => $args{cleanup},
         postcall  => $args{postcall},
+        catch     => $args{catch},
         );
 }
 
