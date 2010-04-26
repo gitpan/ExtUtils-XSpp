@@ -7,7 +7,7 @@ build_requires:
   Test::Differences: 0
 configure_requires:
   Module::Build: 0.36
-generated_by: 'Module::Build version 0.3605'
+generated_by: 'Module::Build version 0.3603'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -16,7 +16,7 @@ name: ExtUtils-XSpp
 provides:
   ExtUtils::XSpp:
     file: lib/ExtUtils/XSpp.pm
-    version: 0.10
+    version: 0.10_01
   ExtUtils::XSpp::Cmd:
     file: lib/ExtUtils/XSpp/Cmd.pm
   ExtUtils::XSpp::Driver:
@@ -83,4 +83,4 @@ requires:
   perl: v5.6.1
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.10
+version: 0.10_01

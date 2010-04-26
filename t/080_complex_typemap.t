@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 5;
+use t::lib::XSP::Test tests => 6;
 
 run_diff xsp_stdout => 'expected';
 
@@ -12,7 +12,9 @@ __DATA__
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{parsed}{%foobar%};
+%typemap{int}{parsed}{
+    %cpp_type{foobar};
+};
 
 class Foo
 {
@@ -46,7 +48,9 @@ Foo::foo( a, b )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{parsed}{%int%}{% $$ = fancy_conversion( $1 ) %};
+%typemap{int}{parsed}{
+    %call_function_code{% $CVar = fancy_conversion( $Call ) %};
+};
 
 class Foo
 {
@@ -80,7 +84,9 @@ Foo::foo( a, b )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{parsed}{%int%}{%%}{% custom_code( RETVAL ) %};
+%typemap{int}{parsed}{
+    %output_code{% $PerlVar = custom_code( $CVar ) %};
+};
 
 class Foo
 {
@@ -101,7 +107,7 @@ Foo::foo( a, b )
   CODE:
     try {
       RETVAL = THIS->foo( a, b );
-       custom_code( RETVAL ) ;
+       ST(0) = custom_code( RETVAL ) ;
     }
     catch (std::exception& e) {
       croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
@@ -115,7 +121,9 @@ Foo::foo( a, b )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{parsed}{%int%}{%%}{%%}{% custom_code( ST(0), RETVAL ) %};
+%typemap{int}{parsed}{
+    %cleanup_code{% custom_code( $PerlVar, $CVar ) %};
+};
 
 class Foo
 {
@@ -151,8 +159,9 @@ Foo::foo( a, b )
 --- xsp_stdout
 %module{Foo};
 
-%typemap{int}{parsed}{%int%}{%%}{%%}{%%}
-    {% custom_code( $1, RETVAL ) %};
+%typemap{int}{parsed}{
+    %precall_code{% custom_code( $PerlVar, $CVar ) %};
+};
 
 class Foo
 {
@@ -172,8 +181,8 @@ Foo::foo( a, b )
     int b
   CODE:
     try {
-       custom_code( ST(1), RETVAL ) ;
- custom_code( ST(2), RETVAL ) ;
+       custom_code( ST(1), a ) ;
+ custom_code( ST(2), b ) ;
       RETVAL = THIS->foo( a, b );
     }
     catch (std::exception& e) {
@@ -183,3 +192,39 @@ Foo::foo( a, b )
       croak("Caught C++ exception of unknown type");
     }
   OUTPUT: RETVAL
+
+=== Complex typemap, output list code
+--- xsp_stdout
+%module{Foo};
+
+%typemap{int}{parsed}{
+    %output_list{% PUTBACK; XPUSHi( $CVar ); SPAGAIN %};
+};
+
+class Foo
+{
+    int foo( int a, int b );
+};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+int
+Foo::foo( a, b )
+    int a
+    int b
+  PPCODE:
+    try {
+      RETVAL = THIS->foo( a, b );
+       PUTBACK; XPUSHi( RETVAL ); SPAGAIN ;
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }

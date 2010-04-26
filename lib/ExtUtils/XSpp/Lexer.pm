@@ -37,6 +37,7 @@ my %tokens = ( '::' => 'DCOLON',
                 '~' => 'TILDE',
                 '*' => 'STAR',
                 '&' => 'AMP',
+                '|' => 'PIPE',
                 ',' => 'COMMA',
                 '=' => 'EQUAL',
                 '/' => 'SLASH',
@@ -140,7 +141,9 @@ sub yylex {
       $$buf =~ s/^[\s\n\r]+//;
       next unless length $$buf;
 
-      if( $$buf =~ s/^([+-]?(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?)// ) {
+      if( $$buf =~ s/^([+-]?0x[0-9a-fA-F]+)// ) {
+        return ( 'INTEGER', $1 );
+      } elsif( $$buf =~ s/^([+-]?(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?)// ) {
         my $v = $1;
         return ( 'INTEGER', $v ) if $v =~ /^[+-]?\d+$/;
         return ( 'FLOAT', $v );
@@ -156,13 +159,12 @@ sub yylex {
           $$buf =~ s/(?:\r\n|\r|\n)$//;
           push @rows, $$buf;
         }
+      } elsif( $$buf =~ s/^(\%\w+)// ) {
+        return ( $tokens{$1}, $1 ) if exists $tokens{$1};
+        return ( 'p_any', substr $1, 1 );
       } elsif( $$buf =~ s/^( \%}
                       | \%{ | {\%
-                      | \%name | \%typemap | \%module  | \%code
-                      | \%file | \%cleanup | \%package | \%length
-                      | \%loadplugin | \%include | \%postcall
-                      | \%exception | \%catch
-                      | [{}();%~*&,=\/\.\-<>]
+                      | [{}();%~*&,=\/\.\-<>|]
                       | :: | :
                        )//x ) {
         return ( $tokens{$1}, $1 );
@@ -239,19 +241,7 @@ sub create_class {
                                                 base_classes => $bases );
 
   # when adding a class C, automatically add weak typemaps for C* and C&
-  my $ptr = ExtUtils::XSpp::Node::Type->new
-                ( base    => $name,
-                  pointer => 1,
-                  );
-  my $ref = ExtUtils::XSpp::Node::Type->new
-                ( base      => $name,
-                  reference => 1,
-                  );
-
-  ExtUtils::XSpp::Typemap::add_weak_typemap_for_type
-      ( $ptr, ExtUtils::XSpp::Typemap::simple->new( type => $ptr ) );
-  ExtUtils::XSpp::Typemap::add_weak_typemap_for_type
-      ( $ref, ExtUtils::XSpp::Typemap::reference->new( type => $ref ) );
+  ExtUtils::XSpp::Typemap::add_class_default_typemaps( $name );
 
   # finish creating the class
   $class->add_methods( @$methods );
