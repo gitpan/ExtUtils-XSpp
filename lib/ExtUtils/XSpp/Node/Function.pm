@@ -51,6 +51,7 @@ sub init {
   $this->{POSTCALL}  = $args{postcall};
   $this->{CLASS}     = $args{class};
   $this->{CATCH}     = $args{catch};
+  $this->{CONDITION} = $args{condition};
 
   if (ref($this->{CATCH})
       and @{$this->{CATCH}} > 1
@@ -345,6 +346,20 @@ EOT
   $out .= "\n";
 }
 
+=head2 print_declaration
+
+Returns a string with a C++ method declaration for the node.
+
+=cut
+
+sub print_declaration {
+    my( $this ) = @_;
+
+    return $this->ret_type->print . ' ' . $this->cpp_name . '( ' .
+           join( ', ', map $_->print, @{$this->arguments} ) . ')' .
+           ( $this->const ? ' const' : '' );
+}
+
 =head2 perl_function_name
 
 Returns the name of the Perl function to generate.
@@ -403,6 +418,11 @@ Returns the C++ return type.
 
 Returns the C<%code> decorator if any.
 
+=head2 set_code
+
+Sets the implementation for the method call (equivalent to using
+C<%code>); takes the code as an array reference containing the lines.
+
 =head2 cleanup
 
 Returns the C<%cleanup> decorator if any.
@@ -419,11 +439,13 @@ with the function via C<%catch>. (array reference)
 =cut
 
 sub cpp_name { $_[0]->{CPP_NAME} }
+sub set_cpp_name { $_[0]->{CPP_NAME} = $_[1] }
 sub perl_name { $_[0]->{PERL_NAME} }
 sub set_perl_name { $_[0]->{PERL_NAME} = $_[1] }
 sub arguments { $_[0]->{ARGUMENTS} }
 sub ret_type { $_[0]->{RET_TYPE} }
 sub code { $_[0]->{CODE} }
+sub set_code { $_[0]->{CODE} = $_[1] }
 sub cleanup { $_[0]->{CLEANUP} }
 sub postcall { $_[0]->{POSTCALL} }
 sub catch { $_[0]->{CATCH} ? $_[0]->{CATCH} : [] }

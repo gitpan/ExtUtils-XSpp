@@ -8,18 +8,19 @@ run_diff xsp_stdout => 'expected';
 
 __DATA__
 
-=== Basic plugin functionality
+=== Handle class/method/function annotations
 --- xsp_stdout
 %module{Foo};
 %package{Foo};
-%loadplugin{t::lib::XSP::Plugin};
-%loadplugin{t::lib::XSP::Plugin};
+%loadplugin{TestParserPlugin};
 
-int foo(int y);
+int foo(int y) %MyFuncRename{Foo};
 
-class Y
+class klass
 {
-    void bar();
+    %MyClassRename{Klass};
+
+    void bar() %MyMethodRename{Bar};
 };
 --- expected
 #include <exception>
@@ -30,7 +31,7 @@ MODULE=Foo
 MODULE=Foo PACKAGE=Foo
 
 int
-foo_perl( y )
+Foo( y )
     int y
   CODE:
     try {
@@ -45,10 +46,10 @@ foo_perl( y )
   OUTPUT: RETVAL
 
 
-MODULE=Foo PACKAGE=Y
+MODULE=Foo PACKAGE=Klass
 
 void
-Y::bar()
+klass::Bar()
   CODE:
     try {
       THIS->bar();
@@ -60,18 +61,14 @@ Y::bar()
       croak("Caught C++ exception of unknown type");
     }
 
-=== Plugin loading from the plugin namespace
+=== Handle top level directives
 --- xsp_stdout
 %module{Foo};
 %package{Foo};
-%loadplugin{TestPlugin};
+%loadplugin{TestParserPlugin};
 
-int foo(int y);
+%MyDirective{Foo};
 
-class Y
-{
-    void bar();
-};
 --- expected
 #include <exception>
 
@@ -80,33 +77,4 @@ MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
 
-int
-foo_perl2( y )
-    int y
-  CODE:
-    try {
-      RETVAL = foo( y );
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
-  OUTPUT: RETVAL
-
-
-MODULE=Foo PACKAGE=Y
-
-void
-Y::bar()
-  CODE:
-    try {
-      THIS->bar();
-    }
-    catch (std::exception& e) {
-      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
-    }
-    catch (...) {
-      croak("Caught C++ exception of unknown type");
-    }
+// Foo

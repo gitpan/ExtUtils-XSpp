@@ -49,6 +49,7 @@ sub init {
   $this->{BASE_CLASSES} = $args{base_classes} || [];
   $this->add_methods( @{$args{methods}} ) if $args{methods};
   $this->{CATCH}     = $args{catch};
+  $this->{CONDITION} = $args{condition};
 
   $all_classes{$this->cpp_name} = $this unless $this->empty;
 
@@ -97,6 +98,13 @@ sub add_methods {
   $all_classes{$this->cpp_name} = $this unless $this->empty;
 }
 
+sub delete_methods {
+    my( $this, @methods ) = @_;
+    my %methods = map { $_ => 1 } @methods;
+
+    $this->{METHODS} = [ grep !$methods{$_}, @{$this->{METHODS}} ];
+}
+
 sub print {
   my $this = shift;
   my $state = shift;
@@ -114,6 +122,10 @@ sub print {
       $out .= <<EOT;
 BOOT:
     {
+EOT
+
+      $out .= '#ifdef ' . $this->condition . "\n" if $this->condition;
+      $out .= <<EOT;
         AV* isa = get_av( "${class}::ISA", 1 );
 EOT
 
@@ -126,6 +138,7 @@ EOT
     }
 
       # close block in BOOT
+      $out .= '#endif // ' . $this->condition . "\n" if $this->condition;
       $out .= <<EOT;
     } // blank line here is important
 

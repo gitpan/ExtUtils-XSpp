@@ -22,7 +22,7 @@ top_list:
     | top_list top      { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
     ;
 
-top: raw | class | directive
+top: raw | class | directive | enum
    | function { $_[1]->resolve_typemaps; $_[1]->resolve_exceptions; $_[1] };
 
 directive:      perc_module SEMICOLON
@@ -35,8 +35,11 @@ directive:      perc_module SEMICOLON
                     { $_[0]->YYData->{PARSER}->load_plugin( $_[1] ); undef }
               | perc_include SEMICOLON
                     { $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
+              | perc_any SEMICOLON
+                    { add_top_level_directive( $_[0], @{$_[1]} ); undef }
               | typemap { }
-              | exceptionmap { };
+              | exceptionmap { }
+              ;
 
 typemap:        p_typemap OPCURLY type CLCURLY OPCURLY ID CLCURLY
                   special_blocks SEMICOLON
@@ -86,7 +89,48 @@ simple_block:  OPCURLY ID CLCURLY
 
 raw:    RAW_CODE        { add_data_raw( $_[0], [ $_[1] ] ) }
       | COMMENT         { add_data_comment( $_[0], $_[1] ) }
+      | PREPROCESSOR    { ExtUtils::XSpp::Node::Preprocessor->new
+                              ( rows   => [ $_[1][0] ],
+                                symbol => $_[1][1],
+                                ) }
       | special_block   { add_data_raw( $_[0], [ @{$_[1]} ] ) };
+
+enum:
+      'enum' OPCURLY enum_element_list CLCURLY SEMICOLON
+          { ExtUtils::XSpp::Node::Enum->new
+                ( elements  => $_[3],
+                  condition => $_[0]->get_conditional,
+                  ) }
+    | 'enum' ID OPCURLY enum_element_list CLCURLY SEMICOLON
+          { ExtUtils::XSpp::Node::Enum->new
+                ( name      => $_[2],
+                  elements  => $_[4],
+                  condition => $_[0]->get_conditional,
+                  ) }
+    ;
+
+enum_element_list:
+          { [] }
+    | enum_element_list enum_element
+          { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+    | enum_element_list enum_element COMMA
+          { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+    ;
+
+enum_element:
+      ID
+          { ExtUtils::XSpp::Node::EnumValue->new
+                ( name => $_[1],
+                  condition => $_[0]->get_conditional,
+                  ) }
+    | ID EQUAL expression
+          { ExtUtils::XSpp::Node::EnumValue->new
+                ( name      => $_[1],
+                  value     => $_[3],
+                  condition => $_[0]->get_conditional,
+                  ) }
+    | raw
+    ;
 
 class:    class_decl SEMICOLON | decorate_class SEMICOLON;
 function: function_decl SEMICOLON;
@@ -96,7 +140,8 @@ decorate_class:
     perc_name class_decl { $_[2]->set_perl_name( $_[1] ); $_[2] };
 
 class_decl: 'class' ID base_classes class_metadata OPCURLY class_body_list CLCURLY
-                { create_class( $_[0], $_[2], $_[3], $_[4], $_[6] ) };
+                { create_class( $_[0], $_[2], $_[3], $_[4], $_[6],
+                                $_[0]->get_conditional ) };
 
 base_classes:
       COLON base_class              { [ $_[2] ] }
@@ -118,6 +163,7 @@ class_name_rename:
     ;
 
 class_metadata:   class_metadata perc_catch { [ @{$_[1]}, @{$_[2]} ] }
+                | class_metadata perc_any   { [ @{$_[1]}, @{$_[2]} ] }
                 |                           { [] }
                 ;
 
@@ -127,7 +173,11 @@ class_body_list:
           { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
     ;
 
-class_body_element: method | raw | typemap | exceptionmap | access_specifier;
+class_body_element:
+    method | raw | typemap | exceptionmap | access_specifier
+  | perc_any SEMICOLON
+        { ExtUtils::XSpp::Node::PercAny->new( @{$_[1]} ) }
+  ;
 
 access_specifier:
       'public' COLON    { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
@@ -168,16 +218,19 @@ function_decl:  looks_like_renamed_function function_metadata
                                          perl_name => $_[1]->{perl_name},
                                          ret_type  => $_[1]->{ret_type},
                                          arguments => $_[1]->{arguments},
+                                         condition => $_[0]->get_conditional,
                                          @{$_[2]} ) };
 
 ctor:           ID OPPAR arg_list CLPAR function_metadata
                     { add_data_ctor( $_[0], name      => $_[1],
                                             arguments => $_[3],
+                                            condition => $_[0]->get_conditional,
                                             @{ $_[5] } ) }
               | perc_name ctor { $_[2]->set_perl_name( $_[1] ); $_[2] };
 
 dtor:           TILDE ID OPPAR CLPAR function_metadata
                     { add_data_dtor( $_[0], name  => $_[2],
+                                            condition => $_[0]->get_conditional,
                                             @{ $_[5] },
                                       ) }
               | perc_name dtor { $_[2]->set_perl_name( $_[1] ); $_[2] };
@@ -195,6 +248,7 @@ nmethod:
                           ret_type  => $_[1]->{ret_type},
                           arguments => $_[1]->{arguments},
                           const     => $_[1]->{const},
+                          condition => $_[0]->get_conditional,
                           @{$_[2]},
                           );
             $m
@@ -217,6 +271,7 @@ _vmethod:
                           ret_type  => $_[2]->{ret_type},
                           arguments => $_[2]->{arguments},
                           const     => $_[2]->{const},
+                          condition => $_[0]->get_conditional,
                           @{$_[3]},
                           );
             $m->set_virtual( 1 );
@@ -230,6 +285,7 @@ _vmethod:
                           ret_type  => $_[2]->{ret_type},
                           arguments => $_[2]->{arguments},
                           const     => $_[2]->{const},
+                          condition => $_[0]->get_conditional,
                           @{$_[5]},
                           );
             die "Invalid pure virtual method" unless $_[4] eq '0';
@@ -242,6 +298,7 @@ _function_metadata:    perc_code
                      | perc_cleanup
                      | perc_postcall
                      | perc_catch
+                     | perc_any
                      ;
 
 perc_name:       p_name OPCURLY class_name CLCURLY       { $_[3] };
@@ -254,6 +311,18 @@ perc_code:       p_code special_block                    { [ code => $_[2] ] };
 perc_cleanup:    p_cleanup special_block                 { [ cleanup => $_[2] ] };
 perc_postcall:   p_postcall special_block                { [ postcall => $_[2] ] };
 perc_catch:      p_catch OPCURLY class_name_list CLCURLY { [ map {(catch => $_)} @{$_[3]} ] };
+
+# this expands mixed_blocks to avoid ambiguity in the OPCURLY case
+perc_any:
+    p_any OPCURLY perc_any_args CLCURLY
+        { [ any => $_[1], any_named_arguments => $_[3] ] }
+  | p_any OPCURLY ID CLCURLY mixed_blocks
+        { [ any => $_[1], any_positional_arguments  => [ $_[3], @{$_[5]} ] ] }
+  | p_any special_block mixed_blocks
+        { [ any => $_[1], any_positional_arguments  => [ $_[2], @{$_[3]} ] ] }
+  | p_any
+        { [ any => $_[1] ] }
+  ;
 
 perc_any_args:
     perc_any_arg                { $_[1] }

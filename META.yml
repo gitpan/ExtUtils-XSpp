@@ -7,7 +7,7 @@ build_requires:
   Test::Differences: 0
 configure_requires:
   Module::Build: 0.36
-generated_by: 'Module::Build version 0.3603'
+generated_by: 'Module::Build version 0.3607'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -16,7 +16,7 @@ name: ExtUtils-XSpp
 provides:
   ExtUtils::XSpp:
     file: lib/ExtUtils/XSpp.pm
-    version: 0.11
+    version: 0.11_01
   ExtUtils::XSpp::Cmd:
     file: lib/ExtUtils/XSpp/Cmd.pm
   ExtUtils::XSpp::Driver:
@@ -54,6 +54,10 @@ provides:
     file: lib/ExtUtils/XSpp/Node/Constructor.pm
   ExtUtils::XSpp::Node::Destructor:
     file: lib/ExtUtils/XSpp/Node/Destructor.pm
+  ExtUtils::XSpp::Node::Enum:
+    file: lib/ExtUtils/XSpp/Node/Enum.pm
+  ExtUtils::XSpp::Node::EnumValue:
+    file: lib/ExtUtils/XSpp/Node/EnumValue.pm
   ExtUtils::XSpp::Node::File:
     file: lib/ExtUtils/XSpp/Node/File.pm
   ExtUtils::XSpp::Node::Function:
@@ -64,6 +68,10 @@ provides:
     file: lib/ExtUtils/XSpp/Node/Module.pm
   ExtUtils::XSpp::Node::Package:
     file: lib/ExtUtils/XSpp/Node/Package.pm
+  ExtUtils::XSpp::Node::PercAny:
+    file: lib/ExtUtils/XSpp/Node/PercAny.pm
+  ExtUtils::XSpp::Node::Preprocessor:
+    file: lib/ExtUtils/XSpp/Node/Preprocessor.pm
   ExtUtils::XSpp::Node::Raw:
     file: lib/ExtUtils/XSpp/Node/Raw.pm
   ExtUtils::XSpp::Node::Type:
@@ -79,8 +87,9 @@ provides:
   ExtUtils::XSpp::Typemap::simple:
     file: lib/ExtUtils/XSpp/Typemap/simple.pm
 requires:
+  Digest::MD5: 2.0
   ExtUtils::ParseXS: 2.2202
   perl: v5.6.1
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.11
+version: 0.11_01
