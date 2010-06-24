@@ -169,9 +169,7 @@ C<length> feature.
 
 sub argument_style {
   my $this = shift;
-  foreach my $arg (@{$this->{ARGUMENTS}}) {
-    return 'ansi' if $arg->name =~ /length.*\(/;
-  }
+  return 'ansi' if $this->has_argument_with_length;
   return 'kr';
 }
 
@@ -285,25 +283,31 @@ sub print {
 
     $code .= "  $code_type:\n";
     $code .= "    try {\n";
-    $code .= '      ' . $precall if $precall;
+    if ($precall) {
+      $code .= '      ' . $precall;
+    }
     $code .= '      ' . $ccode . ";\n";
     if( $has_ret && defined $ret_typemap->output_code( '', '' ) ) {
-      $code .= '      ' . $ret_typemap->output_code( 'ST(0)', 'RETVAL' ) . ";\n";
+      my $retcode = $ret_typemap->output_code( 'ST(0)', 'RETVAL' );
+      $code .= '      ' . $retcode . ";\n";
     }
     if( $has_ret && defined $ret_typemap->output_list( '' ) ) {
-      $code .= '      ' . $ret_typemap->output_list( 'RETVAL' ) . ";\n";
+      my $retcode = $ret_typemap->output_list( 'RETVAL' );
+      $code .= '      ' . $retcode . ";\n";
     }
     $code .= "    }\n";
     my @catchers = @{$this->{EXCEPTIONS}};
     foreach my $exception_handler (@catchers) {
-      $code .= $exception_handler->handler_code;
+      my $handler_code = $exception_handler->handler_code;
+      $code .= $handler_code;
     }
 
     $output = "  OUTPUT: RETVAL\n" if $has_ret;
 
     if( $has_ret && defined $ret_typemap->cleanup_code( '', '' ) ) {
       $cleanup .= "  CLEANUP:\n";
-      $cleanup .= '    ' . $ret_typemap->cleanup_code( 'ST(0)', 'RETVAL' ) . ";\n";
+      my $cleanupcode = $ret_typemap->cleanup_code( 'ST(0)', 'RETVAL' );
+      $cleanup .= '    ' . $cleanupcode . ";\n";
     }
   }
 
@@ -336,14 +340,28 @@ $cur_module PACKAGE=$pcname
 EOT
   }
 
-  $out .= "$retstr\n";
-  $out .= "$fname($arg_list)\n";
-  $out .= $init;
-  $out .= $code;
-  $out .= $postcall;
-  $out .= $output;
-  $out .= $cleanup;
-  $out .= "\n";
+  my $head = "$retstr\n"
+             . "$fname($arg_list)\n";
+  my $body = $init . $code . $postcall . $output . $cleanup . "\n";
+  $this->_munge_code(\$body) if $this->has_argument_with_length;
+
+  $out .= $head . $body;
+  return $out;
+}
+
+# This replaces the use of "length(varname)" with
+# the proper name of the XS variable that is auto-generated in
+# case of the XS length() feature. The Argument's take care of
+# this and do nothing if they're not of the "length" type.
+# Any additional checking "$this->_munge_code(\$code) if $using_length"
+# is just an optimization!
+sub _munge_code {
+  my $this = shift;
+  my $code = shift;
+  
+  foreach my $arg (@{$this->{ARGUMENTS}}) {
+    $$code = $arg->fix_name_in_code($$code);
+  }
 }
 
 =head2 print_declaration
@@ -378,6 +396,22 @@ but overridden in the L<ExtUtils::XSpp::Node::Method> sub-class.
 
 sub is_method { 0 }
 
+=head2 has_argument_with_length
+
+Returns true if the function has any argument that uses the XS length
+feature.
+
+=cut
+
+sub has_argument_with_length {
+  my $this = shift;
+  foreach my $arg (@{$this->{ARGUMENTS}}) {
+    return 1 if $arg->uses_length;
+  }
+  return();
+}
+
+
 =begin documentation
 
 ExtUtils::XSpp::Node::_call_code( argument_string )
@@ -389,7 +423,6 @@ Return something like "foo( $argument_string )".
 =cut
 
 sub _call_code { return $_[0]->cpp_name . '(' . $_[1] . ')'; }
-
 
 =head1 ACCESSORS
 
@@ -453,8 +486,8 @@ sub catch { $_[0]->{CATCH} ? $_[0]->{CATCH} : [] }
 =head2 set_static
 
 Sets the C<static>-ness attribute of the function.
-Can be either undef (i.e. not static), C<package_static>,
-or C<class_static>.
+Can be either undef (i.e. not static), C<"package_static">,
+or C<"class_static">.
 
 =head2 package_static
 

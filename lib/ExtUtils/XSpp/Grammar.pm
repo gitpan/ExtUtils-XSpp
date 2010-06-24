@@ -2570,7 +2570,8 @@ sub
                       # block for each directive inside the typemap
                       for( my $i = 1; $i <= $#{$_[9]}; $i += 2 ) {
                           $_[9][$i] = join "\n", @{$_[9][$i][0]}
-                              if ref( $_[9][$i] ) && ref( $_[9][$i][0] );
+                              if    ref( $_[9][$i] ) eq 'ARRAY'
+                                 && ref( $_[9][$i][0] ) eq 'ARRAY';
                       }
                       my $tm = $package->new( type => $type, @{$_[9]} );
                       ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
@@ -2579,7 +2580,7 @@ sub
 	[#Rule 18
 		 'exceptionmap', 12,
 sub
-#line 72 "XSP.yp"
+#line 73 "XSP.yp"
 { my $package = "ExtUtils::XSpp::Exception::" . $_[9];
                       my $type = make_type($_[6]); my $c = 0;
                       my %args = map { "arg" . ++$c => $_ }
@@ -2592,43 +2593,43 @@ sub
 	[#Rule 19
 		 'mixed_blocks', 2,
 sub
-#line 82 "XSP.yp"
+#line 83 "XSP.yp"
 { [ @{$_[1]}, $_[2] ] }
 	],
 	[#Rule 20
 		 'mixed_blocks', 2,
 sub
-#line 84 "XSP.yp"
+#line 85 "XSP.yp"
 { [ @{$_[1]}, [ $_[2] ] ] }
 	],
 	[#Rule 21
 		 'mixed_blocks', 0,
 sub
-#line 85 "XSP.yp"
+#line 86 "XSP.yp"
 { [] }
 	],
 	[#Rule 22
 		 'simple_block', 3,
 sub
-#line 88 "XSP.yp"
+#line 89 "XSP.yp"
 { $_[2] }
 	],
 	[#Rule 23
 		 'raw', 1,
 sub
-#line 90 "XSP.yp"
+#line 91 "XSP.yp"
 { add_data_raw( $_[0], [ $_[1] ] ) }
 	],
 	[#Rule 24
 		 'raw', 1,
 sub
-#line 91 "XSP.yp"
+#line 92 "XSP.yp"
 { add_data_comment( $_[0], $_[1] ) }
 	],
 	[#Rule 25
 		 'raw', 1,
 sub
-#line 92 "XSP.yp"
+#line 93 "XSP.yp"
 { ExtUtils::XSpp::Node::Preprocessor->new
                               ( rows   => [ $_[1][0] ],
                                 symbol => $_[1][1],
@@ -2637,13 +2638,13 @@ sub
 	[#Rule 26
 		 'raw', 1,
 sub
-#line 96 "XSP.yp"
+#line 97 "XSP.yp"
 { add_data_raw( $_[0], [ @{$_[1]} ] ) }
 	],
 	[#Rule 27
 		 'enum', 5,
 sub
-#line 100 "XSP.yp"
+#line 101 "XSP.yp"
 { ExtUtils::XSpp::Node::Enum->new
                 ( elements  => $_[3],
                   condition => $_[0]->get_conditional,
@@ -2652,7 +2653,7 @@ sub
 	[#Rule 28
 		 'enum', 6,
 sub
-#line 105 "XSP.yp"
+#line 106 "XSP.yp"
 { ExtUtils::XSpp::Node::Enum->new
                 ( name      => $_[2],
                   elements  => $_[4],
@@ -2662,25 +2663,25 @@ sub
 	[#Rule 29
 		 'enum_element_list', 0,
 sub
-#line 113 "XSP.yp"
+#line 114 "XSP.yp"
 { [] }
 	],
 	[#Rule 30
 		 'enum_element_list', 2,
 sub
-#line 115 "XSP.yp"
+#line 116 "XSP.yp"
 { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
 	],
 	[#Rule 31
 		 'enum_element_list', 3,
 sub
-#line 117 "XSP.yp"
+#line 118 "XSP.yp"
 { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
 	],
 	[#Rule 32
 		 'enum_element', 1,
 sub
-#line 122 "XSP.yp"
+#line 123 "XSP.yp"
 { ExtUtils::XSpp::Node::EnumValue->new
                 ( name => $_[1],
                   condition => $_[0]->get_conditional,
@@ -2689,7 +2690,7 @@ sub
 	[#Rule 33
 		 'enum_element', 3,
 sub
-#line 127 "XSP.yp"
+#line 128 "XSP.yp"
 { ExtUtils::XSpp::Node::EnumValue->new
                 ( name      => $_[1],
                   value     => $_[3],
@@ -2714,26 +2715,26 @@ sub
 	[#Rule 39
 		 'decorate_class', 2,
 sub
-#line 140 "XSP.yp"
+#line 141 "XSP.yp"
 { $_[2]->set_perl_name( $_[1] ); $_[2] }
 	],
 	[#Rule 40
 		 'class_decl', 7,
 sub
-#line 143 "XSP.yp"
+#line 144 "XSP.yp"
 { create_class( $_[0], $_[2], $_[3], $_[4], $_[6],
                                 $_[0]->get_conditional ) }
 	],
 	[#Rule 41
 		 'base_classes', 2,
 sub
-#line 147 "XSP.yp"
+#line 148 "XSP.yp"
 { [ $_[2] ] }
 	],
 	[#Rule 42
 		 'base_classes', 3,
 sub
-#line 148 "XSP.yp"
+#line 149 "XSP.yp"
 { push @{$_[1]}, $_[3] if $_[3]; $_[1] }
 	],
 	[#Rule 43
@@ -2742,31 +2743,31 @@ sub
 	[#Rule 44
 		 'base_class', 2,
 sub
-#line 152 "XSP.yp"
+#line 153 "XSP.yp"
 { $_[2] }
 	],
 	[#Rule 45
 		 'base_class', 2,
 sub
-#line 153 "XSP.yp"
+#line 154 "XSP.yp"
 { $_[2] }
 	],
 	[#Rule 46
 		 'base_class', 2,
 sub
-#line 154 "XSP.yp"
+#line 155 "XSP.yp"
 { $_[2] }
 	],
 	[#Rule 47
 		 'class_name_rename', 1,
 sub
-#line 158 "XSP.yp"
+#line 159 "XSP.yp"
 { create_class( $_[0], $_[1], [], [] ) }
 	],
 	[#Rule 48
 		 'class_name_rename', 2,
 sub
-#line 159 "XSP.yp"
+#line 160 "XSP.yp"
 { my $klass = create_class( $_[0], $_[2], [], [] );
                              $klass->set_perl_name( $_[1] );
                              $klass
@@ -2775,31 +2776,31 @@ sub
 	[#Rule 49
 		 'class_metadata', 2,
 sub
-#line 165 "XSP.yp"
+#line 166 "XSP.yp"
 { [ @{$_[1]}, @{$_[2]} ] }
 	],
 	[#Rule 50
 		 'class_metadata', 2,
 sub
-#line 166 "XSP.yp"
+#line 167 "XSP.yp"
 { [ @{$_[1]}, @{$_[2]} ] }
 	],
 	[#Rule 51
 		 'class_metadata', 0,
 sub
-#line 167 "XSP.yp"
+#line 168 "XSP.yp"
 { [] }
 	],
 	[#Rule 52
 		 'class_body_list', 0,
 sub
-#line 171 "XSP.yp"
+#line 172 "XSP.yp"
 { [] }
 	],
 	[#Rule 53
 		 'class_body_list', 2,
 sub
-#line 173 "XSP.yp"
+#line 174 "XSP.yp"
 { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
 	],
 	[#Rule 54
@@ -2820,25 +2821,25 @@ sub
 	[#Rule 59
 		 'class_body_element', 2,
 sub
-#line 179 "XSP.yp"
+#line 180 "XSP.yp"
 { ExtUtils::XSpp::Node::PercAny->new( @{$_[1]} ) }
 	],
 	[#Rule 60
 		 'access_specifier', 2,
 sub
-#line 183 "XSP.yp"
+#line 184 "XSP.yp"
 { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
 	],
 	[#Rule 61
 		 'access_specifier', 2,
 sub
-#line 184 "XSP.yp"
+#line 185 "XSP.yp"
 { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
 	],
 	[#Rule 62
 		 'access_specifier', 2,
 sub
-#line 185 "XSP.yp"
+#line 186 "XSP.yp"
 { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
 	],
 	[#Rule 63
@@ -2856,13 +2857,13 @@ sub
 	[#Rule 67
 		 'const', 1,
 sub
-#line 190 "XSP.yp"
+#line 191 "XSP.yp"
 { 1 }
 	],
 	[#Rule 68
 		 'const', 0,
 sub
-#line 191 "XSP.yp"
+#line 192 "XSP.yp"
 { 0 }
 	],
 	[#Rule 69
@@ -2877,13 +2878,13 @@ sub
 	[#Rule 72
 		 'static', 1,
 sub
-#line 197 "XSP.yp"
+#line 198 "XSP.yp"
 { 'package_static' }
 	],
 	[#Rule 73
 		 'looks_like_function', 6,
 sub
-#line 202 "XSP.yp"
+#line 203 "XSP.yp"
 {
               return { ret_type  => $_[1],
                        name      => $_[2],
@@ -2898,13 +2899,13 @@ sub
 	[#Rule 75
 		 'looks_like_renamed_function', 2,
 sub
-#line 213 "XSP.yp"
+#line 214 "XSP.yp"
 { $_[2]->{perl_name} = $_[1]; $_[2] }
 	],
 	[#Rule 76
 		 'function_decl', 2,
 sub
-#line 216 "XSP.yp"
+#line 217 "XSP.yp"
 { add_data_function( $_[0],
                                          name      => $_[1]->{name},
                                          perl_name => $_[1]->{perl_name},
@@ -2916,7 +2917,7 @@ sub
 	[#Rule 77
 		 'ctor', 5,
 sub
-#line 225 "XSP.yp"
+#line 226 "XSP.yp"
 { add_data_ctor( $_[0], name      => $_[1],
                                             arguments => $_[3],
                                             condition => $_[0]->get_conditional,
@@ -2925,13 +2926,13 @@ sub
 	[#Rule 78
 		 'ctor', 2,
 sub
-#line 229 "XSP.yp"
+#line 230 "XSP.yp"
 { $_[2]->set_perl_name( $_[1] ); $_[2] }
 	],
 	[#Rule 79
 		 'dtor', 5,
 sub
-#line 232 "XSP.yp"
+#line 233 "XSP.yp"
 { add_data_dtor( $_[0], name  => $_[2],
                                             condition => $_[0]->get_conditional,
                                             @{ $_[5] },
@@ -2940,25 +2941,25 @@ sub
 	[#Rule 80
 		 'dtor', 2,
 sub
-#line 236 "XSP.yp"
+#line 237 "XSP.yp"
 { $_[2]->set_perl_name( $_[1] ); $_[2] }
 	],
 	[#Rule 81
 		 'function_metadata', 2,
 sub
-#line 238 "XSP.yp"
+#line 239 "XSP.yp"
 { [ @{$_[1]}, @{$_[2]} ] }
 	],
 	[#Rule 82
 		 'function_metadata', 0,
 sub
-#line 239 "XSP.yp"
+#line 240 "XSP.yp"
 { [] }
 	],
 	[#Rule 83
 		 'nmethod', 2,
 sub
-#line 244 "XSP.yp"
+#line 245 "XSP.yp"
 { my $m = add_data_method
                         ( $_[0],
                           name      => $_[1]->{name},
@@ -2975,7 +2976,7 @@ sub
 	[#Rule 84
 		 'nmethod', 2,
 sub
-#line 257 "XSP.yp"
+#line 258 "XSP.yp"
 { $_[2]->set_static( $_[1] ); $_[2] }
 	],
 	[#Rule 85
@@ -2984,13 +2985,13 @@ sub
 	[#Rule 86
 		 'vmethod', 2,
 sub
-#line 262 "XSP.yp"
+#line 263 "XSP.yp"
 { $_[2]->set_perl_name( $_[1] ); $_[2] }
 	],
 	[#Rule 87
 		 '_vmethod', 3,
 sub
-#line 267 "XSP.yp"
+#line 268 "XSP.yp"
 { my $m = add_data_method
                         ( $_[0],
                           name      => $_[2]->{name},
@@ -3008,7 +3009,7 @@ sub
 	[#Rule 88
 		 '_vmethod', 5,
 sub
-#line 281 "XSP.yp"
+#line 282 "XSP.yp"
 { my $m = add_data_method
                         ( $_[0],
                           name      => $_[2]->{name},
@@ -3042,109 +3043,109 @@ sub
 	[#Rule 94
 		 'perc_name', 4,
 sub
-#line 304 "XSP.yp"
+#line 305 "XSP.yp"
 { $_[3] }
 	],
 	[#Rule 95
 		 'perc_package', 4,
 sub
-#line 305 "XSP.yp"
+#line 306 "XSP.yp"
 { $_[3] }
 	],
 	[#Rule 96
 		 'perc_module', 4,
 sub
-#line 306 "XSP.yp"
+#line 307 "XSP.yp"
 { $_[3] }
 	],
 	[#Rule 97
 		 'perc_file', 4,
 sub
-#line 307 "XSP.yp"
+#line 308 "XSP.yp"
 { $_[3] }
 	],
 	[#Rule 98
 		 'perc_loadplugin', 4,
 sub
-#line 308 "XSP.yp"
+#line 309 "XSP.yp"
 { $_[3] }
 	],
 	[#Rule 99
 		 'perc_include', 4,
 sub
-#line 309 "XSP.yp"
+#line 310 "XSP.yp"
 { $_[3] }
 	],
 	[#Rule 100
 		 'perc_code', 2,
 sub
-#line 310 "XSP.yp"
+#line 311 "XSP.yp"
 { [ code => $_[2] ] }
 	],
 	[#Rule 101
 		 'perc_cleanup', 2,
 sub
-#line 311 "XSP.yp"
+#line 312 "XSP.yp"
 { [ cleanup => $_[2] ] }
 	],
 	[#Rule 102
 		 'perc_postcall', 2,
 sub
-#line 312 "XSP.yp"
+#line 313 "XSP.yp"
 { [ postcall => $_[2] ] }
 	],
 	[#Rule 103
 		 'perc_catch', 4,
 sub
-#line 313 "XSP.yp"
+#line 314 "XSP.yp"
 { [ map {(catch => $_)} @{$_[3]} ] }
 	],
 	[#Rule 104
 		 'perc_any', 4,
 sub
-#line 318 "XSP.yp"
+#line 319 "XSP.yp"
 { [ any => $_[1], any_named_arguments => $_[3] ] }
 	],
 	[#Rule 105
 		 'perc_any', 5,
 sub
-#line 320 "XSP.yp"
+#line 321 "XSP.yp"
 { [ any => $_[1], any_positional_arguments  => [ $_[3], @{$_[5]} ] ] }
 	],
 	[#Rule 106
 		 'perc_any', 3,
 sub
-#line 322 "XSP.yp"
+#line 323 "XSP.yp"
 { [ any => $_[1], any_positional_arguments  => [ $_[2], @{$_[3]} ] ] }
 	],
 	[#Rule 107
 		 'perc_any', 1,
 sub
-#line 324 "XSP.yp"
+#line 325 "XSP.yp"
 { [ any => $_[1] ] }
 	],
 	[#Rule 108
 		 'perc_any_args', 1,
 sub
-#line 328 "XSP.yp"
+#line 329 "XSP.yp"
 { $_[1] }
 	],
 	[#Rule 109
 		 'perc_any_args', 2,
 sub
-#line 329 "XSP.yp"
+#line 330 "XSP.yp"
 { [ @{$_[1]}, @{$_[2]} ] }
 	],
 	[#Rule 110
 		 'perc_any_arg', 3,
 sub
-#line 333 "XSP.yp"
+#line 334 "XSP.yp"
 { [ $_[1] => $_[2] ] }
 	],
 	[#Rule 111
 		 'type', 2,
 sub
-#line 337 "XSP.yp"
+#line 338 "XSP.yp"
 { make_const( $_[2] ) }
 	],
 	[#Rule 112
@@ -3153,19 +3154,19 @@ sub
 	[#Rule 113
 		 'nconsttype', 2,
 sub
-#line 342 "XSP.yp"
+#line 343 "XSP.yp"
 { make_ptr( $_[1] ) }
 	],
 	[#Rule 114
 		 'nconsttype', 2,
 sub
-#line 343 "XSP.yp"
+#line 344 "XSP.yp"
 { make_ref( $_[1] ) }
 	],
 	[#Rule 115
 		 'nconsttype', 1,
 sub
-#line 344 "XSP.yp"
+#line 345 "XSP.yp"
 { make_type( $_[1] ) }
 	],
 	[#Rule 116
@@ -3180,13 +3181,13 @@ sub
 	[#Rule 119
 		 'type_name', 1,
 sub
-#line 351 "XSP.yp"
+#line 352 "XSP.yp"
 { 'unsigned int' }
 	],
 	[#Rule 120
 		 'type_name', 2,
 sub
-#line 352 "XSP.yp"
+#line 353 "XSP.yp"
 { 'unsigned' . ' ' . $_[2] }
 	],
 	[#Rule 121
@@ -3210,19 +3211,19 @@ sub
 	[#Rule 127
 		 'template', 4,
 sub
-#line 358 "XSP.yp"
+#line 359 "XSP.yp"
 { make_template( $_[1], $_[3] ) }
 	],
 	[#Rule 128
 		 'type_list', 1,
 sub
-#line 362 "XSP.yp"
+#line 363 "XSP.yp"
 { [ $_[1] ] }
 	],
 	[#Rule 129
 		 'type_list', 3,
 sub
-#line 363 "XSP.yp"
+#line 364 "XSP.yp"
 { push @{$_[1]}, $_[3]; $_[1] }
 	],
 	[#Rule 130
@@ -3231,61 +3232,61 @@ sub
 	[#Rule 131
 		 'class_name', 2,
 sub
-#line 367 "XSP.yp"
+#line 368 "XSP.yp"
 { $_[1] . '::' . $_[2] }
 	],
 	[#Rule 132
 		 'class_name_list', 1,
 sub
-#line 370 "XSP.yp"
+#line 371 "XSP.yp"
 { [ $_[1] ] }
 	],
 	[#Rule 133
 		 'class_name_list', 3,
 sub
-#line 371 "XSP.yp"
+#line 372 "XSP.yp"
 { push @{$_[1]}, $_[3]; $_[1] }
 	],
 	[#Rule 134
 		 'class_suffix', 2,
 sub
-#line 374 "XSP.yp"
+#line 375 "XSP.yp"
 { $_[2] }
 	],
 	[#Rule 135
 		 'class_suffix', 3,
 sub
-#line 375 "XSP.yp"
+#line 376 "XSP.yp"
 { $_[1] . '::' . $_[3] }
 	],
 	[#Rule 136
 		 'file_name', 1,
 sub
-#line 377 "XSP.yp"
+#line 378 "XSP.yp"
 { '-' }
 	],
 	[#Rule 137
 		 'file_name', 3,
 sub
-#line 378 "XSP.yp"
+#line 379 "XSP.yp"
 { $_[1] . '.' . $_[3] }
 	],
 	[#Rule 138
 		 'file_name', 3,
 sub
-#line 379 "XSP.yp"
+#line 380 "XSP.yp"
 { $_[1] . '/' . $_[3] }
 	],
 	[#Rule 139
 		 'arg_list', 1,
 sub
-#line 381 "XSP.yp"
+#line 382 "XSP.yp"
 { [ $_[1] ] }
 	],
 	[#Rule 140
 		 'arg_list', 3,
 sub
-#line 382 "XSP.yp"
+#line 383 "XSP.yp"
 { push @{$_[1]}, $_[3]; $_[1] }
 	],
 	[#Rule 141
@@ -3294,19 +3295,19 @@ sub
 	[#Rule 142
 		 'argument', 5,
 sub
-#line 386 "XSP.yp"
+#line 387 "XSP.yp"
 { make_argument( @_[0, 1], "length($_[4])" ) }
 	],
 	[#Rule 143
 		 'argument', 4,
 sub
-#line 388 "XSP.yp"
+#line 389 "XSP.yp"
 { make_argument( @_[0, 1, 2, 4] ) }
 	],
 	[#Rule 144
 		 'argument', 2,
 sub
-#line 389 "XSP.yp"
+#line 390 "XSP.yp"
 { make_argument( @_ ) }
 	],
 	[#Rule 145
@@ -3315,7 +3316,7 @@ sub
 	[#Rule 146
 		 'value', 2,
 sub
-#line 392 "XSP.yp"
+#line 393 "XSP.yp"
 { '-' . $_[2] }
 	],
 	[#Rule 147
@@ -3330,7 +3331,7 @@ sub
 	[#Rule 150
 		 'value', 4,
 sub
-#line 396 "XSP.yp"
+#line 397 "XSP.yp"
 { "$_[1]($_[3])" }
 	],
 	[#Rule 151
@@ -3339,13 +3340,13 @@ sub
 	[#Rule 152
 		 'value_list', 3,
 sub
-#line 401 "XSP.yp"
+#line 402 "XSP.yp"
 { "$_[1], $_[2]" }
 	],
 	[#Rule 153
 		 'value_list', 0,
 sub
-#line 402 "XSP.yp"
+#line 403 "XSP.yp"
 { "" }
 	],
 	[#Rule 154
@@ -3354,25 +3355,25 @@ sub
 	[#Rule 155
 		 'expression', 3,
 sub
-#line 408 "XSP.yp"
+#line 409 "XSP.yp"
 { "$_[1] & $_[3]" }
 	],
 	[#Rule 156
 		 'expression', 3,
 sub
-#line 410 "XSP.yp"
+#line 411 "XSP.yp"
 { "$_[1] | $_[3]" }
 	],
 	[#Rule 157
 		 'special_blocks', 1,
 sub
-#line 414 "XSP.yp"
+#line 415 "XSP.yp"
 { [ $_[1] ] }
 	],
 	[#Rule 158
 		 'special_blocks', 2,
 sub
-#line 416 "XSP.yp"
+#line 417 "XSP.yp"
 { [ @{$_[1]}, $_[2] ] }
 	],
 	[#Rule 159
@@ -3381,37 +3382,37 @@ sub
 	[#Rule 160
 		 'special_block', 3,
 sub
-#line 420 "XSP.yp"
+#line 421 "XSP.yp"
 { $_[2] }
 	],
 	[#Rule 161
 		 'special_block', 2,
 sub
-#line 422 "XSP.yp"
+#line 423 "XSP.yp"
 { [] }
 	],
 	[#Rule 162
 		 'special_block_start', 1,
 sub
-#line 425 "XSP.yp"
+#line 426 "XSP.yp"
 { push_lex_mode( $_[0], 'special' ) }
 	],
 	[#Rule 163
 		 'special_block_end', 1,
 sub
-#line 427 "XSP.yp"
+#line 428 "XSP.yp"
 { pop_lex_mode( $_[0], 'special' ) }
 	],
 	[#Rule 164
 		 'lines', 1,
 sub
-#line 429 "XSP.yp"
+#line 430 "XSP.yp"
 { [ $_[1] ] }
 	],
 	[#Rule 165
 		 'lines', 2,
 sub
-#line 430 "XSP.yp"
+#line 431 "XSP.yp"
 { push @{$_[1]}, $_[2]; $_[1] }
 	]
 ],
@@ -3419,7 +3420,7 @@ sub
     bless($self,$class);
 }
 
-#line 432 "XSP.yp"
+#line 433 "XSP.yp"
 
 
 use ExtUtils::XSpp::Lexer;
