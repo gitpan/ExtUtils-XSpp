@@ -2588,9 +2588,9 @@ sub
 { my $type = $_[3]; # add simple and reference typemaps for this type
                       my $tm = ExtUtils::XSpp::Typemap::simple->new( type => $type );
                       ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
-                      $type = make_type($type->base_type . '&');
-                      $tm = ExtUtils::XSpp::Typemap::reference->new( type => $type );
-                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+                      my $reftype = make_ref($type->clone);
+                      $tm = ExtUtils::XSpp::Typemap::reference->new( type => $reftype );
+                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $reftype, $tm );
                       undef }
 	],
 	[#Rule 19
