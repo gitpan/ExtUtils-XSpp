@@ -16,7 +16,7 @@ name: ExtUtils-XSpp
 provides:
   ExtUtils::XSpp:
     file: lib/ExtUtils/XSpp.pm
-    version: 0.12
+    version: 0.13
   ExtUtils::XSpp::Cmd:
     file: lib/ExtUtils/XSpp/Cmd.pm
   ExtUtils::XSpp::Driver:
@@ -40,6 +40,8 @@ provides:
   ExtUtils::XSpp::Grammar::YappDriver:
     file: lib/ExtUtils/XSpp/Grammar.pm
     version: 1.05
+  ExtUtils::XSpp::Lexer:
+    file: lib/ExtUtils/XSpp/Lexer.pm
   ExtUtils::XSpp::Node:
     file: lib/ExtUtils/XSpp/Node.pm
   ExtUtils::XSpp::Node::Access:
@@ -92,4 +94,4 @@ requires:
   perl: v5.6.1
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.12
+version: 0.13
