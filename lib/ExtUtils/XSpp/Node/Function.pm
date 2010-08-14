@@ -52,6 +52,7 @@ sub init {
   $this->{CLASS}     = $args{class};
   $this->{CATCH}     = $args{catch};
   $this->{CONDITION} = $args{condition};
+  $this->{EMIT_CONDITION} = $args{emit_condition};
 
   if (ref($this->{CATCH})
       and @{$this->{CATCH}} > 1
@@ -159,20 +160,6 @@ sub add_exception_handlers {
 }
 
 
-=head2 argument_style
-
-Returns either C<ansi> or C<kr>. C<kr> is the default.
-C<ansi> is returned if any one of the arguments uses the XS
-C<length> feature.
-
-=cut
-
-sub argument_style {
-  my $this = shift;
-  return 'ansi' if $this->has_argument_with_length;
-  return 'kr';
-}
-
 # Depending on argument style, this produces either: (style=kr)
 #
 # return_type
@@ -206,14 +193,15 @@ sub print {
   my $args               = $this->arguments;
   my $ret_type           = $this->ret_type;
   my $ret_typemap        = $this->{TYPEMAPS}{RET_TYPE};
-  my $need_call_function = 0;
+
+  $out .= '#if ' . $this->emit_condition . "\n" if $this->emit_condition;
 
   my( $init, $arg_list, $call_arg_list, $code, $output, $cleanup,
       $postcall, $precall ) =
     ( '', '', '', '', '', '', '', '' );
 
-  my $use_ansi_style = $this->argument_style() eq 'ansi';
-
+  # compute the precall code, XS argument list and C++ argument list using
+  # the typemap information
   if( $args && @$args ) {
     my $has_self = $this->is_method ? 1 : 0;
     my( @arg_list, @call_arg_list );
@@ -223,14 +211,8 @@ sub print {
       my $pc  = $t->precall_code( sprintf( 'ST(%d)', $i + $has_self ),
                                   $arg->name );
 
-      $need_call_function ||=    defined $t->call_parameter_code( '' )
-                              || defined $pc;
-      my $type = $use_ansi_style ? $t->cpp_type . ' ' : '';
-      push @arg_list, $type . $arg->name .
+      push @arg_list, $t->cpp_type . ' ' . $arg->name .
                       ( $arg->has_default ? ' = ' . $arg->default : '' );
-      if (!$use_ansi_style) {
-        $init .= '    ' . $t->cpp_type . ' ' . $arg->name . "\n";
-      }
 
       my $call_code = $t->call_parameter_code( $arg->name );
       push @call_arg_list, defined( $call_code ) ? $call_code : $arg->name;
@@ -240,16 +222,6 @@ sub print {
     $arg_list = ' ' . join( ', ', @arg_list ) . ' ';
     $call_arg_list = ' ' . join( ', ', @call_arg_list ) . ' ';
   }
-
-  # same for return value
-  $need_call_function ||= $ret_typemap &&
-    ( defined $ret_typemap->call_function_code( '', '' ) ||
-      defined $ret_typemap->output_code( '', '' ) ||
-      defined $ret_typemap->cleanup_code( '', '' ) );
-  # is C++ name != Perl name?
-  $need_call_function ||= $this->cpp_name ne $this->perl_name;
-  # package-static function
-  $need_call_function ||= $this->package_static;
 
   my $retstr = $ret_typemap ? $ret_typemap->cpp_type : 'void';
 
@@ -262,53 +234,45 @@ sub print {
 
   my $has_ret = $ret_typemap && !$ret_typemap->type->is_void;
 
-  # Hardcoded to one because we force the exception handling for now
-  # All the hard work above about determining whether $need_call_function
-  # needs to be enabled is left in as exception handling may be subject
-  # to configuration later. --Steffen
-  $need_call_function = 1;
-
   my $ppcode = $has_ret && $ret_typemap->output_list( '' ) ? 1 : 0;
   my $code_type = $ppcode ? "PPCODE" : "CODE";
-  if( $need_call_function ) {
-    my $ccode = $this->_call_code( $call_arg_list );
-    if ($this->isa('ExtUtils::XSpp::Node::Destructor')) {
-      $ccode = 'delete THIS';
-      $has_ret = 0;
-    } elsif( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
-      $ccode = $ret_typemap->call_function_code( $ccode, 'RETVAL' );
-    } elsif( $has_ret ) {
-      $ccode = "RETVAL = $ccode";
-    }
+  my $ccode = $this->_call_code( $call_arg_list );
+  if ($this->isa('ExtUtils::XSpp::Node::Destructor')) {
+    $ccode = 'delete THIS';
+    $has_ret = 0;
+  } elsif( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
+    $ccode = $ret_typemap->call_function_code( $ccode, 'RETVAL' );
+  } elsif( $has_ret ) {
+    $ccode = "RETVAL = $ccode";
+  }
 
-    $code .= "  $code_type:\n";
-    $code .= "    try {\n";
-    if ($precall) {
-      $code .= '      ' . $precall;
-    }
-    $code .= '      ' . $ccode . ";\n";
-    if( $has_ret && defined $ret_typemap->output_code( '', '' ) ) {
-      my $retcode = $ret_typemap->output_code( 'ST(0)', 'RETVAL' );
-      $code .= '      ' . $retcode . ";\n";
-    }
-    if( $has_ret && defined $ret_typemap->output_list( '' ) ) {
-      my $retcode = $ret_typemap->output_list( 'RETVAL' );
-      $code .= '      ' . $retcode . ";\n";
-    }
-    $code .= "    }\n";
-    my @catchers = @{$this->{EXCEPTIONS}};
-    foreach my $exception_handler (@catchers) {
-      my $handler_code = $exception_handler->handler_code;
-      $code .= $handler_code;
-    }
+  $code .= "  $code_type:\n";
+  $code .= "    try {\n";
+  if ($precall) {
+    $code .= '      ' . $precall;
+  }
+  $code .= '      ' . $ccode . ";\n";
+  if( $has_ret && defined $ret_typemap->output_code( '', '' ) ) {
+    my $retcode = $ret_typemap->output_code( 'ST(0)', 'RETVAL' );
+    $code .= '      ' . $retcode . ";\n";
+  }
+  if( $has_ret && defined $ret_typemap->output_list( '' ) ) {
+    my $retcode = $ret_typemap->output_list( 'RETVAL' );
+    $code .= '      ' . $retcode . ";\n";
+  }
+  $code .= "    }\n";
+  my @catchers = @{$this->{EXCEPTIONS}};
+  foreach my $exception_handler (@catchers) {
+    my $handler_code = $exception_handler->handler_code;
+    $code .= $handler_code;
+  }
 
-    $output = "  OUTPUT: RETVAL\n" if $has_ret;
+  $output = "  OUTPUT: RETVAL\n" if $has_ret;
 
-    if( $has_ret && defined $ret_typemap->cleanup_code( '', '' ) ) {
-      $cleanup .= "  CLEANUP:\n";
-      my $cleanupcode = $ret_typemap->cleanup_code( 'ST(0)', 'RETVAL' );
-      $cleanup .= '    ' . $cleanupcode . ";\n";
-    }
+  if( $has_ret && defined $ret_typemap->cleanup_code( '', '' ) ) {
+    $cleanup .= "  CLEANUP:\n";
+    my $cleanupcode = $ret_typemap->cleanup_code( 'ST(0)', 'RETVAL' );
+    $cleanup .= '    ' . $cleanupcode . ";\n";
   }
 
   if( $this->code ) {
@@ -346,6 +310,8 @@ EOT
   $this->_munge_code(\$body) if $this->has_argument_with_length;
 
   $out .= $head . $body;
+  $out .= '#endif // ' . $this->emit_condition . "\n" if $this->emit_condition;
+
   return $out;
 }
 
