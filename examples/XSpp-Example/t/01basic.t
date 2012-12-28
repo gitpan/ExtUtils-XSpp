@@ -1,8 +1,10 @@
 use strict;
 use warnings;
 
-use Test::More tests => 15;
+use Test::More tests => 18;
 use XSpp::Example;
+
+$| = 1; # autoflush
 
 my $dog = Dog->new("Skip");
 isa_ok($dog, 'Dog');
@@ -30,4 +32,12 @@ ok(!$animal->can('Bark'));
 eval { $animal->MakeSound() };
 my $exception = $@;
 ok($exception && $exception =~ /does not make sound/);
+
+my $clone = $dog->Clone();
+isa_ok($clone, 'Dog');
+isa_ok($clone, 'Animal');
+is($clone->GetName(), $dog->GetName());
+
+print "# "; # comment the bark output
+Dog::MakeDogBark($clone);
 

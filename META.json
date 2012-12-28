@@ -4,7 +4,7 @@
       "Mattia Barbon <mbarbon@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.110930",
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -16,13 +16,13 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Test::Base" : 0,
-            "Test::Differences" : 0
+            "Test::Base" : "0",
+            "Test::Differences" : "0"
          }
       },
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.38"
+            "Module::Build" : "0.40"
          }
       },
       "runtime" : {
@@ -36,7 +36,7 @@
    "provides" : {
       "ExtUtils::XSpp" : {
          "file" : "lib/ExtUtils/XSpp.pm",
-         "version" : "0.1602"
+         "version" : "0.1603"
       },
       "ExtUtils::XSpp::Cmd" : {
          "file" : "lib/ExtUtils/XSpp/Cmd.pm",
@@ -185,5 +185,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.1602"
+   "version" : "0.1603"
 }

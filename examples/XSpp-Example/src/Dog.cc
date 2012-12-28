@@ -22,3 +22,16 @@ Dog::MakeSound()
   Bark();
 }
 
+Dog*
+Dog::Clone()
+  const
+{
+  return new Dog(GetName());
+}
+
+void
+Dog::MakeDogBark(const Dog& d)
+{
+  d.Bark();
+}
+
