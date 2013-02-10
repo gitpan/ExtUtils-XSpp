@@ -2,9 +2,11 @@
 
 use strict;
 use warnings;
-use t::lib::XSP::Test tests => 5;
+use t::lib::XSP::Test tests => 9;
 
 run_diff xsp_stdout => 'expected';
+
+# tests for %name{} and %alias{}
 
 __DATA__
 
@@ -53,6 +55,106 @@ boo( int a )
     }
   OUTPUT: RETVAL
 
+=== Function with alias
+--- xsp_stdout
+%module{Foo};
+%package{Foo::Bar};
+
+%name{boo} int foo2(int a) %alias{baz2 = 3};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo::Bar
+
+int
+boo( int a )
+  ALIAS:
+    baz2 = 3
+  CODE:
+    try {
+      if (ix == 0) {
+        RETVAL = foo2( a );
+      }
+      else if (ix == 3) {
+        RETVAL = baz2( a );
+      }
+      else
+        croak("Panic: Invalid invocation of function alias number %i!", (int)ix));
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
+=== Function with alias and code
+--- xsp_stdout
+%module{Foo};
+%package{Foo::Bar};
+
+%name{boo} int foo2(int a) %alias{baz2 = 3} %code{%RETVAL = a;%};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo::Bar
+
+int
+boo( int a )
+  ALIAS:
+    baz2 = 3
+  CODE:
+    RETVAL = a;
+  OUTPUT: RETVAL
+
+=== Function with multiple aliases
+--- xsp_stdout
+%module{Foo};
+%package{Foo::Bar};
+
+%name{boo} int foo2(int a) %alias{baz2 = 3} %alias{buz2 = 1};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo::Bar
+
+int
+boo( int a )
+  ALIAS:
+    buz2 = 1
+    baz2 = 3
+  CODE:
+    try {
+      if (ix == 0) {
+        RETVAL = foo2( a );
+      }
+      else if (ix == 1) {
+        RETVAL = buz2( a );
+      }
+      else if (ix == 3) {
+        RETVAL = baz2( a );
+      }
+      else
+        croak("Panic: Invalid invocation of function alias number %i!", (int)ix));
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
 === Renamed method
 --- xsp_stdout
 %module{Foo};
@@ -74,6 +176,45 @@ Foo::bar( int a )
   CODE:
     try {
       RETVAL = THIS->foo( a );
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+  OUTPUT: RETVAL
+
+=== Renamed method with alias
+--- xsp_stdout
+%module{Foo};
+
+class Foo
+{
+    %name{bar} int foo( int a ) %alias{baz = 1};
+};
+--- expected
+#include <exception>
+
+
+MODULE=Foo
+
+MODULE=Foo PACKAGE=Foo
+
+int
+Foo::bar( int a )
+  ALIAS:
+    baz = 1
+  CODE:
+    try {
+      if (ix == 0) {
+        RETVAL = THIS->foo( a );
+      }
+      else if (ix == 1) {
+        RETVAL = THIS->baz( a );
+      }
+      else
+        croak("Panic: Invalid invocation of function alias number %i!", (int)ix));
     }
     catch (std::exception& e) {
       croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
