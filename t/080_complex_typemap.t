@@ -25,7 +25,7 @@ class Foo
     int foo( int a, funnyvoid b );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -59,7 +59,7 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -93,7 +93,7 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -128,7 +128,7 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -164,7 +164,7 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -200,7 +200,7 @@ class Foo
     int foo( int a, int b );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

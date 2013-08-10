@@ -17,7 +17,7 @@ class Foo
     int foo( int a, int b, int c );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -46,7 +46,7 @@ class Foo
 {
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -60,7 +60,7 @@ MODULE=Foo PACKAGE=Foo
 
 int foo( int a );
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -90,7 +90,7 @@ class Foo
     int foo( int a = 1, int b = 0x1, int c = 1|2 );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -120,12 +120,15 @@ class Foo
     Foo( int a = 1 );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
+
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (CLASS)
 
 Foo*
 Foo::new( int a = 1 )
@@ -141,6 +144,9 @@ Foo::new( int a = 1 )
     }
   OUTPUT: RETVAL
 
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)
+
 === Destructor
 --- xsp_stdout
 %module{Foo};
@@ -150,7 +156,7 @@ class Foo
     ~Foo();
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -179,7 +185,7 @@ class Foo
     void foo( int a );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -206,9 +212,10 @@ Foo::foo( int a )
 class Foo
 {
     void foo();
+    void bar(void);
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -220,6 +227,19 @@ Foo::foo()
   CODE:
     try {
       THIS->foo();
+    }
+    catch (std::exception& e) {
+      croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
+    }
+    catch (...) {
+      croak("Caught C++ exception of unknown type");
+    }
+
+void
+Foo::bar()
+  CODE:
+    try {
+      THIS->bar();
     }
     catch (std::exception& e) {
       croak("Caught C++ exception of type or derived from 'std::exception': %s", e.what());
@@ -258,7 +278,7 @@ class Foo
  * class
  */
 --- expected
-#include <exception>
+# XSP preamble
 
 
 
@@ -312,7 +332,7 @@ Foo::foo( int a, int b, int c )
 unsigned int
 bar( char* line, unsigned long %length{line} );
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -343,7 +363,7 @@ unsigned int
 bar( char* line, unsigned long %length{line} )
   %code{%RETVAL = bar(length(line)*2);%};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -367,7 +387,7 @@ bar( char* line, unsigned long %length{line} )
   %postcall{% cout << length(line) << endl;%}
   %cleanup{% cout << 2*length(line) << endl;%};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -401,7 +421,7 @@ bar( char* line, unsigned long length(line) )
 short int
 bar( short a, unsigned short int b, unsigned c, unsigned int d, int e, unsigned short f, long int g, unsigned long int h );
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -434,12 +454,15 @@ bar( short a, unsigned short b, unsigned int c, unsigned int d, int e, unsigned 
              %};
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Wx
 
 MODULE=Wx PACKAGE=Wx::RichTextCtrl
+
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (CLASS)
 
 static wxRichTextCtrl*
 wxRichTextCtrl::newDefault()
@@ -447,3 +470,6 @@ wxRichTextCtrl::newDefault()
      RETVAL = new wxRichTextCtrl();
                 wxPli_create_evthandler( aTHX_ RETVAL, CLASS );
   OUTPUT: RETVAL
+
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)

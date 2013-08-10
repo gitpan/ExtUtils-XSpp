@@ -27,8 +27,22 @@ sub generate {
                                               );
     my $success = $parser->parse;
     return() if not $success;
+    my $generated = $self->_emit( $parser );
 
-    return $self->_emit( $parser );
+    my $typemap_code = ExtUtils::XSpp::Typemap::get_xs_typemap_code_for_all_typemaps();
+    if (defined $typemap_code && $typemap_code =~ /\S/) {
+        if (exists $generated->{'-'} and $generated->{'-'} ne '') {
+            $generated->{'-'} = $typemap_code . $generated->{'-'};
+        }
+        elsif (my @files = grep !/^-$/, keys %$generated) {
+            $generated->{$files[0]} = $typemap_code . ($generated->{$files[0]}||'');
+        }
+        else {
+            $generated->{'-'} = $typemap_code . ($generated->{'-'}||'');
+        }
+    }
+
+    return $generated;
 }
 
 sub process {
@@ -81,20 +95,34 @@ sub _emit {
     my %state = ( current_module => undef );
 
     foreach my $plugin ( @{$parser->post_process_plugins} ) {
-        $plugin->post_process( $data );
+        my $method = $plugin->{method};
+
+        $plugin->{plugin}->$method( $data );
     }
 
+    $out{'-'} = preamble();
     foreach my $e ( @$data ) {
         if( $e->isa( 'ExtUtils::XSpp::Node::Module' ) ) {
             $state{current_module} = $e;
         }
         if( $e->isa( 'ExtUtils::XSpp::Node::File' ) ) {
             $out_file = $e->file;
+            $out{$out_file} ||= preamble();
         }
         $out{$out_file} .= $e->print( \%state );
     }
 
     return \%out;
+}
+
+sub preamble {
+  return <<EOT
+#include <exception>
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)
+
+
+EOT
 }
 
 sub typemaps { @{$_[0]->{typemaps} || []} }

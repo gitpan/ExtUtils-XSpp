@@ -18,7 +18,7 @@ __DATA__
 %name{boo} int foo(int a);
 %name{moo::boo} int foo(int a);
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -62,7 +62,7 @@ boo( int a )
 
 %name{boo} int foo2(int a) %alias{baz2 = 3};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -99,7 +99,7 @@ boo( int a )
 
 %name{boo} int foo2(int a) %alias{baz2 = 3} %code{%RETVAL = a;%};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -121,7 +121,7 @@ boo( int a )
 
 %name{boo} int foo2(int a) %alias{baz2 = 3} %alias{buz2 = 1};
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -164,7 +164,7 @@ class Foo
     %name{bar} int foo( int a );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -194,7 +194,7 @@ class Foo
     %name{bar} int foo( int a ) %alias{baz = 1};
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -233,12 +233,15 @@ class Foo
     %name{newFoo} Foo( int a );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
+
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (CLASS)
 
 static Foo*
 Foo::newFoo( int a )
@@ -254,6 +257,9 @@ Foo::newFoo( int a )
     }
   OUTPUT: RETVAL
 
+#undef  xsp_constructor_class
+#define xsp_constructor_class(c) (c)
+
 === Renamed destructor
 --- xsp_stdout
 %module{Foo};
@@ -263,7 +269,7 @@ class Foo
     %name{destroy} ~Foo();
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -293,7 +299,7 @@ Foo::destroy()
     %name{foo_int} int foo( int a );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

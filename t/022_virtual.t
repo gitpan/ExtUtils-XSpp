@@ -20,7 +20,7 @@ class Foo
         %code{%dummy%};
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -49,7 +49,7 @@ class Foo
         %code{%dummy%};
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -73,7 +73,7 @@ class Foo
         %code{%dummy%};
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

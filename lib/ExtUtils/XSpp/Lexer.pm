@@ -16,6 +16,7 @@ use ExtUtils::XSpp::Node::Constructor;
 use ExtUtils::XSpp::Node::Destructor;
 use ExtUtils::XSpp::Node::File;
 use ExtUtils::XSpp::Node::Function;
+use ExtUtils::XSpp::Node::Member;
 use ExtUtils::XSpp::Node::Method;
 use ExtUtils::XSpp::Node::Module;
 use ExtUtils::XSpp::Node::Package;
@@ -68,6 +69,7 @@ my %tokens = ( '::' => 'DCOLON',
                '%loadplugin' => 'p_loadplugin',
                '%include'    => 'p_include',
                '%alias'      => 'p_alias',
+               '%_type'      => 'p__type',
              );
 
 my %keywords = ( const           => 1,
@@ -77,6 +79,7 @@ my %keywords = ( const           => 1,
                  long            => 1,
                  int             => 1,
                  char            => 1,
+                 void            => 1,
                  package_static  => 1,
                  class_static    => 1,
                  static          => 1,
@@ -255,6 +258,13 @@ sub make_template {
                                      )
 }
 
+sub add_typemap {
+  my( $name, $type, @args ) = @_;
+  my $tm = ExtUtils::XSpp::Typemap::create( $name, type => $type, @args );
+
+  ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+}
+
 sub add_data_raw {
   my $p = shift;
   my $rows = shift;
@@ -274,18 +284,26 @@ sub add_top_level_directive {
 
   $parser->YYData->{PARSER}->handle_toplevel_tag_plugins
     ( $args{any},
-      any_named_arguments      => $args{any_named_arguments},
-      any_positional_arguments => $args{any_positional_arguments},
+      named                    => $args{named},
+      positional               => $args{positional},
+      any_named_arguments      => $args{named},
+      any_positional_arguments => $args{positional},
       condition                => $parser->get_conditional,
       );
 }
 
 sub make_argument {
-  my( $p, $type, $name, $default ) = @_;
+  my( $p, $type, $name, $default, @args ) = @_;
+  my %args   = @args;
+  _merge_keys( 'tag', \%args, \@args );
 
-  ExtUtils::XSpp::Node::Argument->new( type    => $type,
-                              name    => $name,
-                              default => $default );
+  my $arg = ExtUtils::XSpp::Node::Argument->new
+                ( type    => $type,
+                  name    => $name,
+                  default => $default,
+                  tags    => $args{tag} );
+
+  return $arg;
 }
 
 sub create_class {
@@ -305,16 +323,48 @@ sub create_class {
   my @any  = grep  $_->isa( 'ExtUtils::XSpp::Node::PercAny' ), @$methods;
   my @rest = grep !$_->isa( 'ExtUtils::XSpp::Node::PercAny' ), @$methods;
 
+  # finish creating the class
+  $class->add_methods( @rest );
+
+  foreach my $meth ( grep $_->isa( 'ExtUtils::XSpp::Node::Method' ), @rest ) {
+    call_argument_tags( $parser, $meth );
+
+    my $nodes = $parser->YYData->{PARSER}->handle_method_tags_plugins( $meth, $meth->tags );
+
+    $class->add_methods( @$nodes );
+  }
+
   foreach my $any ( @any ) {
-    $parser->YYData->{PARSER}->handle_class_tag_plugins
+    if( $any->{NAME} eq 'accessors' ) {
+      # TODO use plugin infrastructure, add decent validation
+      my %args = @{$any->{NAMED_ARGUMENTS}};
+      if( $args{get_style} ) {
+          if( @{$args{get_style}} ) {
+              $class->set_getter_style( $args{get_style}[0][0] );
+          } else {
+              die "Invalid accessor style declaration";
+          }
+      }
+      if( $args{set_style} ) {
+          if( @{$args{set_style}} ) {
+              $class->set_setter_style( $args{set_style}[0][0] );
+          } else {
+              die "Invalid accessor style declaration";
+          }
+      }
+      next;
+    }
+
+    my $nodes = $parser->YYData->{PARSER}->handle_class_tag_plugins
       ( $class, $any->{NAME},
+        named                    => $any->{NAMED_ARGUMENTS},
+        positional               => $any->{POSITIONAL_ARGUMENTS},
         any_named_arguments      => $any->{NAMED_ARGUMENTS},
         any_positional_arguments => $any->{POSITIONAL_ARGUMENTS},
         );
-  }
 
-  # finish creating the class
-  $class->add_methods( @rest );
+    $class->add_methods( @$nodes );
+  }
 
   return $class;
 }
@@ -335,14 +385,31 @@ sub _merge_keys {
   $argshash->{$key} = \@occurrances;
 }
 
+
+sub create_member {
+  my( $parser, @args ) = @_;
+  my %args   = @args;
+  _merge_keys( 'tag', \%args, \@args );
+
+  return ExtUtils::XSpp::Node::Member->new
+              ( cpp_name  => $args{name},
+                perl_name => $args{perl_name},
+                class     => $args{class},
+                type      => $args{type},
+                condition => $args{condition},
+                tags      => $args{tag},
+                );
+}
+
 sub add_data_function {
   my( $parser, @args ) = @_;
   my %args   = @args;
   _merge_keys( 'catch', \%args, \@args );
   _merge_keys( 'alias', \%args, \@args );
+  _merge_keys( 'tag', \%args, \@args );
   $args{alias} = +{@{$args{alias}}} if exists $args{alias};
 
-  my $f = ExtUtils::XSpp::Node::Function->new
+  return ExtUtils::XSpp::Node::Function->new
               ( cpp_name  => $args{name},
                 perl_name => $args{perl_name},
                 class     => $args{class},
@@ -354,17 +421,8 @@ sub add_data_function {
                 catch     => $args{catch},
                 condition => $args{condition},
                 alias     => $args{alias},
+                tags      => $args{tag},
                 );
-
-  if( $args{any} ) {
-    $parser->YYData->{PARSER}->handle_function_tag_plugins
-      ( $f, $args{any},
-        any_named_arguments      => $args{any_named_arguments},
-        any_positional_arguments => $args{any_positional_arguments},
-        );
-  }
-
-  return $f;
 }
 
 sub add_data_method {
@@ -372,6 +430,7 @@ sub add_data_method {
   my %args   = @args;
   _merge_keys( 'catch', \%args, \@args );
   _merge_keys( 'alias', \%args, \@args );
+  _merge_keys( 'tag', \%args, \@args );
   $args{alias} = +{@{$args{alias}}} if exists $args{alias};
 
   my $m = ExtUtils::XSpp::Node::Method->new
@@ -386,15 +445,8 @@ sub add_data_method {
               catch     => $args{catch},
               condition => $args{condition},
               alias     => $args{alias},
+              tags      => $args{tag},
               );
-
-  if( $args{any} ) {
-    $parser->YYData->{PARSER}->handle_method_tag_plugins
-      ( $m, $args{any},
-        any_named_arguments      => $args{any_named_arguments},
-        any_positional_arguments => $args{any_positional_arguments},
-        );
-  }
 
   return $m;
 }
@@ -403,6 +455,7 @@ sub add_data_ctor {
   my( $parser, @args ) = @_;
   my %args   = @args;
   _merge_keys( 'catch', \%args, \@args );
+  _merge_keys( 'tag', \%args, \@args );
 
   my $m = ExtUtils::XSpp::Node::Constructor->new
             ( cpp_name  => $args{name},
@@ -412,15 +465,8 @@ sub add_data_ctor {
               postcall  => $args{postcall},
               catch     => $args{catch},
               condition => $args{condition},
+              tags      => $args{tag},
               );
-
-  if( $args{any} ) {
-    $parser->YYData->{PARSER}->handle_method_tag_plugins
-      ( $m, $args{any},
-        any_named_arguments      => $args{any_named_arguments},
-        any_positional_arguments => $args{any_positional_arguments},
-        );
-  }
 
   return $m;
 }
@@ -429,6 +475,7 @@ sub add_data_dtor {
   my( $parser, @args ) = @_;
   my %args   = @args;
   _merge_keys( 'catch', \%args, \@args );
+  _merge_keys( 'tag', \%args, \@args );
 
   my $m = ExtUtils::XSpp::Node::Destructor->new
             ( cpp_name  => $args{name},
@@ -437,31 +484,30 @@ sub add_data_dtor {
               postcall  => $args{postcall},
               catch     => $args{catch},
               condition => $args{condition},
+              tags      => $args{tag},
               );
-
-  if( $args{any} ) {
-    $parser->YYData->{PARSER}->handle_method_tag_plugins
-      ( $m, $args{any},
-        any_named_arguments      => $args{any_named_arguments},
-        any_positional_arguments => $args{any_positional_arguments},
-        );
-  }
 
   return $m;
 }
 
-sub is_directive {
-  my( $p, $d, $name ) = @_;
+sub process_function {
+  my( $parser, $function ) = @_;
 
-  return $d->[0] eq $name;
+  $function->resolve_typemaps;
+  $function->resolve_exceptions;
+  call_argument_tags( $parser, $function );
+
+  my $nodes = $parser->YYData->{PARSER}->handle_function_tags_plugins( $function, $function->tags );
+
+  return [ $function, @$nodes ];
 }
 
-#sub assert_directive {
-#  my( $p, $d, $name ) = @_;
-#
-#  if( $d->[0] ne $name )
-#    { $p->YYError }
-#  1;
-#}
+sub call_argument_tags {
+  my( $parser, $function ) = @_;
+
+  foreach my $arg ( @{$function->arguments} ) {
+    $parser->YYData->{PARSER}->handle_argument_tags_plugins( $arg, $arg->tags );
+  }
+}
 
 1;

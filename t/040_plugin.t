@@ -22,7 +22,7 @@ class Y
     void bar();
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -72,7 +72,7 @@ class Y
     void bar();
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

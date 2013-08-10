@@ -501,353 +501,357 @@ sub new {
 [
 	{#State 0
 		ACTIONS => {
-			'ID' => 25,
+			'ID' => 28,
 			'p_typemap' => 4,
 			'p_any' => 3,
-			'OPSPECIAL' => 30,
-			'COMMENT' => 6,
-			'p_exceptionmap' => 33,
-			"class" => 8,
-			'RAW_CODE' => 34,
-			"const" => 10,
-			"int" => 37,
-			'p_module' => 15,
-			'p_package' => 44,
-			"enum" => 43,
-			'p_loadplugin' => 42,
-			'PREPROCESSOR' => 16,
-			"short" => 17,
-			'p_file' => 46,
-			"unsigned" => 47,
-			'p_name' => 19,
-			'p_include' => 20,
-			"long" => 21,
-			"char" => 24
+			'OPSPECIAL' => 33,
+			'COMMENT' => 7,
+			'p_exceptionmap' => 36,
+			"class" => 9,
+			'RAW_CODE' => 37,
+			"const" => 11,
+			"int" => 40,
+			'p_module' => 16,
+			"enum" => 47,
+			'p_package' => 46,
+			'p_loadplugin' => 45,
+			'PREPROCESSOR' => 17,
+			"short" => 18,
+			'p_file' => 49,
+			"void" => 19,
+			"unsigned" => 50,
+			'p_name' => 21,
+			'p_include' => 22,
+			"long" => 23,
+			'p__type' => 26,
+			"char" => 27
 		},
 		GOTOS => {
-			'perc_loadplugin' => 26,
+			'perc_loadplugin' => 29,
 			'class_name' => 1,
 			'top_list' => 2,
-			'perc_package' => 29,
-			'function' => 28,
-			'nconsttype' => 27,
-			'looks_like_function' => 5,
-			'exceptionmap' => 31,
-			'special_block_start' => 32,
-			'perc_name' => 7,
-			'class_decl' => 35,
-			'typemap' => 9,
-			'enum' => 36,
-			'decorate_class' => 11,
-			'special_block' => 12,
-			'perc_module' => 38,
-			'type_name' => 13,
-			'perc_file' => 41,
-			'perc_any' => 40,
-			'basic_type' => 39,
-			'template' => 14,
-			'looks_like_renamed_function' => 45,
-			'top' => 18,
-			'function_decl' => 48,
-			'perc_include' => 49,
-			'directive' => 50,
-			'type' => 22,
-			'class' => 23,
-			'raw' => 51
+			'perc_package' => 32,
+			'function' => 31,
+			'nconsttype' => 30,
+			'_top' => 5,
+			'looks_like_function' => 6,
+			'exceptionmap' => 34,
+			'special_block_start' => 35,
+			'perc_name' => 8,
+			'class_decl' => 38,
+			'typemap' => 10,
+			'enum' => 39,
+			'decorate_class' => 12,
+			'special_block' => 13,
+			'perc_module' => 41,
+			'type_name' => 14,
+			'perc_file' => 44,
+			'perc_any' => 43,
+			'basic_type' => 42,
+			'template' => 15,
+			'looks_like_renamed_function' => 48,
+			'top' => 20,
+			'function_decl' => 51,
+			'perc_include' => 52,
+			'directive' => 53,
+			'type' => 24,
+			'class' => 25,
+			'raw' => 54
 		}
 	},
 	{#State 1
 		ACTIONS => {
-			'OPANG' => 52
+			'OPANG' => 55
 		},
-		DEFAULT => -121
+		DEFAULT => -133
 	},
 	{#State 2
 		ACTIONS => {
-			'ID' => 25,
-			'' => 53,
+			'ID' => 28,
+			'' => 56,
 			'p_typemap' => 4,
 			'p_any' => 3,
-			'OPSPECIAL' => 30,
-			'COMMENT' => 6,
-			'p_exceptionmap' => 33,
-			"class" => 8,
-			'RAW_CODE' => 34,
-			"const" => 10,
-			"int" => 37,
-			'p_module' => 15,
-			"enum" => 43,
-			'p_package' => 44,
-			'p_loadplugin' => 42,
-			'PREPROCESSOR' => 16,
-			"short" => 17,
-			'p_file' => 46,
-			"unsigned" => 47,
-			'p_name' => 19,
-			'p_include' => 20,
-			"long" => 21,
-			"char" => 24
+			'OPSPECIAL' => 33,
+			'COMMENT' => 7,
+			'p_exceptionmap' => 36,
+			"class" => 9,
+			'RAW_CODE' => 37,
+			"const" => 11,
+			"int" => 40,
+			'p_module' => 16,
+			"enum" => 47,
+			'p_package' => 46,
+			'p_loadplugin' => 45,
+			'PREPROCESSOR' => 17,
+			"short" => 18,
+			'p_file' => 49,
+			"void" => 19,
+			"unsigned" => 50,
+			'p_name' => 21,
+			'p_include' => 22,
+			"long" => 23,
+			"char" => 27
 		},
 		GOTOS => {
-			'perc_loadplugin' => 26,
+			'perc_loadplugin' => 29,
 			'class_name' => 1,
-			'function' => 28,
-			'perc_package' => 29,
-			'nconsttype' => 27,
-			'looks_like_function' => 5,
-			'exceptionmap' => 31,
-			'special_block_start' => 32,
-			'perc_name' => 7,
-			'class_decl' => 35,
-			'typemap' => 9,
-			'enum' => 36,
-			'decorate_class' => 11,
-			'special_block' => 12,
-			'perc_module' => 38,
-			'type_name' => 13,
-			'perc_file' => 41,
-			'perc_any' => 40,
-			'basic_type' => 39,
-			'template' => 14,
-			'looks_like_renamed_function' => 45,
-			'top' => 54,
-			'function_decl' => 48,
-			'perc_include' => 49,
-			'directive' => 50,
-			'type' => 22,
-			'class' => 23,
-			'raw' => 51
+			'function' => 31,
+			'perc_package' => 32,
+			'nconsttype' => 30,
+			'_top' => 5,
+			'looks_like_function' => 6,
+			'exceptionmap' => 34,
+			'special_block_start' => 35,
+			'perc_name' => 8,
+			'class_decl' => 38,
+			'typemap' => 10,
+			'enum' => 39,
+			'decorate_class' => 12,
+			'special_block' => 13,
+			'perc_module' => 41,
+			'type_name' => 14,
+			'perc_file' => 44,
+			'perc_any' => 43,
+			'basic_type' => 42,
+			'template' => 15,
+			'looks_like_renamed_function' => 48,
+			'top' => 57,
+			'function_decl' => 51,
+			'perc_include' => 52,
+			'directive' => 53,
+			'type' => 24,
+			'class' => 25,
+			'raw' => 54
 		}
 	},
 	{#State 3
 		ACTIONS => {
-			'OPSPECIAL' => 30,
-			'OPCURLY' => 55
+			'OPSPECIAL' => 33,
+			'OPCURLY' => 58
 		},
-		DEFAULT => -111,
+		DEFAULT => -122,
 		GOTOS => {
-			'special_block' => 56,
-			'special_block_start' => 32
+			'special_block' => 59,
+			'special_block_start' => 35
 		}
 	},
 	{#State 4
 		ACTIONS => {
-			'OPCURLY' => 57
+			'OPCURLY' => 60
 		}
 	},
 	{#State 5
-		DEFAULT => -75
+		DEFAULT => -4
 	},
 	{#State 6
-		DEFAULT => -25
+		DEFAULT => -86
 	},
 	{#State 7
-		ACTIONS => {
-			'ID' => 25,
-			"class" => 8,
-			"short" => 17,
-			"const" => 10,
-			"unsigned" => 47,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		GOTOS => {
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'looks_like_function' => 58,
-			'class_decl' => 59,
-			'type' => 22
-		}
+		DEFAULT => -27
 	},
 	{#State 8
 		ACTIONS => {
-			'ID' => 60
+			'ID' => 28,
+			"class" => 9,
+			"short" => 18,
+			"void" => 19,
+			"const" => 11,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
+		},
+		GOTOS => {
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'looks_like_function' => 61,
+			'class_decl' => 62,
+			'type' => 24
 		}
 	},
 	{#State 9
-		DEFAULT => -14
-	},
-	{#State 10
 		ACTIONS => {
-			'ID' => 25,
-			"short" => 17,
-			"unsigned" => 47,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
+			'ID' => 28
 		},
 		GOTOS => {
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 61,
-			'template' => 14
+			'class_name' => 63
 		}
+	},
+	{#State 10
+		DEFAULT => -16
 	},
 	{#State 11
 		ACTIONS => {
-			'SEMICOLON' => 62
+			'ID' => 28,
+			"short" => 18,
+			"void" => 19,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
+		},
+		GOTOS => {
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 64,
+			'template' => 15
 		}
 	},
 	{#State 12
-		DEFAULT => -27
+		ACTIONS => {
+			'SEMICOLON' => 65
+		}
 	},
 	{#State 13
-		DEFAULT => -119
+		DEFAULT => -29
 	},
 	{#State 14
-		DEFAULT => -120
+		DEFAULT => -131
 	},
 	{#State 15
-		ACTIONS => {
-			'OPCURLY' => 63
-		}
+		DEFAULT => -132
 	},
 	{#State 16
-		DEFAULT => -26
-	},
-	{#State 17
-		ACTIONS => {
-			"int" => 64
-		},
-		DEFAULT => -128
-	},
-	{#State 18
-		DEFAULT => -1
-	},
-	{#State 19
-		ACTIONS => {
-			'OPCURLY' => 65
-		}
-	},
-	{#State 20
 		ACTIONS => {
 			'OPCURLY' => 66
 		}
 	},
-	{#State 21
+	{#State 17
+		DEFAULT => -28
+	},
+	{#State 18
 		ACTIONS => {
 			"int" => 67
 		},
-		DEFAULT => -127
+		DEFAULT => -141
+	},
+	{#State 19
+		DEFAULT => -135
+	},
+	{#State 20
+		DEFAULT => -1
+	},
+	{#State 21
+		ACTIONS => {
+			'OPCURLY' => 68
+		}
 	},
 	{#State 22
 		ACTIONS => {
-			'ID' => 68
+			'OPCURLY' => 69
 		}
 	},
 	{#State 23
-		DEFAULT => -4
+		ACTIONS => {
+			"int" => 70
+		},
+		DEFAULT => -140
 	},
 	{#State 24
-		DEFAULT => -125
+		ACTIONS => {
+			'ID' => 71
+		}
 	},
 	{#State 25
-		ACTIONS => {
-			'DCOLON' => 70
-		},
-		DEFAULT => -134,
-		GOTOS => {
-			'class_suffix' => 69
-		}
+		DEFAULT => -6
 	},
 	{#State 26
 		ACTIONS => {
-			'SEMICOLON' => 71
+			'OPCURLY' => 72
 		}
 	},
 	{#State 27
-		ACTIONS => {
-			'STAR' => 73,
-			'AMP' => 72
-		},
-		DEFAULT => -116
+		DEFAULT => -138
 	},
 	{#State 28
-		DEFAULT => -7
+		ACTIONS => {
+			'DCOLON' => 74
+		},
+		DEFAULT => -147,
+		GOTOS => {
+			'class_suffix' => 73
+		}
 	},
 	{#State 29
 		ACTIONS => {
-			'SEMICOLON' => 74
+			'SEMICOLON' => 75
 		}
 	},
 	{#State 30
-		DEFAULT => -166
+		ACTIONS => {
+			'STAR' => 77,
+			'AMP' => 76
+		},
+		DEFAULT => -128
 	},
 	{#State 31
-		DEFAULT => -15
+		DEFAULT => -9
 	},
 	{#State 32
 		ACTIONS => {
-			'CLSPECIAL' => 75,
-			'line' => 76
-		},
-		GOTOS => {
-			'special_block_end' => 77,
-			'lines' => 78
+			'SEMICOLON' => 78
 		}
 	},
 	{#State 33
-		ACTIONS => {
-			'OPCURLY' => 79
-		}
+		DEFAULT => -184
 	},
 	{#State 34
-		DEFAULT => -24
+		DEFAULT => -17
 	},
 	{#State 35
 		ACTIONS => {
-			'SEMICOLON' => 80
+			'CLSPECIAL' => 79,
+			'line' => 80
+		},
+		GOTOS => {
+			'special_block_end' => 81,
+			'lines' => 82
 		}
 	},
 	{#State 36
-		DEFAULT => -6
+		ACTIONS => {
+			'OPCURLY' => 83
+		}
 	},
 	{#State 37
-		DEFAULT => -126
+		DEFAULT => -26
 	},
 	{#State 38
 		ACTIONS => {
-			'SEMICOLON' => 81
+			'SEMICOLON' => 84
 		}
 	},
 	{#State 39
-		DEFAULT => -122
+		DEFAULT => -8
 	},
 	{#State 40
-		ACTIONS => {
-			'SEMICOLON' => 82
-		}
+		DEFAULT => -139
 	},
 	{#State 41
 		ACTIONS => {
-			'SEMICOLON' => 83
+			'SEMICOLON' => 85
 		}
 	},
 	{#State 42
-		ACTIONS => {
-			'OPCURLY' => 84
-		}
+		DEFAULT => -134
 	},
 	{#State 43
 		ACTIONS => {
-			'ID' => 86,
-			'OPCURLY' => 85
+			'SEMICOLON' => 86
 		}
 	},
 	{#State 44
 		ACTIONS => {
-			'OPCURLY' => 87
+			'SEMICOLON' => 87
 		}
 	},
 	{#State 45
-		DEFAULT => -84,
-		GOTOS => {
-			'function_metadata' => 88
+		ACTIONS => {
+			'OPCURLY' => 88
 		}
 	},
 	{#State 46
@@ -857,1691 +861,1845 @@ sub new {
 	},
 	{#State 47
 		ACTIONS => {
-			"short" => 17,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		DEFAULT => -123,
-		GOTOS => {
-			'basic_type' => 90
+			'ID' => 91,
+			'OPCURLY' => 90
 		}
 	},
 	{#State 48
-		ACTIONS => {
-			'SEMICOLON' => 91
+		DEFAULT => -95,
+		GOTOS => {
+			'function_metadata' => 92
 		}
 	},
 	{#State 49
 		ACTIONS => {
-			'SEMICOLON' => 92
+			'OPCURLY' => 93
 		}
 	},
 	{#State 50
-		DEFAULT => -5
+		ACTIONS => {
+			"short" => 18,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
+		},
+		DEFAULT => -136,
+		GOTOS => {
+			'basic_type' => 94
+		}
 	},
 	{#State 51
-		DEFAULT => -3
+		ACTIONS => {
+			'SEMICOLON' => 95
+		}
 	},
 	{#State 52
 		ACTIONS => {
-			'ID' => 25,
-			"short" => 17,
-			"unsigned" => 47,
-			"const" => 10,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		GOTOS => {
-			'type_list' => 94,
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'type' => 93
+			'SEMICOLON' => 96
 		}
 	},
 	{#State 53
-		DEFAULT => 0
+		DEFAULT => -7
 	},
 	{#State 54
-		DEFAULT => -2
+		DEFAULT => -5
 	},
 	{#State 55
 		ACTIONS => {
-			'ID' => 97,
-			'p_any' => 95
+			'ID' => 28,
+			"short" => 18,
+			"void" => 19,
+			"const" => 11,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
 		},
 		GOTOS => {
-			'perc_any_arg' => 96,
-			'perc_any_args' => 98
+			'type_list' => 98,
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'type' => 97
 		}
 	},
 	{#State 56
-		DEFAULT => -22,
-		GOTOS => {
-			'mixed_blocks' => 99
-		}
+		DEFAULT => 0
 	},
 	{#State 57
-		ACTIONS => {
-			'ID' => 25,
-			"short" => 17,
-			"unsigned" => 47,
-			"const" => 10,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		GOTOS => {
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'type' => 100
-		}
+		DEFAULT => -2
 	},
 	{#State 58
-		DEFAULT => -76
+		ACTIONS => {
+			'ID' => 102,
+			'p_any' => 99,
+			'p_name' => 21
+		},
+		GOTOS => {
+			'perc_name' => 101,
+			'perc_any_arg' => 100,
+			'perc_any_args' => 103
+		}
 	},
 	{#State 59
-		DEFAULT => -40
+		DEFAULT => -24,
+		GOTOS => {
+			'mixed_blocks' => 104
+		}
 	},
 	{#State 60
 		ACTIONS => {
-			'COLON' => 102
+			'ID' => 28,
+			"short" => 18,
+			"void" => 19,
+			"const" => 11,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
 		},
-		DEFAULT => -44,
 		GOTOS => {
-			'base_classes' => 101
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'type' => 105
 		}
 	},
 	{#State 61
-		ACTIONS => {
-			'STAR' => 73,
-			'AMP' => 72
-		},
-		DEFAULT => -115
+		DEFAULT => -87
 	},
 	{#State 62
-		DEFAULT => -37
+		DEFAULT => -43
 	},
 	{#State 63
 		ACTIONS => {
-			'ID' => 25
+			'COLON' => 107
 		},
+		DEFAULT => -47,
 		GOTOS => {
-			'class_name' => 103
+			'base_classes' => 106
 		}
 	},
 	{#State 64
-		DEFAULT => -130
+		ACTIONS => {
+			'STAR' => 77,
+			'AMP' => 76
+		},
+		DEFAULT => -127
 	},
 	{#State 65
-		ACTIONS => {
-			'ID' => 25
-		},
-		GOTOS => {
-			'class_name' => 104
-		}
+		DEFAULT => -39
 	},
 	{#State 66
 		ACTIONS => {
-			'ID' => 106,
-			'DASH' => 107
+			'ID' => 28
 		},
 		GOTOS => {
-			'file_name' => 105
+			'class_name' => 108
 		}
 	},
 	{#State 67
-		DEFAULT => -129
+		DEFAULT => -143
 	},
 	{#State 68
 		ACTIONS => {
-			'OPPAR' => 108
+			'ID' => 28
+		},
+		GOTOS => {
+			'class_name' => 109
 		}
 	},
 	{#State 69
 		ACTIONS => {
-			'DCOLON' => 109
+			'ID' => 111,
+			'DASH' => 112
 		},
-		DEFAULT => -135
+		GOTOS => {
+			'file_name' => 110
+		}
 	},
 	{#State 70
-		ACTIONS => {
-			'ID' => 110
-		}
+		DEFAULT => -142
 	},
 	{#State 71
-		DEFAULT => -11
+		ACTIONS => {
+			'OPPAR' => 113
+		}
 	},
 	{#State 72
-		DEFAULT => -118
+		ACTIONS => {
+			'ID' => 28,
+			"short" => 18,
+			"void" => 19,
+			"const" => 11,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
+		},
+		GOTOS => {
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'type' => 114
+		}
 	},
 	{#State 73
-		DEFAULT => -117
+		ACTIONS => {
+			'DCOLON' => 115
+		},
+		DEFAULT => -148
 	},
 	{#State 74
-		DEFAULT => -9
+		ACTIONS => {
+			'ID' => 116
+		}
 	},
 	{#State 75
-		DEFAULT => -167
-	},
-	{#State 76
-		DEFAULT => -168
-	},
-	{#State 77
-		DEFAULT => -165
-	},
-	{#State 78
-		ACTIONS => {
-			'CLSPECIAL' => 75,
-			'line' => 111
-		},
-		GOTOS => {
-			'special_block_end' => 112
-		}
-	},
-	{#State 79
-		ACTIONS => {
-			'ID' => 113
-		}
-	},
-	{#State 80
-		DEFAULT => -36
-	},
-	{#State 81
-		DEFAULT => -8
-	},
-	{#State 82
 		DEFAULT => -13
 	},
+	{#State 76
+		DEFAULT => -130
+	},
+	{#State 77
+		DEFAULT => -129
+	},
+	{#State 78
+		DEFAULT => -11
+	},
+	{#State 79
+		DEFAULT => -185
+	},
+	{#State 80
+		DEFAULT => -186
+	},
+	{#State 81
+		DEFAULT => -183
+	},
+	{#State 82
+		ACTIONS => {
+			'CLSPECIAL' => 79,
+			'line' => 117
+		},
+		GOTOS => {
+			'special_block_end' => 118
+		}
+	},
 	{#State 83
-		DEFAULT => -10
+		ACTIONS => {
+			'ID' => 119
+		}
 	},
 	{#State 84
-		ACTIONS => {
-			'ID' => 25
-		},
-		GOTOS => {
-			'class_name' => 114
-		}
+		DEFAULT => -38
 	},
 	{#State 85
-		DEFAULT => -30,
-		GOTOS => {
-			'enum_element_list' => 115
-		}
+		DEFAULT => -10
 	},
 	{#State 86
-		ACTIONS => {
-			'OPCURLY' => 116
-		}
+		DEFAULT => -15
 	},
 	{#State 87
-		ACTIONS => {
-			'ID' => 25
-		},
-		GOTOS => {
-			'class_name' => 117
-		}
+		DEFAULT => -12
 	},
 	{#State 88
 		ACTIONS => {
-			'p_any' => 3,
-			'p_alias' => 122,
-			'p_code' => 125,
-			'p_cleanup' => 119,
-			'p_postcall' => 121,
-			'p_catch' => 129
+			'ID' => 28
 		},
-		DEFAULT => -77,
 		GOTOS => {
-			'perc_postcall' => 124,
-			'perc_code' => 118,
-			'perc_any' => 126,
-			'perc_cleanup' => 127,
-			'perc_catch' => 120,
-			'_function_metadata' => 128,
-			'perc_alias' => 123
+			'class_name' => 120
 		}
 	},
 	{#State 89
 		ACTIONS => {
-			'ID' => 106,
-			'DASH' => 107
+			'ID' => 28
 		},
 		GOTOS => {
-			'file_name' => 130
+			'class_name' => 121
 		}
 	},
 	{#State 90
-		DEFAULT => -124
+		DEFAULT => -32,
+		GOTOS => {
+			'enum_element_list' => 122
+		}
 	},
 	{#State 91
-		DEFAULT => -38
+		ACTIONS => {
+			'OPCURLY' => 123
+		}
 	},
 	{#State 92
-		DEFAULT => -12
+		ACTIONS => {
+			'p_any' => 3,
+			'p_alias' => 128,
+			'p_code' => 131,
+			'p_cleanup' => 125,
+			'p_postcall' => 127,
+			'p_catch' => 135
+		},
+		DEFAULT => -88,
+		GOTOS => {
+			'perc_postcall' => 130,
+			'perc_code' => 124,
+			'perc_any' => 132,
+			'perc_cleanup' => 133,
+			'perc_catch' => 126,
+			'_function_metadata' => 134,
+			'perc_alias' => 129
+		}
 	},
 	{#State 93
-		DEFAULT => -132
+		ACTIONS => {
+			'ID' => 111,
+			'DASH' => 112
+		},
+		GOTOS => {
+			'file_name' => 136
+		}
 	},
 	{#State 94
-		ACTIONS => {
-			'CLANG' => 131,
-			'COMMA' => 132
-		}
+		DEFAULT => -137
 	},
 	{#State 95
-		DEFAULT => -22,
-		GOTOS => {
-			'mixed_blocks' => 133
-		}
+		DEFAULT => -40
 	},
 	{#State 96
-		DEFAULT => -112
+		DEFAULT => -14
 	},
 	{#State 97
-		ACTIONS => {
-			'CLCURLY' => 134
-		}
+		DEFAULT => -145
 	},
 	{#State 98
 		ACTIONS => {
-			'p_any' => 95,
-			'CLCURLY' => 136
-		},
-		GOTOS => {
-			'perc_any_arg' => 135
+			'CLANG' => 137,
+			'COMMA' => 138
 		}
 	},
 	{#State 99
-		ACTIONS => {
-			'OPSPECIAL' => 30,
-			'OPCURLY' => 137
-		},
-		DEFAULT => -110,
+		DEFAULT => -24,
 		GOTOS => {
-			'simple_block' => 139,
-			'special_block' => 138,
-			'special_block_start' => 32
+			'mixed_blocks' => 139
 		}
 	},
 	{#State 100
-		ACTIONS => {
-			'CLCURLY' => 140
-		}
+		DEFAULT => -123
 	},
 	{#State 101
 		ACTIONS => {
-			'COMMA' => 142
-		},
-		DEFAULT => -52,
-		GOTOS => {
-			'class_metadata' => 141
+			'SEMICOLON' => 140
 		}
 	},
 	{#State 102
 		ACTIONS => {
-			"protected" => 146,
-			"private" => 145,
-			"public" => 143
-		},
-		GOTOS => {
-			'base_class' => 144
+			'CLCURLY' => 141
 		}
 	},
 	{#State 103
 		ACTIONS => {
-			'CLCURLY' => 147
+			'p_any' => 99,
+			'p_name' => 21,
+			'CLCURLY' => 143
+		},
+		GOTOS => {
+			'perc_name' => 101,
+			'perc_any_arg' => 142
 		}
 	},
 	{#State 104
 		ACTIONS => {
-			'CLCURLY' => 148
+			'OPSPECIAL' => 33,
+			'OPCURLY' => 144
+		},
+		DEFAULT => -121,
+		GOTOS => {
+			'simple_block' => 146,
+			'special_block' => 145,
+			'special_block_start' => 35
 		}
 	},
 	{#State 105
 		ACTIONS => {
-			'CLCURLY' => 149
+			'CLCURLY' => 147
 		}
 	},
 	{#State 106
 		ACTIONS => {
-			'DOT' => 151,
-			'SLASH' => 150
+			'COMMA' => 149
+		},
+		DEFAULT => -55,
+		GOTOS => {
+			'class_metadata' => 148
 		}
 	},
 	{#State 107
-		DEFAULT => -140
+		ACTIONS => {
+			"protected" => 153,
+			"private" => 152,
+			"public" => 150
+		},
+		GOTOS => {
+			'base_class' => 151
+		}
 	},
 	{#State 108
 		ACTIONS => {
-			'ID' => 25,
-			"short" => 17,
-			"const" => 10,
-			"unsigned" => 47,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		DEFAULT => -145,
-		GOTOS => {
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'arg_list' => 153,
-			'argument' => 154,
-			'type' => 152
+			'CLCURLY' => 154
 		}
 	},
 	{#State 109
 		ACTIONS => {
-			'ID' => 155
+			'CLCURLY' => 155
 		}
 	},
 	{#State 110
-		DEFAULT => -138
-	},
-	{#State 111
-		DEFAULT => -169
-	},
-	{#State 112
-		DEFAULT => -164
-	},
-	{#State 113
 		ACTIONS => {
 			'CLCURLY' => 156
 		}
 	},
+	{#State 111
+		ACTIONS => {
+			'DOT' => 158,
+			'SLASH' => 157
+		}
+	},
+	{#State 112
+		DEFAULT => -153
+	},
+	{#State 113
+		ACTIONS => {
+			'ID' => 28,
+			"short" => 18,
+			"void" => 160,
+			"const" => 11,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
+		},
+		DEFAULT => -160,
+		GOTOS => {
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'nonvoid_arg_list' => 159,
+			'arg_list' => 162,
+			'argument' => 163,
+			'type' => 161
+		}
+	},
 	{#State 114
 		ACTIONS => {
-			'CLCURLY' => 157
+			'CLCURLY' => 164
 		}
 	},
 	{#State 115
 		ACTIONS => {
-			'ID' => 158,
-			'PREPROCESSOR' => 16,
-			'RAW_CODE' => 34,
-			'OPSPECIAL' => 30,
-			'COMMENT' => 6,
-			'CLCURLY' => 160
-		},
-		GOTOS => {
-			'enum_element' => 159,
-			'special_block' => 12,
-			'raw' => 161,
-			'special_block_start' => 32
+			'ID' => 165
 		}
 	},
 	{#State 116
-		DEFAULT => -30,
-		GOTOS => {
-			'enum_element_list' => 162
-		}
+		DEFAULT => -151
 	},
 	{#State 117
-		ACTIONS => {
-			'CLCURLY' => 163
-		}
+		DEFAULT => -187
 	},
 	{#State 118
-		DEFAULT => -91
+		DEFAULT => -182
 	},
 	{#State 119
 		ACTIONS => {
-			'OPSPECIAL' => 30
-		},
-		GOTOS => {
-			'special_block' => 164,
-			'special_block_start' => 32
+			'CLCURLY' => 166
 		}
 	},
 	{#State 120
-		DEFAULT => -94
+		ACTIONS => {
+			'CLCURLY' => 167
+		}
 	},
 	{#State 121
 		ACTIONS => {
-			'OPSPECIAL' => 30
-		},
-		GOTOS => {
-			'special_block' => 165,
-			'special_block_start' => 32
+			'CLCURLY' => 168
 		}
 	},
 	{#State 122
 		ACTIONS => {
-			'OPCURLY' => 166
+			'ID' => 169,
+			'PREPROCESSOR' => 17,
+			'RAW_CODE' => 37,
+			'OPSPECIAL' => 33,
+			'COMMENT' => 7,
+			'CLCURLY' => 171
+		},
+		GOTOS => {
+			'enum_element' => 170,
+			'special_block' => 13,
+			'raw' => 172,
+			'special_block_start' => 35
 		}
 	},
 	{#State 123
-		DEFAULT => -95
+		DEFAULT => -32,
+		GOTOS => {
+			'enum_element_list' => 173
+		}
 	},
 	{#State 124
-		DEFAULT => -93
+		DEFAULT => -102
 	},
 	{#State 125
 		ACTIONS => {
-			'OPSPECIAL' => 30
+			'OPSPECIAL' => 33
 		},
 		GOTOS => {
-			'special_block' => 167,
-			'special_block_start' => 32
+			'special_block' => 174,
+			'special_block_start' => 35
 		}
 	},
 	{#State 126
-		DEFAULT => -96
+		DEFAULT => -105
 	},
 	{#State 127
-		DEFAULT => -92
+		ACTIONS => {
+			'OPSPECIAL' => 33
+		},
+		GOTOS => {
+			'special_block' => 175,
+			'special_block_start' => 35
+		}
 	},
 	{#State 128
-		DEFAULT => -83
+		ACTIONS => {
+			'OPCURLY' => 176
+		}
 	},
 	{#State 129
-		ACTIONS => {
-			'OPCURLY' => 168
-		}
+		DEFAULT => -106
 	},
 	{#State 130
-		ACTIONS => {
-			'CLCURLY' => 169
-		}
+		DEFAULT => -104
 	},
 	{#State 131
-		DEFAULT => -131
+		ACTIONS => {
+			'OPSPECIAL' => 33
+		},
+		GOTOS => {
+			'special_block' => 177,
+			'special_block_start' => 35
+		}
 	},
 	{#State 132
-		ACTIONS => {
-			'ID' => 25,
-			"short" => 17,
-			"unsigned" => 47,
-			"const" => 10,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		GOTOS => {
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'type' => 170
-		}
+		DEFAULT => -107
 	},
 	{#State 133
-		ACTIONS => {
-			'OPCURLY' => 137,
-			'OPSPECIAL' => 30,
-			'SEMICOLON' => 171
-		},
-		GOTOS => {
-			'simple_block' => 139,
-			'special_block' => 138,
-			'special_block_start' => 32
-		}
+		DEFAULT => -103
 	},
 	{#State 134
-		DEFAULT => -22,
-		GOTOS => {
-			'mixed_blocks' => 172
-		}
+		DEFAULT => -94
 	},
 	{#State 135
-		DEFAULT => -113
+		ACTIONS => {
+			'OPCURLY' => 178
+		}
 	},
 	{#State 136
-		DEFAULT => -108
+		ACTIONS => {
+			'CLCURLY' => 179
+		}
 	},
 	{#State 137
-		ACTIONS => {
-			'ID' => 173
-		}
+		DEFAULT => -144
 	},
 	{#State 138
-		DEFAULT => -20
-	},
-	{#State 139
-		DEFAULT => -21
-	},
-	{#State 140
 		ACTIONS => {
-			'OPCURLY' => 174,
-			'SEMICOLON' => 175
-		}
-	},
-	{#State 141
-		ACTIONS => {
-			'OPCURLY' => 176,
-			'p_any' => 3,
-			'p_catch' => 129
+			'ID' => 28,
+			"short" => 18,
+			"void" => 19,
+			"const" => 11,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
 		},
 		GOTOS => {
-			'perc_any' => 178,
-			'perc_catch' => 177
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'type' => 180
+		}
+	},
+	{#State 139
+		ACTIONS => {
+			'OPCURLY' => 144,
+			'OPSPECIAL' => 33,
+			'SEMICOLON' => 181
+		},
+		GOTOS => {
+			'simple_block' => 146,
+			'special_block' => 145,
+			'special_block_start' => 35
+		}
+	},
+	{#State 140
+		DEFAULT => -126
+	},
+	{#State 141
+		DEFAULT => -24,
+		GOTOS => {
+			'mixed_blocks' => 182
 		}
 	},
 	{#State 142
-		ACTIONS => {
-			"protected" => 146,
-			"private" => 145,
-			"public" => 143
-		},
-		GOTOS => {
-			'base_class' => 179
-		}
+		DEFAULT => -124
 	},
 	{#State 143
-		ACTIONS => {
-			'ID' => 25,
-			'p_name' => 19
-		},
-		GOTOS => {
-			'perc_name' => 181,
-			'class_name' => 180,
-			'class_name_rename' => 182
-		}
+		DEFAULT => -119
 	},
 	{#State 144
-		DEFAULT => -42
+		ACTIONS => {
+			'ID' => 183
+		}
 	},
 	{#State 145
-		ACTIONS => {
-			'ID' => 25,
-			'p_name' => 19
-		},
-		GOTOS => {
-			'perc_name' => 181,
-			'class_name' => 180,
-			'class_name_rename' => 183
-		}
+		DEFAULT => -22
 	},
 	{#State 146
-		ACTIONS => {
-			'ID' => 25,
-			'p_name' => 19
-		},
-		GOTOS => {
-			'perc_name' => 181,
-			'class_name' => 180,
-			'class_name_rename' => 184
-		}
+		DEFAULT => -23
 	},
 	{#State 147
-		DEFAULT => -100
+		ACTIONS => {
+			'OPCURLY' => 184,
+			'SEMICOLON' => 185
+		}
 	},
 	{#State 148
-		DEFAULT => -97
+		ACTIONS => {
+			'OPCURLY' => 186,
+			'p_any' => 3,
+			'p_catch' => 135
+		},
+		GOTOS => {
+			'perc_any' => 188,
+			'perc_catch' => 187
+		}
 	},
 	{#State 149
-		DEFAULT => -103
+		ACTIONS => {
+			"protected" => 153,
+			"private" => 152,
+			"public" => 150
+		},
+		GOTOS => {
+			'base_class' => 189
+		}
 	},
 	{#State 150
 		ACTIONS => {
-			'ID' => 106,
-			'DASH' => 107
+			'ID' => 28,
+			'p_name' => 21
 		},
 		GOTOS => {
-			'file_name' => 185
+			'perc_name' => 191,
+			'class_name' => 190,
+			'class_name_rename' => 192
 		}
 	},
 	{#State 151
-		ACTIONS => {
-			'ID' => 186
-		}
+		DEFAULT => -45
 	},
 	{#State 152
 		ACTIONS => {
-			'ID' => 188,
-			'p_length' => 187
+			'ID' => 28,
+			'p_name' => 21
+		},
+		GOTOS => {
+			'perc_name' => 191,
+			'class_name' => 190,
+			'class_name_rename' => 193
 		}
 	},
 	{#State 153
 		ACTIONS => {
-			'CLPAR' => 189,
-			'COMMA' => 190
+			'ID' => 28,
+			'p_name' => 21
+		},
+		GOTOS => {
+			'perc_name' => 191,
+			'class_name' => 190,
+			'class_name_rename' => 194
 		}
 	},
 	{#State 154
-		DEFAULT => -143
+		DEFAULT => -111
 	},
 	{#State 155
-		DEFAULT => -139
+		DEFAULT => -108
 	},
 	{#State 156
-		ACTIONS => {
-			'OPCURLY' => 191
-		}
+		DEFAULT => -114
 	},
 	{#State 157
-		DEFAULT => -102
-	},
-	{#State 158
 		ACTIONS => {
-			'EQUAL' => 192
-		},
-		DEFAULT => -33
-	},
-	{#State 159
-		ACTIONS => {
-			'COMMA' => 193
-		},
-		DEFAULT => -31
-	},
-	{#State 160
-		ACTIONS => {
-			'SEMICOLON' => 194
-		}
-	},
-	{#State 161
-		DEFAULT => -35
-	},
-	{#State 162
-		ACTIONS => {
-			'ID' => 158,
-			'PREPROCESSOR' => 16,
-			'RAW_CODE' => 34,
-			'OPSPECIAL' => 30,
-			'COMMENT' => 6,
-			'CLCURLY' => 195
+			'ID' => 111,
+			'DASH' => 112
 		},
 		GOTOS => {
-			'enum_element' => 159,
-			'special_block' => 12,
-			'raw' => 161,
-			'special_block_start' => 32
+			'file_name' => 195
 		}
 	},
-	{#State 163
-		DEFAULT => -99
-	},
-	{#State 164
-		DEFAULT => -105
-	},
-	{#State 165
-		DEFAULT => -106
-	},
-	{#State 166
+	{#State 158
 		ACTIONS => {
 			'ID' => 196
 		}
 	},
+	{#State 159
+		ACTIONS => {
+			'COMMA' => 197
+		},
+		DEFAULT => -156
+	},
+	{#State 160
+		ACTIONS => {
+			'CLPAR' => -157
+		},
+		DEFAULT => -135
+	},
+	{#State 161
+		ACTIONS => {
+			'ID' => 199,
+			'p_length' => 198
+		}
+	},
+	{#State 162
+		ACTIONS => {
+			'CLPAR' => 200
+		}
+	},
+	{#State 163
+		DEFAULT => -158
+	},
+	{#State 164
+		DEFAULT => -3
+	},
+	{#State 165
+		DEFAULT => -152
+	},
+	{#State 166
+		ACTIONS => {
+			'OPCURLY' => 201
+		}
+	},
 	{#State 167
-		DEFAULT => -104
+		DEFAULT => -113
 	},
 	{#State 168
-		ACTIONS => {
-			'ID' => 25
-		},
-		GOTOS => {
-			'class_name' => 197,
-			'class_name_list' => 198
-		}
+		DEFAULT => -110
 	},
 	{#State 169
-		DEFAULT => -101
+		ACTIONS => {
+			'EQUAL' => 202
+		},
+		DEFAULT => -35
 	},
 	{#State 170
-		DEFAULT => -133
+		ACTIONS => {
+			'COMMA' => 203
+		},
+		DEFAULT => -33
 	},
 	{#State 171
-		DEFAULT => -114
+		ACTIONS => {
+			'SEMICOLON' => 204
+		}
 	},
 	{#State 172
-		ACTIONS => {
-			'OPSPECIAL' => 30,
-			'OPCURLY' => 137
-		},
-		DEFAULT => -109,
-		GOTOS => {
-			'simple_block' => 139,
-			'special_block' => 138,
-			'special_block_start' => 32
-		}
+		DEFAULT => -37
 	},
 	{#State 173
 		ACTIONS => {
-			'CLCURLY' => 199
+			'ID' => 169,
+			'PREPROCESSOR' => 17,
+			'RAW_CODE' => 37,
+			'OPSPECIAL' => 33,
+			'COMMENT' => 7,
+			'CLCURLY' => 205
+		},
+		GOTOS => {
+			'enum_element' => 170,
+			'special_block' => 13,
+			'raw' => 172,
+			'special_block_start' => 35
 		}
 	},
 	{#State 174
-		ACTIONS => {
-			'ID' => 200
-		}
+		DEFAULT => -116
 	},
 	{#State 175
-		DEFAULT => -18
+		DEFAULT => -117
 	},
 	{#State 176
-		DEFAULT => -53,
-		GOTOS => {
-			'class_body_list' => 201
+		ACTIONS => {
+			'ID' => 206
 		}
 	},
 	{#State 177
-		DEFAULT => -50
+		DEFAULT => -115
 	},
 	{#State 178
-		DEFAULT => -51
+		ACTIONS => {
+			'ID' => 28
+		},
+		GOTOS => {
+			'class_name' => 207,
+			'class_name_list' => 208
+		}
 	},
 	{#State 179
-		DEFAULT => -43
+		DEFAULT => -112
 	},
 	{#State 180
-		DEFAULT => -48
+		DEFAULT => -146
 	},
 	{#State 181
-		ACTIONS => {
-			'ID' => 25
-		},
-		GOTOS => {
-			'class_name' => 202
-		}
+		DEFAULT => -125
 	},
 	{#State 182
-		DEFAULT => -45
+		ACTIONS => {
+			'OPSPECIAL' => 33,
+			'OPCURLY' => 144
+		},
+		DEFAULT => -120,
+		GOTOS => {
+			'simple_block' => 146,
+			'special_block' => 145,
+			'special_block_start' => 35
+		}
 	},
 	{#State 183
-		DEFAULT => -47
+		ACTIONS => {
+			'CLCURLY' => 209
+		}
 	},
 	{#State 184
-		DEFAULT => -46
+		ACTIONS => {
+			'ID' => 210
+		}
 	},
 	{#State 185
-		DEFAULT => -142
+		DEFAULT => -20
 	},
 	{#State 186
-		DEFAULT => -141
+		DEFAULT => -56,
+		GOTOS => {
+			'class_body_list' => 211
+		}
 	},
 	{#State 187
-		ACTIONS => {
-			'OPCURLY' => 203
-		}
+		DEFAULT => -53
 	},
 	{#State 188
-		ACTIONS => {
-			'EQUAL' => 204
-		},
-		DEFAULT => -148
+		DEFAULT => -54
 	},
 	{#State 189
-		ACTIONS => {
-			"const" => 205
-		},
-		DEFAULT => -69,
-		GOTOS => {
-			'const' => 206
-		}
+		DEFAULT => -46
 	},
 	{#State 190
-		ACTIONS => {
-			'ID' => 25,
-			"short" => 17,
-			"unsigned" => 47,
-			"const" => 10,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		GOTOS => {
-			'argument' => 207,
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'type' => 152
-		}
+		DEFAULT => -51
 	},
 	{#State 191
 		ACTIONS => {
-			'ID' => 25,
-			"short" => 17,
-			"unsigned" => 47,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
+			'ID' => 28
 		},
 		GOTOS => {
-			'type_name' => 209,
-			'class_name' => 208,
-			'basic_type' => 39
+			'class_name' => 212
 		}
 	},
 	{#State 192
-		ACTIONS => {
-			'ID' => 25,
-			'INTEGER' => 212,
-			'QUOTED_STRING' => 214,
-			'DASH' => 216,
-			'FLOAT' => 215
-		},
-		GOTOS => {
-			'class_name' => 210,
-			'value' => 213,
-			'expression' => 211
-		}
+		DEFAULT => -48
 	},
 	{#State 193
-		DEFAULT => -32
+		DEFAULT => -50
 	},
 	{#State 194
-		DEFAULT => -28
+		DEFAULT => -49
 	},
 	{#State 195
-		ACTIONS => {
-			'SEMICOLON' => 217
-		}
+		DEFAULT => -155
 	},
 	{#State 196
-		ACTIONS => {
-			'EQUAL' => 218
-		}
+		DEFAULT => -154
 	},
 	{#State 197
-		DEFAULT => -136
+		ACTIONS => {
+			'ID' => 28,
+			"short" => 18,
+			"void" => 19,
+			"const" => 11,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
+		},
+		GOTOS => {
+			'argument' => 213,
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'type' => 161
+		}
 	},
 	{#State 198
 		ACTIONS => {
-			'COMMA' => 219,
-			'CLCURLY' => 220
+			'OPCURLY' => 214
 		}
 	},
 	{#State 199
-		DEFAULT => -23
+		DEFAULT => -162,
+		GOTOS => {
+			'argument_metadata' => 215
+		}
 	},
 	{#State 200
 		ACTIONS => {
-			'CLCURLY' => 221
+			"const" => 216
+		},
+		DEFAULT => -80,
+		GOTOS => {
+			'const' => 217
 		}
 	},
 	{#State 201
 		ACTIONS => {
-			'ID' => 236,
-			'p_typemap' => 4,
-			'p_any' => 3,
-			'OPSPECIAL' => 30,
-			"virtual" => 237,
-			'COMMENT' => 6,
-			"class_static" => 223,
-			"package_static" => 238,
-			"public" => 224,
-			'p_exceptionmap' => 33,
-			'RAW_CODE' => 34,
-			"const" => 10,
-			"static" => 242,
-			"int" => 37,
-			"private" => 229,
-			'CLCURLY' => 245,
-			'PREPROCESSOR' => 16,
-			"short" => 17,
-			"unsigned" => 47,
-			'p_name' => 19,
-			'TILDE' => 232,
-			"protected" => 233,
-			"long" => 21,
-			"char" => 24
+			'ID' => 28,
+			"short" => 18,
+			"void" => 19,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
 		},
 		GOTOS => {
-			'class_name' => 1,
-			'nconsttype' => 27,
-			'looks_like_function' => 5,
-			'static' => 222,
-			'exceptionmap' => 239,
-			'special_block_start' => 32,
-			'perc_name' => 225,
-			'typemap' => 226,
-			'class_body_element' => 240,
-			'method' => 241,
-			'vmethod' => 227,
-			'nmethod' => 228,
-			'special_block' => 12,
-			'access_specifier' => 230,
-			'type_name' => 13,
-			'ctor' => 231,
-			'perc_any' => 243,
-			'basic_type' => 39,
-			'template' => 14,
-			'virtual' => 244,
-			'looks_like_renamed_function' => 246,
-			'_vmethod' => 247,
-			'type' => 22,
-			'dtor' => 234,
-			'raw' => 248,
-			'method_decl' => 235
+			'type_name' => 219,
+			'class_name' => 218,
+			'basic_type' => 42
 		}
 	},
 	{#State 202
-		DEFAULT => -49
-	},
-	{#State 203
 		ACTIONS => {
-			'ID' => 249
-		}
-	},
-	{#State 204
-		ACTIONS => {
-			'ID' => 25,
-			'INTEGER' => 212,
-			'QUOTED_STRING' => 214,
-			'DASH' => 216,
-			'FLOAT' => 215
+			'ID' => 28,
+			'INTEGER' => 222,
+			'QUOTED_STRING' => 224,
+			'DASH' => 226,
+			'FLOAT' => 225
 		},
 		GOTOS => {
-			'class_name' => 210,
-			'value' => 213,
-			'expression' => 250
+			'class_name' => 220,
+			'value' => 223,
+			'expression' => 221
 		}
+	},
+	{#State 203
+		DEFAULT => -34
+	},
+	{#State 204
+		DEFAULT => -30
 	},
 	{#State 205
-		DEFAULT => -68
+		ACTIONS => {
+			'SEMICOLON' => 227
+		}
 	},
 	{#State 206
-		DEFAULT => -74
+		ACTIONS => {
+			'EQUAL' => 228
+		}
 	},
 	{#State 207
-		DEFAULT => -144
+		DEFAULT => -149
 	},
 	{#State 208
-		DEFAULT => -121
+		ACTIONS => {
+			'COMMA' => 229,
+			'CLCURLY' => 230
+		}
 	},
 	{#State 209
-		ACTIONS => {
-			'CLCURLY' => 251
-		}
+		DEFAULT => -25
 	},
 	{#State 210
 		ACTIONS => {
-			'OPPAR' => 252
-		},
-		DEFAULT => -153
+			'CLCURLY' => 231
+		}
 	},
 	{#State 211
-		DEFAULT => -34
+		ACTIONS => {
+			'ID' => 250,
+			'p_typemap' => 4,
+			'p_any' => 3,
+			'OPSPECIAL' => 33,
+			"virtual" => 251,
+			'COMMENT' => 7,
+			"class_static" => 233,
+			"package_static" => 252,
+			"public" => 234,
+			'p_exceptionmap' => 36,
+			'RAW_CODE' => 37,
+			"const" => 11,
+			"static" => 256,
+			"int" => 40,
+			"private" => 240,
+			'CLCURLY' => 259,
+			'PREPROCESSOR' => 17,
+			"short" => 18,
+			"void" => 19,
+			"unsigned" => 50,
+			'p_name' => 21,
+			'TILDE' => 244,
+			"protected" => 245,
+			"long" => 23,
+			"char" => 27
+		},
+		DEFAULT => -71,
+		GOTOS => {
+			'class_name' => 1,
+			'nconsttype' => 30,
+			'looks_like_function' => 6,
+			'static' => 232,
+			'exceptionmap' => 253,
+			'special_block_start' => 35,
+			'perc_name' => 235,
+			'looks_like_member' => 236,
+			'typemap' => 237,
+			'class_body_element' => 254,
+			'method' => 255,
+			'special_block' => 13,
+			'vmethod' => 238,
+			'nmethod' => 239,
+			'access_specifier' => 241,
+			'type_name' => 14,
+			'ctor' => 242,
+			'perc_any' => 257,
+			'basic_type' => 42,
+			'template' => 15,
+			'member' => 243,
+			'virtual' => 258,
+			'looks_like_renamed_function' => 260,
+			'_vmethod' => 261,
+			'dtor' => 246,
+			'type' => 247,
+			'raw' => 262,
+			'method_decl' => 249,
+			'member_decl' => 248
+		}
 	},
 	{#State 212
-		DEFAULT => -149
+		DEFAULT => -52
 	},
 	{#State 213
-		ACTIONS => {
-			'AMP' => 253,
-			'PIPE' => 254
-		},
-		DEFAULT => -158
+		DEFAULT => -159
 	},
 	{#State 214
-		DEFAULT => -152
+		ACTIONS => {
+			'ID' => 263
+		}
 	},
 	{#State 215
-		DEFAULT => -151
+		ACTIONS => {
+			'EQUAL' => 264,
+			'p_any' => 3
+		},
+		DEFAULT => -166,
+		GOTOS => {
+			'perc_any' => 266,
+			'_argument_metadata' => 265
+		}
 	},
 	{#State 216
-		ACTIONS => {
-			'INTEGER' => 255
-		}
+		DEFAULT => -79
 	},
 	{#State 217
-		DEFAULT => -29
+		DEFAULT => -85
 	},
 	{#State 218
-		ACTIONS => {
-			'INTEGER' => 256
-		}
+		DEFAULT => -133
 	},
 	{#State 219
 		ACTIONS => {
-			'ID' => 25
-		},
-		GOTOS => {
-			'class_name' => 257
+			'CLCURLY' => 267
 		}
 	},
 	{#State 220
-		DEFAULT => -107
+		ACTIONS => {
+			'OPPAR' => 268
+		},
+		DEFAULT => -171
 	},
 	{#State 221
-		ACTIONS => {
-			'OPCURLY' => 258,
-			'OPSPECIAL' => 30
-		},
-		DEFAULT => -163,
-		GOTOS => {
-			'special_blocks' => 260,
-			'special_block' => 259,
-			'special_block_start' => 32
-		}
+		DEFAULT => -36
 	},
 	{#State 222
-		ACTIONS => {
-			'ID' => 25,
-			"class_static" => 223,
-			"package_static" => 238,
-			"short" => 17,
-			"unsigned" => 47,
-			"const" => 10,
-			'p_name' => 19,
-			"long" => 21,
-			"static" => 242,
-			"int" => 37,
-			"char" => 24
-		},
-		GOTOS => {
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'looks_like_function' => 5,
-			'static' => 222,
-			'perc_name' => 261,
-			'looks_like_renamed_function' => 246,
-			'nmethod' => 262,
-			'type' => 22
-		}
+		DEFAULT => -167
 	},
 	{#State 223
-		DEFAULT => -72
+		ACTIONS => {
+			'AMP' => 269,
+			'PIPE' => 270
+		},
+		DEFAULT => -176
 	},
 	{#State 224
-		ACTIONS => {
-			'COLON' => 263
-		}
+		DEFAULT => -170
 	},
 	{#State 225
-		ACTIONS => {
-			'ID' => 236,
-			"virtual" => 237,
-			"short" => 17,
-			"unsigned" => 47,
-			"const" => 10,
-			'p_name' => 19,
-			'TILDE' => 232,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		GOTOS => {
-			'type_name' => 13,
-			'class_name' => 1,
-			'ctor' => 266,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'looks_like_function' => 58,
-			'virtual' => 244,
-			'perc_name' => 264,
-			'_vmethod' => 247,
-			'dtor' => 267,
-			'vmethod' => 265,
-			'type' => 22
-		}
+		DEFAULT => -169
 	},
 	{#State 226
-		DEFAULT => -57
+		ACTIONS => {
+			'INTEGER' => 271
+		}
 	},
 	{#State 227
-		DEFAULT => -65
+		DEFAULT => -31
 	},
 	{#State 228
-		DEFAULT => -64
+		ACTIONS => {
+			'INTEGER' => 272
+		}
 	},
 	{#State 229
 		ACTIONS => {
-			'COLON' => 268
+			'ID' => 28
+		},
+		GOTOS => {
+			'class_name' => 273
 		}
 	},
 	{#State 230
-		DEFAULT => -59
+		DEFAULT => -118
 	},
 	{#State 231
-		DEFAULT => -66
+		ACTIONS => {
+			'OPCURLY' => 274,
+			'OPSPECIAL' => 33
+		},
+		DEFAULT => -181,
+		GOTOS => {
+			'special_blocks' => 276,
+			'special_block' => 275,
+			'special_block_start' => 35
+		}
 	},
 	{#State 232
 		ACTIONS => {
-			'ID' => 269
+			'ID' => 28,
+			"class_static" => 233,
+			"package_static" => 252,
+			"short" => 18,
+			"void" => 19,
+			"unsigned" => 50,
+			"const" => 11,
+			'p_name' => 21,
+			"long" => 23,
+			"static" => 256,
+			"int" => 40,
+			"char" => 27
+		},
+		GOTOS => {
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'looks_like_function' => 6,
+			'static' => 232,
+			'perc_name' => 277,
+			'looks_like_renamed_function' => 260,
+			'nmethod' => 278,
+			'type' => 24
 		}
 	},
 	{#State 233
-		ACTIONS => {
-			'COLON' => 270
-		}
+		DEFAULT => -83
 	},
 	{#State 234
-		DEFAULT => -67
+		ACTIONS => {
+			'COLON' => 279
+		}
 	},
 	{#State 235
 		ACTIONS => {
-			'SEMICOLON' => 271
+			'ID' => 250,
+			"virtual" => 251,
+			"short" => 18,
+			"void" => 19,
+			"unsigned" => 50,
+			"const" => 11,
+			'p_name' => 21,
+			'TILDE' => 244,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
+		},
+		GOTOS => {
+			'type_name' => 14,
+			'class_name' => 1,
+			'ctor' => 283,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'looks_like_function' => 61,
+			'virtual' => 258,
+			'perc_name' => 280,
+			'looks_like_member' => 281,
+			'_vmethod' => 261,
+			'dtor' => 284,
+			'vmethod' => 282,
+			'type' => 247
 		}
 	},
 	{#State 236
-		ACTIONS => {
-			'DCOLON' => 70,
-			'OPPAR' => 272
-		},
-		DEFAULT => -134,
-		GOTOS => {
-			'class_suffix' => 69
-		}
+		DEFAULT => -72
 	},
 	{#State 237
-		DEFAULT => -70
+		DEFAULT => -60
 	},
 	{#State 238
-		DEFAULT => -71
+		DEFAULT => -76
 	},
 	{#State 239
-		DEFAULT => -58
+		DEFAULT => -75
 	},
 	{#State 240
-		DEFAULT => -54
+		ACTIONS => {
+			'COLON' => 285
+		}
 	},
 	{#State 241
-		DEFAULT => -55
+		DEFAULT => -62
 	},
 	{#State 242
-		DEFAULT => -73
+		DEFAULT => -77
 	},
 	{#State 243
-		ACTIONS => {
-			'SEMICOLON' => 273
-		}
+		DEFAULT => -63
 	},
 	{#State 244
 		ACTIONS => {
-			'ID' => 25,
-			"virtual" => 237,
-			"short" => 17,
-			"unsigned" => 47,
-			"const" => 10,
-			'p_name' => 19,
-			'TILDE' => 232,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		GOTOS => {
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'looks_like_function' => 274,
-			'virtual' => 277,
-			'perc_name' => 275,
-			'type' => 22,
-			'dtor' => 276
+			'ID' => 286
 		}
 	},
 	{#State 245
-		DEFAULT => -41
-	},
-	{#State 246
-		DEFAULT => -84,
-		GOTOS => {
-			'function_metadata' => 278
+		ACTIONS => {
+			'COLON' => 287
 		}
 	},
+	{#State 246
+		DEFAULT => -78
+	},
 	{#State 247
-		DEFAULT => -87
+		ACTIONS => {
+			'ID' => 288
+		}
 	},
 	{#State 248
-		DEFAULT => -56
+		ACTIONS => {
+			'SEMICOLON' => 289
+		}
 	},
 	{#State 249
 		ACTIONS => {
-			'CLCURLY' => 279
+			'SEMICOLON' => 290
 		}
 	},
 	{#State 250
-		DEFAULT => -147
+		ACTIONS => {
+			'DCOLON' => 74,
+			'OPPAR' => 291
+		},
+		DEFAULT => -147,
+		GOTOS => {
+			'class_suffix' => 73
+		}
 	},
 	{#State 251
-		ACTIONS => {
-			'OPCURLY' => 280
-		}
+		DEFAULT => -81
 	},
 	{#State 252
-		ACTIONS => {
-			'ID' => 25,
-			'INTEGER' => 212,
-			'QUOTED_STRING' => 214,
-			'DASH' => 216,
-			'FLOAT' => 215
-		},
-		DEFAULT => -157,
-		GOTOS => {
-			'class_name' => 210,
-			'value_list' => 281,
-			'value' => 282
-		}
+		DEFAULT => -82
 	},
 	{#State 253
-		ACTIONS => {
-			'ID' => 25,
-			'INTEGER' => 212,
-			'QUOTED_STRING' => 214,
-			'DASH' => 216,
-			'FLOAT' => 215
-		},
-		GOTOS => {
-			'class_name' => 210,
-			'value' => 283
-		}
+		DEFAULT => -61
 	},
 	{#State 254
-		ACTIONS => {
-			'ID' => 25,
-			'INTEGER' => 212,
-			'QUOTED_STRING' => 214,
-			'DASH' => 216,
-			'FLOAT' => 215
-		},
-		GOTOS => {
-			'class_name' => 210,
-			'value' => 284
-		}
+		DEFAULT => -57
 	},
 	{#State 255
-		DEFAULT => -150
+		DEFAULT => -58
 	},
 	{#State 256
-		ACTIONS => {
-			'CLCURLY' => 285
-		}
+		DEFAULT => -84
 	},
 	{#State 257
-		DEFAULT => -137
+		ACTIONS => {
+			'SEMICOLON' => 292
+		}
 	},
 	{#State 258
 		ACTIONS => {
-			'p_any' => 95
+			'ID' => 28,
+			"virtual" => 251,
+			"short" => 18,
+			"void" => 19,
+			"unsigned" => 50,
+			"const" => 11,
+			'p_name' => 21,
+			'TILDE' => 244,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
 		},
 		GOTOS => {
-			'perc_any_arg' => 96,
-			'perc_any_args' => 286
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'looks_like_function' => 293,
+			'virtual' => 296,
+			'perc_name' => 294,
+			'type' => 24,
+			'dtor' => 295
 		}
 	},
 	{#State 259
-		DEFAULT => -161
+		DEFAULT => -44
 	},
 	{#State 260
-		ACTIONS => {
-			'OPSPECIAL' => 30,
-			'SEMICOLON' => 288
-		},
+		DEFAULT => -95,
 		GOTOS => {
-			'special_block' => 287,
-			'special_block_start' => 32
+			'function_metadata' => 297
 		}
 	},
 	{#State 261
-		ACTIONS => {
-			'ID' => 25,
-			"short" => 17,
-			"unsigned" => 47,
-			"const" => 10,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		GOTOS => {
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'looks_like_function' => 58,
-			'type' => 22
-		}
+		DEFAULT => -98
 	},
 	{#State 262
-		DEFAULT => -86
+		DEFAULT => -59
 	},
 	{#State 263
-		DEFAULT => -61
+		ACTIONS => {
+			'CLCURLY' => 298
+		}
 	},
 	{#State 264
 		ACTIONS => {
-			'ID' => 289,
-			'TILDE' => 232,
-			'p_name' => 19,
-			"virtual" => 237
+			'ID' => 28,
+			'INTEGER' => 222,
+			'QUOTED_STRING' => 224,
+			'DASH' => 226,
+			'FLOAT' => 225
 		},
 		GOTOS => {
-			'perc_name' => 264,
-			'ctor' => 266,
-			'_vmethod' => 247,
-			'dtor' => 267,
-			'vmethod' => 265,
-			'virtual' => 244
+			'class_name' => 220,
+			'value' => 223,
+			'expression' => 299
 		}
 	},
 	{#State 265
-		DEFAULT => -88
+		DEFAULT => -161
 	},
 	{#State 266
-		DEFAULT => -79
+		DEFAULT => -163
 	},
 	{#State 267
-		DEFAULT => -81
+		ACTIONS => {
+			'OPCURLY' => 300
+		}
 	},
 	{#State 268
-		DEFAULT => -63
+		ACTIONS => {
+			'ID' => 28,
+			'INTEGER' => 222,
+			'QUOTED_STRING' => 224,
+			'DASH' => 226,
+			'FLOAT' => 225
+		},
+		DEFAULT => -175,
+		GOTOS => {
+			'class_name' => 220,
+			'value_list' => 301,
+			'value' => 302
+		}
 	},
 	{#State 269
 		ACTIONS => {
-			'OPPAR' => 290
+			'ID' => 28,
+			'INTEGER' => 222,
+			'QUOTED_STRING' => 224,
+			'DASH' => 226,
+			'FLOAT' => 225
+		},
+		GOTOS => {
+			'class_name' => 220,
+			'value' => 303
 		}
 	},
 	{#State 270
-		DEFAULT => -62
+		ACTIONS => {
+			'ID' => 28,
+			'INTEGER' => 222,
+			'QUOTED_STRING' => 224,
+			'DASH' => 226,
+			'FLOAT' => 225
+		},
+		GOTOS => {
+			'class_name' => 220,
+			'value' => 304
+		}
 	},
 	{#State 271
-		DEFAULT => -39
+		DEFAULT => -168
 	},
 	{#State 272
 		ACTIONS => {
-			'ID' => 25,
-			"short" => 17,
-			"const" => 10,
-			"unsigned" => 47,
-			"long" => 21,
-			"int" => 37,
-			"char" => 24
-		},
-		DEFAULT => -145,
-		GOTOS => {
-			'type_name' => 13,
-			'class_name' => 1,
-			'basic_type' => 39,
-			'nconsttype' => 27,
-			'template' => 14,
-			'arg_list' => 291,
-			'argument' => 154,
-			'type' => 152
+			'CLCURLY' => 305
 		}
 	},
 	{#State 273
-		DEFAULT => -60
+		DEFAULT => -150
 	},
 	{#State 274
 		ACTIONS => {
-			'EQUAL' => 292
+			'p_any' => 99,
+			'p_name' => 21
 		},
-		DEFAULT => -84,
 		GOTOS => {
-			'function_metadata' => 293
+			'perc_name' => 101,
+			'perc_any_arg' => 100,
+			'perc_any_args' => 306
 		}
 	},
 	{#State 275
-		ACTIONS => {
-			'TILDE' => 232,
-			'p_name' => 19,
-			"virtual" => 237
-		},
-		GOTOS => {
-			'perc_name' => 275,
-			'dtor' => 267,
-			'virtual' => 277
-		}
+		DEFAULT => -179
 	},
 	{#State 276
-		DEFAULT => -82
+		ACTIONS => {
+			'OPSPECIAL' => 33,
+			'SEMICOLON' => 308
+		},
+		GOTOS => {
+			'special_block' => 307,
+			'special_block_start' => 35
+		}
 	},
 	{#State 277
 		ACTIONS => {
-			'TILDE' => 232,
-			'p_name' => 19,
-			"virtual" => 237
+			'ID' => 28,
+			"short" => 18,
+			"void" => 19,
+			"const" => 11,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
 		},
 		GOTOS => {
-			'perc_name' => 275,
-			'dtor' => 276,
-			'virtual' => 277
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'looks_like_function' => 61,
+			'type' => 24
 		}
 	},
 	{#State 278
-		ACTIONS => {
-			'p_any' => 3,
-			'p_alias' => 122,
-			'p_code' => 125,
-			'p_cleanup' => 119,
-			'p_postcall' => 121,
-			'p_catch' => 129
-		},
-		DEFAULT => -85,
-		GOTOS => {
-			'perc_postcall' => 124,
-			'perc_code' => 118,
-			'perc_any' => 126,
-			'perc_cleanup' => 127,
-			'perc_catch' => 120,
-			'_function_metadata' => 128,
-			'perc_alias' => 123
-		}
+		DEFAULT => -97
 	},
 	{#State 279
-		DEFAULT => -146
+		DEFAULT => -65
 	},
 	{#State 280
 		ACTIONS => {
-			'ID' => 294
+			'ID' => 309,
+			'TILDE' => 244,
+			'p_name' => 21,
+			"virtual" => 251
+		},
+		GOTOS => {
+			'perc_name' => 280,
+			'ctor' => 283,
+			'_vmethod' => 261,
+			'dtor' => 284,
+			'vmethod' => 282,
+			'virtual' => 258
 		}
 	},
 	{#State 281
-		ACTIONS => {
-			'CLPAR' => 295,
-			'COMMA' => 296
-		}
+		DEFAULT => -73
 	},
 	{#State 282
-		DEFAULT => -155
+		DEFAULT => -99
 	},
 	{#State 283
-		DEFAULT => -159
+		DEFAULT => -90
 	},
 	{#State 284
-		DEFAULT => -160
+		DEFAULT => -92
 	},
 	{#State 285
-		DEFAULT => -98
+		DEFAULT => -67
 	},
 	{#State 286
 		ACTIONS => {
-			'p_any' => 95,
-			'CLCURLY' => 297
-		},
-		GOTOS => {
-			'perc_any_arg' => 135
+			'OPPAR' => 310
 		}
 	},
 	{#State 287
-		DEFAULT => -162
+		DEFAULT => -66
 	},
 	{#State 288
-		DEFAULT => -16
+		ACTIONS => {
+			'OPPAR' => 113
+		},
+		DEFAULT => -69,
+		GOTOS => {
+			'member_metadata' => 311
+		}
 	},
 	{#State 289
-		ACTIONS => {
-			'OPPAR' => 272
-		}
+		DEFAULT => -42
 	},
 	{#State 290
-		ACTIONS => {
-			'CLPAR' => 298
-		}
+		DEFAULT => -41
 	},
 	{#State 291
 		ACTIONS => {
-			'CLPAR' => 299,
-			'COMMA' => 190
+			'ID' => 28,
+			"short" => 18,
+			"void" => 160,
+			"const" => 11,
+			"unsigned" => 50,
+			"long" => 23,
+			"int" => 40,
+			"char" => 27
+		},
+		DEFAULT => -160,
+		GOTOS => {
+			'type_name' => 14,
+			'class_name' => 1,
+			'basic_type' => 42,
+			'nconsttype' => 30,
+			'template' => 15,
+			'nonvoid_arg_list' => 159,
+			'arg_list' => 312,
+			'argument' => 163,
+			'type' => 161
 		}
 	},
 	{#State 292
-		ACTIONS => {
-			'INTEGER' => 300
-		}
+		DEFAULT => -64
 	},
 	{#State 293
 		ACTIONS => {
-			'p_any' => 3,
-			'p_alias' => 122,
-			'p_code' => 125,
-			'p_cleanup' => 119,
-			'p_postcall' => 121,
-			'p_catch' => 129
+			'EQUAL' => 313
 		},
-		DEFAULT => -89,
+		DEFAULT => -95,
 		GOTOS => {
-			'perc_postcall' => 124,
-			'perc_code' => 118,
-			'perc_any' => 126,
-			'perc_cleanup' => 127,
-			'perc_catch' => 120,
-			'_function_metadata' => 128,
-			'perc_alias' => 123
+			'function_metadata' => 314
 		}
 	},
 	{#State 294
 		ACTIONS => {
-			'CLCURLY' => 301
+			'TILDE' => 244,
+			'p_name' => 21,
+			"virtual" => 251
+		},
+		GOTOS => {
+			'perc_name' => 294,
+			'dtor' => 284,
+			'virtual' => 296
 		}
 	},
 	{#State 295
-		DEFAULT => -154
+		DEFAULT => -93
 	},
 	{#State 296
 		ACTIONS => {
-			'ID' => 25,
-			'INTEGER' => 212,
-			'QUOTED_STRING' => 214,
-			'DASH' => 216,
-			'FLOAT' => 215
+			'TILDE' => 244,
+			'p_name' => 21,
+			"virtual" => 251
 		},
 		GOTOS => {
-			'class_name' => 210,
-			'value' => 302
+			'perc_name' => 294,
+			'dtor' => 295,
+			'virtual' => 296
 		}
 	},
 	{#State 297
 		ACTIONS => {
-			'SEMICOLON' => 303
+			'p_any' => 3,
+			'p_alias' => 128,
+			'p_code' => 131,
+			'p_cleanup' => 125,
+			'p_postcall' => 127,
+			'p_catch' => 135
+		},
+		DEFAULT => -96,
+		GOTOS => {
+			'perc_postcall' => 130,
+			'perc_code' => 124,
+			'perc_any' => 132,
+			'perc_cleanup' => 133,
+			'perc_catch' => 126,
+			'_function_metadata' => 134,
+			'perc_alias' => 129
 		}
 	},
 	{#State 298
-		DEFAULT => -84,
-		GOTOS => {
-			'function_metadata' => 304
-		}
+		DEFAULT => -164
 	},
 	{#State 299
-		DEFAULT => -84,
-		GOTOS => {
-			'function_metadata' => 305
-		}
+		DEFAULT => -165
 	},
 	{#State 300
-		DEFAULT => -84,
-		GOTOS => {
-			'function_metadata' => 306
+		ACTIONS => {
+			'ID' => 315
 		}
 	},
 	{#State 301
-		DEFAULT => -22,
-		GOTOS => {
-			'mixed_blocks' => 307
+		ACTIONS => {
+			'CLPAR' => 316,
+			'COMMA' => 317
 		}
 	},
 	{#State 302
-		DEFAULT => -156
+		DEFAULT => -173
 	},
 	{#State 303
-		DEFAULT => -17
+		DEFAULT => -177
 	},
 	{#State 304
-		ACTIONS => {
-			'p_any' => 3,
-			'p_alias' => 122,
-			'p_code' => 125,
-			'p_cleanup' => 119,
-			'p_postcall' => 121,
-			'p_catch' => 129
-		},
-		DEFAULT => -80,
-		GOTOS => {
-			'perc_postcall' => 124,
-			'perc_code' => 118,
-			'perc_any' => 126,
-			'perc_cleanup' => 127,
-			'perc_catch' => 120,
-			'_function_metadata' => 128,
-			'perc_alias' => 123
-		}
+		DEFAULT => -178
 	},
 	{#State 305
-		ACTIONS => {
-			'p_any' => 3,
-			'p_alias' => 122,
-			'p_code' => 125,
-			'p_cleanup' => 119,
-			'p_postcall' => 121,
-			'p_catch' => 129
-		},
-		DEFAULT => -78,
-		GOTOS => {
-			'perc_postcall' => 124,
-			'perc_code' => 118,
-			'perc_any' => 126,
-			'perc_cleanup' => 127,
-			'perc_catch' => 120,
-			'_function_metadata' => 128,
-			'perc_alias' => 123
-		}
+		DEFAULT => -109
 	},
 	{#State 306
 		ACTIONS => {
-			'p_any' => 3,
-			'p_alias' => 122,
-			'p_code' => 125,
-			'p_cleanup' => 119,
-			'p_postcall' => 121,
-			'p_catch' => 129
+			'p_any' => 99,
+			'p_name' => 21,
+			'CLCURLY' => 318
 		},
-		DEFAULT => -90,
 		GOTOS => {
-			'perc_postcall' => 124,
-			'perc_code' => 118,
-			'perc_any' => 126,
-			'perc_cleanup' => 127,
-			'perc_catch' => 120,
-			'_function_metadata' => 128,
-			'perc_alias' => 123
+			'perc_name' => 101,
+			'perc_any_arg' => 142
 		}
 	},
 	{#State 307
-		ACTIONS => {
-			'OPCURLY' => 137,
-			'OPSPECIAL' => 30,
-			'SEMICOLON' => 308
-		},
-		GOTOS => {
-			'simple_block' => 139,
-			'special_block' => 138,
-			'special_block_start' => 32
-		}
+		DEFAULT => -180
 	},
 	{#State 308
+		DEFAULT => -18
+	},
+	{#State 309
+		ACTIONS => {
+			'OPPAR' => 291
+		}
+	},
+	{#State 310
+		ACTIONS => {
+			'CLPAR' => 319
+		}
+	},
+	{#State 311
+		ACTIONS => {
+			'p_any' => 3
+		},
+		DEFAULT => -74,
+		GOTOS => {
+			'perc_any' => 321,
+			'_member_metadata' => 320
+		}
+	},
+	{#State 312
+		ACTIONS => {
+			'CLPAR' => 322
+		}
+	},
+	{#State 313
+		ACTIONS => {
+			'INTEGER' => 323
+		}
+	},
+	{#State 314
+		ACTIONS => {
+			'p_any' => 3,
+			'p_alias' => 128,
+			'p_code' => 131,
+			'p_cleanup' => 125,
+			'p_postcall' => 127,
+			'p_catch' => 135
+		},
+		DEFAULT => -100,
+		GOTOS => {
+			'perc_postcall' => 130,
+			'perc_code' => 124,
+			'perc_any' => 132,
+			'perc_cleanup' => 133,
+			'perc_catch' => 126,
+			'_function_metadata' => 134,
+			'perc_alias' => 129
+		}
+	},
+	{#State 315
+		ACTIONS => {
+			'CLCURLY' => 324
+		}
+	},
+	{#State 316
+		DEFAULT => -172
+	},
+	{#State 317
+		ACTIONS => {
+			'ID' => 28,
+			'INTEGER' => 222,
+			'QUOTED_STRING' => 224,
+			'DASH' => 226,
+			'FLOAT' => 225
+		},
+		GOTOS => {
+			'class_name' => 220,
+			'value' => 325
+		}
+	},
+	{#State 318
+		ACTIONS => {
+			'SEMICOLON' => 326
+		}
+	},
+	{#State 319
+		DEFAULT => -95,
+		GOTOS => {
+			'function_metadata' => 327
+		}
+	},
+	{#State 320
+		DEFAULT => -68
+	},
+	{#State 321
+		DEFAULT => -70
+	},
+	{#State 322
+		DEFAULT => -95,
+		GOTOS => {
+			'function_metadata' => 328
+		}
+	},
+	{#State 323
+		DEFAULT => -95,
+		GOTOS => {
+			'function_metadata' => 329
+		}
+	},
+	{#State 324
+		DEFAULT => -24,
+		GOTOS => {
+			'mixed_blocks' => 330
+		}
+	},
+	{#State 325
+		DEFAULT => -174
+	},
+	{#State 326
 		DEFAULT => -19
+	},
+	{#State 327
+		ACTIONS => {
+			'p_any' => 3,
+			'p_alias' => 128,
+			'p_code' => 131,
+			'p_cleanup' => 125,
+			'p_postcall' => 127,
+			'p_catch' => 135
+		},
+		DEFAULT => -91,
+		GOTOS => {
+			'perc_postcall' => 130,
+			'perc_code' => 124,
+			'perc_any' => 132,
+			'perc_cleanup' => 133,
+			'perc_catch' => 126,
+			'_function_metadata' => 134,
+			'perc_alias' => 129
+		}
+	},
+	{#State 328
+		ACTIONS => {
+			'p_any' => 3,
+			'p_alias' => 128,
+			'p_code' => 131,
+			'p_cleanup' => 125,
+			'p_postcall' => 127,
+			'p_catch' => 135
+		},
+		DEFAULT => -89,
+		GOTOS => {
+			'perc_postcall' => 130,
+			'perc_code' => 124,
+			'perc_any' => 132,
+			'perc_cleanup' => 133,
+			'perc_catch' => 126,
+			'_function_metadata' => 134,
+			'perc_alias' => 129
+		}
+	},
+	{#State 329
+		ACTIONS => {
+			'p_any' => 3,
+			'p_alias' => 128,
+			'p_code' => 131,
+			'p_cleanup' => 125,
+			'p_postcall' => 127,
+			'p_catch' => 135
+		},
+		DEFAULT => -101,
+		GOTOS => {
+			'perc_postcall' => 130,
+			'perc_code' => 124,
+			'perc_any' => 132,
+			'perc_cleanup' => 133,
+			'perc_catch' => 126,
+			'_function_metadata' => 134,
+			'perc_alias' => 129
+		}
+	},
+	{#State 330
+		ACTIONS => {
+			'OPCURLY' => 144,
+			'OPSPECIAL' => 33,
+			'SEMICOLON' => 331
+		},
+		GOTOS => {
+			'simple_block' => 146,
+			'special_block' => 145,
+			'special_block_start' => 35
+		}
+	},
+	{#State 331
+		DEFAULT => -21
 	}
 ],
                                   yyrules  =>
@@ -2550,129 +2708,131 @@ sub new {
 		 '$start', 2, undef
 	],
 	[#Rule 1
-		 'top_list', 1,
-sub
-#line 21 "XSP.yp"
-{ $_[1] ? [ $_[1] ] : [] }
+		 'top_list', 1, undef
 	],
 	[#Rule 2
 		 'top_list', 2,
 sub
 #line 22 "XSP.yp"
-{ push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+{ push @{$_[1]}, @{$_[2]}; $_[1] }
 	],
 	[#Rule 3
-		 'top', 1, undef
+		 'top_list', 4,
+sub
+#line 24 "XSP.yp"
+{ $_[3] }
 	],
 	[#Rule 4
-		 'top', 1, undef
-	],
-	[#Rule 5
-		 'top', 1, undef
-	],
-	[#Rule 6
-		 'top', 1, undef
-	],
-	[#Rule 7
 		 'top', 1,
 sub
-#line 26 "XSP.yp"
-{ $_[1]->resolve_typemaps; $_[1]->resolve_exceptions; $_[1] }
+#line 27 "XSP.yp"
+{ !$_[1]               ? [] :
+                          ref $_[1] eq 'ARRAY' ? $_[1] :
+                                                 [ $_[1] ] }
+	],
+	[#Rule 5
+		 '_top', 1, undef
+	],
+	[#Rule 6
+		 '_top', 1, undef
+	],
+	[#Rule 7
+		 '_top', 1, undef
 	],
 	[#Rule 8
-		 'directive', 2,
-sub
-#line 29 "XSP.yp"
-{ ExtUtils::XSpp::Node::Module->new( module => $_[1] ) }
+		 '_top', 1, undef
 	],
 	[#Rule 9
-		 'directive', 2,
+		 '_top', 1,
 sub
-#line 31 "XSP.yp"
-{ ExtUtils::XSpp::Node::Package->new( perl_name => $_[1] ) }
+#line 32 "XSP.yp"
+{ process_function( $_[0], $_[1] ) }
 	],
 	[#Rule 10
 		 'directive', 2,
 sub
-#line 33 "XSP.yp"
-{ ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
+#line 35 "XSP.yp"
+{ ExtUtils::XSpp::Node::Module->new( module => $_[1] ) }
 	],
 	[#Rule 11
 		 'directive', 2,
 sub
-#line 35 "XSP.yp"
-{ $_[0]->YYData->{PARSER}->load_plugin( $_[1] ); undef }
+#line 37 "XSP.yp"
+{ ExtUtils::XSpp::Node::Package->new( perl_name => $_[1] ) }
 	],
 	[#Rule 12
 		 'directive', 2,
 sub
-#line 37 "XSP.yp"
-{ $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
+#line 39 "XSP.yp"
+{ ExtUtils::XSpp::Node::File->new( file => $_[1] ) }
 	],
 	[#Rule 13
 		 'directive', 2,
 sub
-#line 39 "XSP.yp"
-{ add_top_level_directive( $_[0], @{$_[1]} ); undef }
+#line 41 "XSP.yp"
+{ $_[0]->YYData->{PARSER}->load_plugin( $_[1] ); undef }
 	],
 	[#Rule 14
-		 'directive', 1,
+		 'directive', 2,
 sub
-#line 40 "XSP.yp"
-{ }
+#line 43 "XSP.yp"
+{ $_[0]->YYData->{PARSER}->include_file( $_[1] ); undef }
 	],
 	[#Rule 15
-		 'directive', 1,
+		 'directive', 2,
 sub
-#line 41 "XSP.yp"
-{ }
+#line 45 "XSP.yp"
+{ add_top_level_directive( $_[0], %{$_[1][1]} ) }
 	],
 	[#Rule 16
-		 'typemap', 9,
+		 'directive', 1,
 sub
 #line 46 "XSP.yp"
-{ my $package = "ExtUtils::XSpp::Typemap::" . $_[6];
-                      my $type = $_[3]; my $c = 0;
+{ }
+	],
+	[#Rule 17
+		 'directive', 1,
+sub
+#line 47 "XSP.yp"
+{ }
+	],
+	[#Rule 18
+		 'typemap', 9,
+sub
+#line 52 "XSP.yp"
+{ my $c = 0;
                       my %args = map { "arg" . ++$c => $_ }
                                  map { join( '', @$_ ) }
                                      @{$_[8] || []};
-                      my $tm = $package->new( type => $type, %args );
-                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+                      add_typemap( $_[6], $_[3], %args );
                       undef }
 	],
-	[#Rule 17
+	[#Rule 19
 		 'typemap', 11,
 sub
-#line 56 "XSP.yp"
-{ my $package = "ExtUtils::XSpp::Typemap::" . $_[6];
-                      my $type = $_[3];
-                      # this assumes that there will be at most one named
+#line 60 "XSP.yp"
+{ # this assumes that there will be at most one named
                       # block for each directive inside the typemap
                       for( my $i = 1; $i <= $#{$_[9]}; $i += 2 ) {
                           $_[9][$i] = join "\n", @{$_[9][$i][0]}
                               if    ref( $_[9][$i] ) eq 'ARRAY'
                                  && ref( $_[9][$i][0] ) eq 'ARRAY';
                       }
-                      my $tm = $package->new( type => $type, @{$_[9]} );
-                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
+                      add_typemap( $_[6], $_[3], @{$_[9]} );
                       undef }
 	],
-	[#Rule 18
+	[#Rule 20
 		 'typemap', 5,
 sub
-#line 69 "XSP.yp"
-{ my $type = $_[3]; # add simple and reference typemaps for this type
-                      my $tm = ExtUtils::XSpp::Typemap::simple->new( type => $type );
-                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $type, $tm );
-                      my $reftype = make_ref($type->clone);
-                      $tm = ExtUtils::XSpp::Typemap::reference->new( type => $reftype );
-                      ExtUtils::XSpp::Typemap::add_typemap_for_type( $reftype, $tm );
+#line 70 "XSP.yp"
+{ add_typemap( 'simple', $_[3] );
+                      add_typemap( 'reference', make_ref($_[3]->clone) );
                       undef }
 	],
-	[#Rule 19
+	[#Rule 21
 		 'exceptionmap', 12,
 sub
-#line 81 "XSP.yp"
+#line 78 "XSP.yp"
 { my $package = "ExtUtils::XSpp::Exception::" . $_[9];
                       my $type = make_type($_[6]); my $c = 0;
                       my %args = map { "arg" . ++$c => $_ }
@@ -2682,227 +2842,221 @@ sub
                       ExtUtils::XSpp::Exception->add_exception( $e );
                       undef }
 	],
-	[#Rule 20
+	[#Rule 22
 		 'mixed_blocks', 2,
 sub
-#line 91 "XSP.yp"
+#line 88 "XSP.yp"
 { [ @{$_[1]}, $_[2] ] }
 	],
-	[#Rule 21
+	[#Rule 23
 		 'mixed_blocks', 2,
 sub
-#line 93 "XSP.yp"
+#line 90 "XSP.yp"
 { [ @{$_[1]}, [ $_[2] ] ] }
 	],
-	[#Rule 22
+	[#Rule 24
 		 'mixed_blocks', 0,
 sub
-#line 94 "XSP.yp"
+#line 91 "XSP.yp"
 { [] }
 	],
-	[#Rule 23
+	[#Rule 25
 		 'simple_block', 3,
 sub
-#line 97 "XSP.yp"
+#line 94 "XSP.yp"
 { $_[2] }
-	],
-	[#Rule 24
-		 'raw', 1,
-sub
-#line 99 "XSP.yp"
-{ add_data_raw( $_[0], [ $_[1] ] ) }
-	],
-	[#Rule 25
-		 'raw', 1,
-sub
-#line 100 "XSP.yp"
-{ add_data_comment( $_[0], $_[1] ) }
 	],
 	[#Rule 26
 		 'raw', 1,
 sub
-#line 101 "XSP.yp"
+#line 96 "XSP.yp"
+{ add_data_raw( $_[0], [ $_[1] ] ) }
+	],
+	[#Rule 27
+		 'raw', 1,
+sub
+#line 97 "XSP.yp"
+{ add_data_comment( $_[0], $_[1] ) }
+	],
+	[#Rule 28
+		 'raw', 1,
+sub
+#line 98 "XSP.yp"
 { ExtUtils::XSpp::Node::Preprocessor->new
                               ( rows   => [ $_[1][0] ],
                                 symbol => $_[1][1],
                                 ) }
 	],
-	[#Rule 27
+	[#Rule 29
 		 'raw', 1,
 sub
-#line 105 "XSP.yp"
+#line 102 "XSP.yp"
 { add_data_raw( $_[0], [ @{$_[1]} ] ) }
 	],
-	[#Rule 28
+	[#Rule 30
 		 'enum', 5,
 sub
-#line 109 "XSP.yp"
+#line 106 "XSP.yp"
 { ExtUtils::XSpp::Node::Enum->new
                 ( elements  => $_[3],
                   condition => $_[0]->get_conditional,
                   ) }
 	],
-	[#Rule 29
+	[#Rule 31
 		 'enum', 6,
 sub
-#line 114 "XSP.yp"
+#line 111 "XSP.yp"
 { ExtUtils::XSpp::Node::Enum->new
                 ( name      => $_[2],
                   elements  => $_[4],
                   condition => $_[0]->get_conditional,
                   ) }
 	],
-	[#Rule 30
+	[#Rule 32
 		 'enum_element_list', 0,
 sub
-#line 122 "XSP.yp"
+#line 119 "XSP.yp"
 { [] }
 	],
-	[#Rule 31
+	[#Rule 33
 		 'enum_element_list', 2,
 sub
-#line 124 "XSP.yp"
+#line 121 "XSP.yp"
 { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
 	],
-	[#Rule 32
+	[#Rule 34
 		 'enum_element_list', 3,
 sub
-#line 126 "XSP.yp"
+#line 123 "XSP.yp"
 { push @{$_[1]}, $_[2] if $_[2]; $_[1] }
 	],
-	[#Rule 33
+	[#Rule 35
 		 'enum_element', 1,
 sub
-#line 131 "XSP.yp"
+#line 128 "XSP.yp"
 { ExtUtils::XSpp::Node::EnumValue->new
                 ( name => $_[1],
                   condition => $_[0]->get_conditional,
                   ) }
 	],
-	[#Rule 34
+	[#Rule 36
 		 'enum_element', 3,
 sub
-#line 136 "XSP.yp"
+#line 133 "XSP.yp"
 { ExtUtils::XSpp::Node::EnumValue->new
                 ( name      => $_[1],
                   value     => $_[3],
                   condition => $_[0]->get_conditional,
                   ) }
 	],
-	[#Rule 35
+	[#Rule 37
 		 'enum_element', 1, undef
 	],
-	[#Rule 36
-		 'class', 2, undef
-	],
-	[#Rule 37
-		 'class', 2, undef
-	],
 	[#Rule 38
-		 'function', 2, undef
+		 'class', 2, undef
 	],
 	[#Rule 39
-		 'method', 2, undef
+		 'class', 2, undef
 	],
 	[#Rule 40
-		 'decorate_class', 2,
-sub
-#line 149 "XSP.yp"
-{ $_[2]->set_perl_name( $_[1] ); $_[2] }
+		 'function', 2, undef
 	],
 	[#Rule 41
+		 'method', 2, undef
+	],
+	[#Rule 42
+		 'member', 2, undef
+	],
+	[#Rule 43
+		 'decorate_class', 2,
+sub
+#line 147 "XSP.yp"
+{ $_[2]->set_perl_name( $_[1] ); $_[2] }
+	],
+	[#Rule 44
 		 'class_decl', 7,
 sub
-#line 152 "XSP.yp"
+#line 150 "XSP.yp"
 { create_class( $_[0], $_[2], $_[3], $_[4], $_[6],
                                 $_[0]->get_conditional ) }
 	],
-	[#Rule 42
+	[#Rule 45
 		 'base_classes', 2,
 sub
-#line 156 "XSP.yp"
+#line 154 "XSP.yp"
 { [ $_[2] ] }
 	],
-	[#Rule 43
+	[#Rule 46
 		 'base_classes', 3,
 sub
-#line 157 "XSP.yp"
+#line 155 "XSP.yp"
 { push @{$_[1]}, $_[3] if $_[3]; $_[1] }
 	],
-	[#Rule 44
+	[#Rule 47
 		 'base_classes', 0, undef
 	],
-	[#Rule 45
+	[#Rule 48
+		 'base_class', 2,
+sub
+#line 159 "XSP.yp"
+{ $_[2] }
+	],
+	[#Rule 49
+		 'base_class', 2,
+sub
+#line 160 "XSP.yp"
+{ $_[2] }
+	],
+	[#Rule 50
 		 'base_class', 2,
 sub
 #line 161 "XSP.yp"
 { $_[2] }
 	],
-	[#Rule 46
-		 'base_class', 2,
-sub
-#line 162 "XSP.yp"
-{ $_[2] }
-	],
-	[#Rule 47
-		 'base_class', 2,
-sub
-#line 163 "XSP.yp"
-{ $_[2] }
-	],
-	[#Rule 48
+	[#Rule 51
 		 'class_name_rename', 1,
 sub
-#line 167 "XSP.yp"
+#line 165 "XSP.yp"
 { create_class( $_[0], $_[1], [], [] ) }
 	],
-	[#Rule 49
+	[#Rule 52
 		 'class_name_rename', 2,
 sub
-#line 168 "XSP.yp"
+#line 166 "XSP.yp"
 { my $klass = create_class( $_[0], $_[2], [], [] );
                              $klass->set_perl_name( $_[1] );
                              $klass
                              }
 	],
-	[#Rule 50
-		 'class_metadata', 2,
-sub
-#line 174 "XSP.yp"
-{ [ @{$_[1]}, @{$_[2]} ] }
-	],
-	[#Rule 51
-		 'class_metadata', 2,
-sub
-#line 175 "XSP.yp"
-{ [ @{$_[1]}, @{$_[2]} ] }
-	],
-	[#Rule 52
-		 'class_metadata', 0,
-sub
-#line 176 "XSP.yp"
-{ [] }
-	],
 	[#Rule 53
-		 'class_body_list', 0,
+		 'class_metadata', 2,
 sub
-#line 180 "XSP.yp"
-{ [] }
+#line 172 "XSP.yp"
+{ [ @{$_[1]}, @{$_[2]} ] }
 	],
 	[#Rule 54
-		 'class_body_list', 2,
+		 'class_metadata', 2,
 sub
-#line 182 "XSP.yp"
-{ push @{$_[1]}, $_[2] if $_[2]; $_[1] }
+#line 173 "XSP.yp"
+{ [ @{$_[1]}, @{$_[2]} ] }
 	],
 	[#Rule 55
-		 'class_body_element', 1, undef
+		 'class_metadata', 0,
+sub
+#line 174 "XSP.yp"
+{ [] }
 	],
 	[#Rule 56
-		 'class_body_element', 1, undef
+		 'class_body_list', 0,
+sub
+#line 178 "XSP.yp"
+{ [] }
 	],
 	[#Rule 57
-		 'class_body_element', 1, undef
+		 'class_body_list', 2,
+sub
+#line 180 "XSP.yp"
+{ push @{$_[1]}, $_[2] if $_[2]; $_[1] }
 	],
 	[#Rule 58
 		 'class_body_element', 1, undef
@@ -2911,72 +3065,121 @@ sub
 		 'class_body_element', 1, undef
 	],
 	[#Rule 60
-		 'class_body_element', 2,
-sub
-#line 188 "XSP.yp"
-{ ExtUtils::XSpp::Node::PercAny->new( @{$_[1]} ) }
+		 'class_body_element', 1, undef
 	],
 	[#Rule 61
+		 'class_body_element', 1, undef
+	],
+	[#Rule 62
+		 'class_body_element', 1, undef
+	],
+	[#Rule 63
+		 'class_body_element', 1, undef
+	],
+	[#Rule 64
+		 'class_body_element', 2,
+sub
+#line 186 "XSP.yp"
+{ ExtUtils::XSpp::Node::PercAny->new( %{$_[1][1]} ) }
+	],
+	[#Rule 65
+		 'access_specifier', 2,
+sub
+#line 190 "XSP.yp"
+{ ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
+	],
+	[#Rule 66
+		 'access_specifier', 2,
+sub
+#line 191 "XSP.yp"
+{ ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
+	],
+	[#Rule 67
 		 'access_specifier', 2,
 sub
 #line 192 "XSP.yp"
 { ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
 	],
-	[#Rule 62
-		 'access_specifier', 2,
-sub
-#line 193 "XSP.yp"
-{ ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
-	],
-	[#Rule 63
-		 'access_specifier', 2,
-sub
-#line 194 "XSP.yp"
-{ ExtUtils::XSpp::Node::Access->new( access => $_[1] ) }
-	],
-	[#Rule 64
-		 'method_decl', 1, undef
-	],
-	[#Rule 65
-		 'method_decl', 1, undef
-	],
-	[#Rule 66
-		 'method_decl', 1, undef
-	],
-	[#Rule 67
-		 'method_decl', 1, undef
-	],
 	[#Rule 68
-		 'const', 1,
+		 'member_metadata', 2,
 sub
-#line 199 "XSP.yp"
-{ 1 }
+#line 195 "XSP.yp"
+{ [ @{$_[1]}, @{$_[2]} ] }
 	],
 	[#Rule 69
-		 'const', 0,
+		 'member_metadata', 0,
 sub
-#line 200 "XSP.yp"
-{ 0 }
+#line 196 "XSP.yp"
+{ [] }
 	],
 	[#Rule 70
-		 'virtual', 1, undef
+		 '_member_metadata', 1, undef
 	],
 	[#Rule 71
-		 'static', 1, undef
+		 'member_decl', 0, undef
 	],
 	[#Rule 72
-		 'static', 1, undef
+		 'member_decl', 1, undef
 	],
 	[#Rule 73
-		 'static', 1,
+		 'member_decl', 2,
 sub
-#line 206 "XSP.yp"
-{ 'package_static' }
+#line 204 "XSP.yp"
+{ $_[2]->set_perl_name( $_[1] ); $_[2] }
 	],
 	[#Rule 74
+		 'looks_like_member', 3,
+sub
+#line 208 "XSP.yp"
+{ create_member( $_[0],
+                           name      => $_[2],
+                           type      => $_[1],
+                           condition => $_[0]->get_conditional,
+                           @{$_[3]} ) }
+	],
+	[#Rule 75
+		 'method_decl', 1, undef
+	],
+	[#Rule 76
+		 'method_decl', 1, undef
+	],
+	[#Rule 77
+		 'method_decl', 1, undef
+	],
+	[#Rule 78
+		 'method_decl', 1, undef
+	],
+	[#Rule 79
+		 'const', 1,
+sub
+#line 216 "XSP.yp"
+{ 1 }
+	],
+	[#Rule 80
+		 'const', 0,
+sub
+#line 217 "XSP.yp"
+{ 0 }
+	],
+	[#Rule 81
+		 'virtual', 1, undef
+	],
+	[#Rule 82
+		 'static', 1, undef
+	],
+	[#Rule 83
+		 'static', 1, undef
+	],
+	[#Rule 84
+		 'static', 1,
+sub
+#line 223 "XSP.yp"
+{ 'package_static' }
+	],
+	[#Rule 85
 		 'looks_like_function', 6,
 sub
-#line 211 "XSP.yp"
+#line 228 "XSP.yp"
 {
               return { ret_type  => $_[1],
                        name      => $_[2],
@@ -2985,19 +3188,19 @@ sub
                        };
           }
 	],
-	[#Rule 75
+	[#Rule 86
 		 'looks_like_renamed_function', 1, undef
 	],
-	[#Rule 76
+	[#Rule 87
 		 'looks_like_renamed_function', 2,
 sub
-#line 222 "XSP.yp"
+#line 239 "XSP.yp"
 { $_[2]->{perl_name} = $_[1]; $_[2] }
 	],
-	[#Rule 77
+	[#Rule 88
 		 'function_decl', 2,
 sub
-#line 225 "XSP.yp"
+#line 242 "XSP.yp"
 { add_data_function( $_[0],
                                          name      => $_[1]->{name},
                                          perl_name => $_[1]->{perl_name},
@@ -3006,58 +3209,58 @@ sub
                                          condition => $_[0]->get_conditional,
                                          @{$_[2]} ) }
 	],
-	[#Rule 78
+	[#Rule 89
 		 'ctor', 5,
 sub
-#line 234 "XSP.yp"
+#line 251 "XSP.yp"
 { add_data_ctor( $_[0], name      => $_[1],
                                             arguments => $_[3],
                                             condition => $_[0]->get_conditional,
                                             @{ $_[5] } ) }
 	],
-	[#Rule 79
+	[#Rule 90
 		 'ctor', 2,
 sub
-#line 238 "XSP.yp"
+#line 255 "XSP.yp"
 { $_[2]->set_perl_name( $_[1] ); $_[2] }
 	],
-	[#Rule 80
+	[#Rule 91
 		 'dtor', 5,
 sub
-#line 241 "XSP.yp"
+#line 258 "XSP.yp"
 { add_data_dtor( $_[0], name  => $_[2],
                                             condition => $_[0]->get_conditional,
                                             @{ $_[5] },
                                       ) }
 	],
-	[#Rule 81
+	[#Rule 92
 		 'dtor', 2,
 sub
-#line 245 "XSP.yp"
+#line 262 "XSP.yp"
 { $_[2]->set_perl_name( $_[1] ); $_[2] }
 	],
-	[#Rule 82
+	[#Rule 93
 		 'dtor', 2,
 sub
-#line 246 "XSP.yp"
+#line 263 "XSP.yp"
 { $_[2]->set_virtual( 1 ); $_[2] }
 	],
-	[#Rule 83
+	[#Rule 94
 		 'function_metadata', 2,
 sub
-#line 248 "XSP.yp"
+#line 265 "XSP.yp"
 { [ @{$_[1]}, @{$_[2]} ] }
 	],
-	[#Rule 84
+	[#Rule 95
 		 'function_metadata', 0,
 sub
-#line 249 "XSP.yp"
+#line 266 "XSP.yp"
 { [] }
 	],
-	[#Rule 85
+	[#Rule 96
 		 'nmethod', 2,
 sub
-#line 254 "XSP.yp"
+#line 271 "XSP.yp"
 { my $m = add_data_method
                         ( $_[0],
                           name      => $_[1]->{name},
@@ -3071,25 +3274,25 @@ sub
             $m
           }
 	],
-	[#Rule 86
+	[#Rule 97
 		 'nmethod', 2,
 sub
-#line 267 "XSP.yp"
+#line 284 "XSP.yp"
 { $_[2]->set_static( $_[1] ); $_[2] }
 	],
-	[#Rule 87
+	[#Rule 98
 		 'vmethod', 1, undef
 	],
-	[#Rule 88
+	[#Rule 99
 		 'vmethod', 2,
 sub
-#line 272 "XSP.yp"
+#line 289 "XSP.yp"
 { $_[2]->set_perl_name( $_[1] ); $_[2] }
 	],
-	[#Rule 89
+	[#Rule 100
 		 '_vmethod', 3,
 sub
-#line 277 "XSP.yp"
+#line 294 "XSP.yp"
 { my $m = add_data_method
                         ( $_[0],
                           name      => $_[2]->{name},
@@ -3104,10 +3307,10 @@ sub
             $m
           }
 	],
-	[#Rule 90
+	[#Rule 101
 		 '_vmethod', 5,
 sub
-#line 291 "XSP.yp"
+#line 308 "XSP.yp"
 { my $m = add_data_method
                         ( $_[0],
                           name      => $_[2]->{name},
@@ -3123,403 +3326,436 @@ sub
             $m
           }
 	],
-	[#Rule 91
-		 '_function_metadata', 1, undef
-	],
-	[#Rule 92
-		 '_function_metadata', 1, undef
-	],
-	[#Rule 93
-		 '_function_metadata', 1, undef
-	],
-	[#Rule 94
-		 '_function_metadata', 1, undef
-	],
-	[#Rule 95
-		 '_function_metadata', 1, undef
-	],
-	[#Rule 96
-		 '_function_metadata', 1, undef
-	],
-	[#Rule 97
-		 'perc_name', 4,
-sub
-#line 315 "XSP.yp"
-{ $_[3] }
-	],
-	[#Rule 98
-		 'perc_alias', 6,
-sub
-#line 316 "XSP.yp"
-{ [ alias => [$_[3], $_[5]] ] }
-	],
-	[#Rule 99
-		 'perc_package', 4,
-sub
-#line 317 "XSP.yp"
-{ $_[3] }
-	],
-	[#Rule 100
-		 'perc_module', 4,
-sub
-#line 318 "XSP.yp"
-{ $_[3] }
-	],
-	[#Rule 101
-		 'perc_file', 4,
-sub
-#line 319 "XSP.yp"
-{ $_[3] }
-	],
 	[#Rule 102
-		 'perc_loadplugin', 4,
-sub
-#line 320 "XSP.yp"
-{ $_[3] }
+		 '_function_metadata', 1, undef
 	],
 	[#Rule 103
-		 'perc_include', 4,
-sub
-#line 321 "XSP.yp"
-{ $_[3] }
+		 '_function_metadata', 1, undef
 	],
 	[#Rule 104
-		 'perc_code', 2,
-sub
-#line 322 "XSP.yp"
-{ [ code => $_[2] ] }
+		 '_function_metadata', 1, undef
 	],
 	[#Rule 105
-		 'perc_cleanup', 2,
-sub
-#line 323 "XSP.yp"
-{ [ cleanup => $_[2] ] }
+		 '_function_metadata', 1, undef
 	],
 	[#Rule 106
-		 'perc_postcall', 2,
-sub
-#line 324 "XSP.yp"
-{ [ postcall => $_[2] ] }
+		 '_function_metadata', 1, undef
 	],
 	[#Rule 107
-		 'perc_catch', 4,
-sub
-#line 325 "XSP.yp"
-{ [ map {(catch => $_)} @{$_[3]} ] }
+		 '_function_metadata', 1, undef
 	],
 	[#Rule 108
-		 'perc_any', 4,
-sub
-#line 330 "XSP.yp"
-{ [ any => $_[1], any_named_arguments => $_[3] ] }
-	],
-	[#Rule 109
-		 'perc_any', 5,
+		 'perc_name', 4,
 sub
 #line 332 "XSP.yp"
-{ [ any => $_[1], any_positional_arguments  => [ $_[3], @{$_[5]} ] ] }
+{ $_[3] }
+	],
+	[#Rule 109
+		 'perc_alias', 6,
+sub
+#line 333 "XSP.yp"
+{ [ alias => [$_[3], $_[5]] ] }
 	],
 	[#Rule 110
-		 'perc_any', 3,
+		 'perc_package', 4,
 sub
 #line 334 "XSP.yp"
-{ [ any => $_[1], any_positional_arguments  => [ $_[2], @{$_[3]} ] ] }
+{ $_[3] }
 	],
 	[#Rule 111
-		 'perc_any', 1,
+		 'perc_module', 4,
 sub
-#line 336 "XSP.yp"
-{ [ any => $_[1] ] }
+#line 335 "XSP.yp"
+{ $_[3] }
 	],
 	[#Rule 112
-		 'perc_any_args', 1,
+		 'perc_file', 4,
 sub
-#line 340 "XSP.yp"
-{ $_[1] }
+#line 336 "XSP.yp"
+{ $_[3] }
 	],
 	[#Rule 113
-		 'perc_any_args', 2,
+		 'perc_loadplugin', 4,
 sub
-#line 341 "XSP.yp"
-{ [ @{$_[1]}, @{$_[2]} ] }
+#line 337 "XSP.yp"
+{ $_[3] }
 	],
 	[#Rule 114
-		 'perc_any_arg', 3,
+		 'perc_include', 4,
 sub
-#line 345 "XSP.yp"
-{ [ $_[1] => $_[2] ] }
+#line 338 "XSP.yp"
+{ $_[3] }
 	],
 	[#Rule 115
-		 'type', 2,
+		 'perc_code', 2,
 sub
-#line 349 "XSP.yp"
-{ make_const( $_[2] ) }
+#line 339 "XSP.yp"
+{ [ code => $_[2] ] }
 	],
 	[#Rule 116
-		 'type', 1, undef
+		 'perc_cleanup', 2,
+sub
+#line 340 "XSP.yp"
+{ [ cleanup => $_[2] ] }
 	],
 	[#Rule 117
-		 'nconsttype', 2,
+		 'perc_postcall', 2,
 sub
-#line 354 "XSP.yp"
-{ make_ptr( $_[1] ) }
+#line 341 "XSP.yp"
+{ [ postcall => $_[2] ] }
 	],
 	[#Rule 118
-		 'nconsttype', 2,
+		 'perc_catch', 4,
 sub
-#line 355 "XSP.yp"
-{ make_ref( $_[1] ) }
+#line 342 "XSP.yp"
+{ [ map {(catch => $_)} @{$_[3]} ] }
 	],
 	[#Rule 119
-		 'nconsttype', 1,
+		 'perc_any', 4,
 sub
-#line 356 "XSP.yp"
-{ make_type( $_[1] ) }
+#line 347 "XSP.yp"
+{ [ tag => { any => $_[1], named => $_[3] } ] }
 	],
 	[#Rule 120
-		 'nconsttype', 1, undef
+		 'perc_any', 5,
+sub
+#line 349 "XSP.yp"
+{ [ tag => { any => $_[1], positional  => [ $_[3], @{$_[5]} ] } ] }
 	],
 	[#Rule 121
-		 'type_name', 1, undef
+		 'perc_any', 3,
+sub
+#line 351 "XSP.yp"
+{ [ tag => { any => $_[1], positional  => [ $_[2], @{$_[3]} ] } ] }
 	],
 	[#Rule 122
-		 'type_name', 1, undef
+		 'perc_any', 1,
+sub
+#line 353 "XSP.yp"
+{ [ tag => { any => $_[1] } ] }
 	],
 	[#Rule 123
-		 'type_name', 1,
+		 'perc_any_args', 1,
 sub
-#line 363 "XSP.yp"
-{ 'unsigned int' }
+#line 357 "XSP.yp"
+{ $_[1] }
 	],
 	[#Rule 124
-		 'type_name', 2,
+		 'perc_any_args', 2,
 sub
-#line 364 "XSP.yp"
-{ 'unsigned' . ' ' . $_[2] }
+#line 358 "XSP.yp"
+{ [ @{$_[1]}, @{$_[2]} ] }
 	],
 	[#Rule 125
-		 'basic_type', 1, undef
+		 'perc_any_arg', 3,
+sub
+#line 362 "XSP.yp"
+{ [ $_[1] => $_[2] ] }
 	],
 	[#Rule 126
-		 'basic_type', 1, undef
+		 'perc_any_arg', 2,
+sub
+#line 363 "XSP.yp"
+{ [ name  => $_[1] ] }
 	],
 	[#Rule 127
-		 'basic_type', 1, undef
+		 'type', 2,
+sub
+#line 367 "XSP.yp"
+{ make_const( $_[2] ) }
 	],
 	[#Rule 128
-		 'basic_type', 1, undef
+		 'type', 1, undef
 	],
 	[#Rule 129
-		 'basic_type', 2, undef
+		 'nconsttype', 2,
+sub
+#line 372 "XSP.yp"
+{ make_ptr( $_[1] ) }
 	],
 	[#Rule 130
-		 'basic_type', 2, undef
+		 'nconsttype', 2,
+sub
+#line 373 "XSP.yp"
+{ make_ref( $_[1] ) }
 	],
 	[#Rule 131
-		 'template', 4,
-sub
-#line 370 "XSP.yp"
-{ make_template( $_[1], $_[3] ) }
-	],
-	[#Rule 132
-		 'type_list', 1,
+		 'nconsttype', 1,
 sub
 #line 374 "XSP.yp"
-{ [ $_[1] ] }
+{ make_type( $_[1] ) }
+	],
+	[#Rule 132
+		 'nconsttype', 1, undef
 	],
 	[#Rule 133
-		 'type_list', 3,
-sub
-#line 375 "XSP.yp"
-{ push @{$_[1]}, $_[3]; $_[1] }
+		 'type_name', 1, undef
 	],
 	[#Rule 134
-		 'class_name', 1, undef
+		 'type_name', 1, undef
 	],
 	[#Rule 135
-		 'class_name', 2,
-sub
-#line 379 "XSP.yp"
-{ $_[1] . '::' . $_[2] }
+		 'type_name', 1, undef
 	],
 	[#Rule 136
-		 'class_name_list', 1,
+		 'type_name', 1,
 sub
 #line 382 "XSP.yp"
-{ [ $_[1] ] }
+{ 'unsigned int' }
 	],
 	[#Rule 137
-		 'class_name_list', 3,
+		 'type_name', 2,
 sub
 #line 383 "XSP.yp"
-{ push @{$_[1]}, $_[3]; $_[1] }
+{ 'unsigned' . ' ' . $_[2] }
 	],
 	[#Rule 138
-		 'class_suffix', 2,
-sub
-#line 386 "XSP.yp"
-{ $_[2] }
+		 'basic_type', 1, undef
 	],
 	[#Rule 139
-		 'class_suffix', 3,
-sub
-#line 387 "XSP.yp"
-{ $_[1] . '::' . $_[3] }
+		 'basic_type', 1, undef
 	],
 	[#Rule 140
-		 'file_name', 1,
-sub
-#line 389 "XSP.yp"
-{ '-' }
+		 'basic_type', 1, undef
 	],
 	[#Rule 141
-		 'file_name', 3,
-sub
-#line 390 "XSP.yp"
-{ $_[1] . '.' . $_[3] }
+		 'basic_type', 1, undef
 	],
 	[#Rule 142
-		 'file_name', 3,
-sub
-#line 391 "XSP.yp"
-{ $_[1] . '/' . $_[3] }
+		 'basic_type', 2, undef
 	],
 	[#Rule 143
-		 'arg_list', 1,
+		 'basic_type', 2, undef
+	],
+	[#Rule 144
+		 'template', 4,
+sub
+#line 389 "XSP.yp"
+{ make_template( $_[1], $_[3] ) }
+	],
+	[#Rule 145
+		 'type_list', 1,
 sub
 #line 393 "XSP.yp"
 { [ $_[1] ] }
 	],
-	[#Rule 144
-		 'arg_list', 3,
+	[#Rule 146
+		 'type_list', 3,
 sub
 #line 394 "XSP.yp"
 { push @{$_[1]}, $_[3]; $_[1] }
 	],
-	[#Rule 145
-		 'arg_list', 0, undef
-	],
-	[#Rule 146
-		 'argument', 5,
-sub
-#line 398 "XSP.yp"
-{ make_argument( @_[0, 1], "length($_[4])" ) }
-	],
 	[#Rule 147
-		 'argument', 4,
-sub
-#line 400 "XSP.yp"
-{ make_argument( @_[0, 1, 2, 4] ) }
+		 'class_name', 1, undef
 	],
 	[#Rule 148
-		 'argument', 2,
+		 'class_name', 2,
 sub
-#line 401 "XSP.yp"
-{ make_argument( @_ ) }
+#line 398 "XSP.yp"
+{ $_[1] . '::' . $_[2] }
 	],
 	[#Rule 149
-		 'value', 1, undef
+		 'class_name_list', 1,
+sub
+#line 401 "XSP.yp"
+{ [ $_[1] ] }
 	],
 	[#Rule 150
-		 'value', 2,
+		 'class_name_list', 3,
 sub
-#line 404 "XSP.yp"
-{ '-' . $_[2] }
+#line 402 "XSP.yp"
+{ push @{$_[1]}, $_[3]; $_[1] }
 	],
 	[#Rule 151
-		 'value', 1, undef
-	],
-	[#Rule 152
-		 'value', 1, undef
-	],
-	[#Rule 153
-		 'value', 1, undef
-	],
-	[#Rule 154
-		 'value', 4,
+		 'class_suffix', 2,
 sub
-#line 408 "XSP.yp"
-{ "$_[1]($_[3])" }
-	],
-	[#Rule 155
-		 'value_list', 1, undef
-	],
-	[#Rule 156
-		 'value_list', 3,
-sub
-#line 413 "XSP.yp"
-{ "$_[1], $_[2]" }
-	],
-	[#Rule 157
-		 'value_list', 0,
-sub
-#line 414 "XSP.yp"
-{ "" }
-	],
-	[#Rule 158
-		 'expression', 1, undef
-	],
-	[#Rule 159
-		 'expression', 3,
-sub
-#line 420 "XSP.yp"
-{ "$_[1] & $_[3]" }
-	],
-	[#Rule 160
-		 'expression', 3,
-sub
-#line 422 "XSP.yp"
-{ "$_[1] | $_[3]" }
-	],
-	[#Rule 161
-		 'special_blocks', 1,
-sub
-#line 426 "XSP.yp"
-{ [ $_[1] ] }
-	],
-	[#Rule 162
-		 'special_blocks', 2,
-sub
-#line 428 "XSP.yp"
-{ [ @{$_[1]}, $_[2] ] }
-	],
-	[#Rule 163
-		 'special_blocks', 0, undef
-	],
-	[#Rule 164
-		 'special_block', 3,
-sub
-#line 432 "XSP.yp"
+#line 405 "XSP.yp"
 { $_[2] }
 	],
-	[#Rule 165
-		 'special_block', 2,
+	[#Rule 152
+		 'class_suffix', 3,
 sub
-#line 434 "XSP.yp"
-{ [] }
+#line 406 "XSP.yp"
+{ $_[1] . '::' . $_[3] }
 	],
-	[#Rule 166
-		 'special_block_start', 1,
+	[#Rule 153
+		 'file_name', 1,
 sub
-#line 437 "XSP.yp"
-{ push_lex_mode( $_[0], 'special' ) }
+#line 408 "XSP.yp"
+{ '-' }
 	],
-	[#Rule 167
-		 'special_block_end', 1,
+	[#Rule 154
+		 'file_name', 3,
 sub
-#line 439 "XSP.yp"
-{ pop_lex_mode( $_[0], 'special' ) }
+#line 409 "XSP.yp"
+{ $_[1] . '.' . $_[3] }
 	],
-	[#Rule 168
-		 'lines', 1,
+	[#Rule 155
+		 'file_name', 3,
 sub
-#line 441 "XSP.yp"
+#line 410 "XSP.yp"
+{ $_[1] . '/' . $_[3] }
+	],
+	[#Rule 156
+		 'arg_list', 1, undef
+	],
+	[#Rule 157
+		 'arg_list', 1,
+sub
+#line 413 "XSP.yp"
+{ undef }
+	],
+	[#Rule 158
+		 'nonvoid_arg_list', 1,
+sub
+#line 416 "XSP.yp"
 { [ $_[1] ] }
 	],
+	[#Rule 159
+		 'nonvoid_arg_list', 3,
+sub
+#line 417 "XSP.yp"
+{ push @{$_[1]}, $_[3]; $_[1] }
+	],
+	[#Rule 160
+		 'nonvoid_arg_list', 0, undef
+	],
+	[#Rule 161
+		 'argument_metadata', 2,
+sub
+#line 420 "XSP.yp"
+{ [ @{$_[1]}, @{$_[2]} ] }
+	],
+	[#Rule 162
+		 'argument_metadata', 0,
+sub
+#line 421 "XSP.yp"
+{ [] }
+	],
+	[#Rule 163
+		 '_argument_metadata', 1, undef
+	],
+	[#Rule 164
+		 'argument', 5,
+sub
+#line 427 "XSP.yp"
+{ make_argument( @_[0, 1], "length($_[4])" ) }
+	],
+	[#Rule 165
+		 'argument', 5,
+sub
+#line 429 "XSP.yp"
+{ make_argument( @_[0, 1, 2, 5], @{$_[3]} ) }
+	],
+	[#Rule 166
+		 'argument', 3,
+sub
+#line 431 "XSP.yp"
+{ make_argument( @_[0, 1, 2], undef, @{$_[3]} ) }
+	],
+	[#Rule 167
+		 'value', 1, undef
+	],
+	[#Rule 168
+		 'value', 2,
+sub
+#line 434 "XSP.yp"
+{ '-' . $_[2] }
+	],
 	[#Rule 169
+		 'value', 1, undef
+	],
+	[#Rule 170
+		 'value', 1, undef
+	],
+	[#Rule 171
+		 'value', 1, undef
+	],
+	[#Rule 172
+		 'value', 4,
+sub
+#line 438 "XSP.yp"
+{ "$_[1]($_[3])" }
+	],
+	[#Rule 173
+		 'value_list', 1, undef
+	],
+	[#Rule 174
+		 'value_list', 3,
+sub
+#line 443 "XSP.yp"
+{ "$_[1], $_[2]" }
+	],
+	[#Rule 175
+		 'value_list', 0,
+sub
+#line 444 "XSP.yp"
+{ "" }
+	],
+	[#Rule 176
+		 'expression', 1, undef
+	],
+	[#Rule 177
+		 'expression', 3,
+sub
+#line 450 "XSP.yp"
+{ "$_[1] & $_[3]" }
+	],
+	[#Rule 178
+		 'expression', 3,
+sub
+#line 452 "XSP.yp"
+{ "$_[1] | $_[3]" }
+	],
+	[#Rule 179
+		 'special_blocks', 1,
+sub
+#line 456 "XSP.yp"
+{ [ $_[1] ] }
+	],
+	[#Rule 180
+		 'special_blocks', 2,
+sub
+#line 458 "XSP.yp"
+{ [ @{$_[1]}, $_[2] ] }
+	],
+	[#Rule 181
+		 'special_blocks', 0, undef
+	],
+	[#Rule 182
+		 'special_block', 3,
+sub
+#line 462 "XSP.yp"
+{ $_[2] }
+	],
+	[#Rule 183
+		 'special_block', 2,
+sub
+#line 464 "XSP.yp"
+{ [] }
+	],
+	[#Rule 184
+		 'special_block_start', 1,
+sub
+#line 467 "XSP.yp"
+{ push_lex_mode( $_[0], 'special' ) }
+	],
+	[#Rule 185
+		 'special_block_end', 1,
+sub
+#line 469 "XSP.yp"
+{ pop_lex_mode( $_[0], 'special' ) }
+	],
+	[#Rule 186
+		 'lines', 1,
+sub
+#line 471 "XSP.yp"
+{ [ $_[1] ] }
+	],
+	[#Rule 187
 		 'lines', 2,
 sub
-#line 442 "XSP.yp"
+#line 472 "XSP.yp"
 { push @{$_[1]}, $_[2]; $_[1] }
 	]
 ],
@@ -3527,7 +3763,7 @@ sub
     bless($self,$class);
 }
 
-#line 444 "XSP.yp"
+#line 474 "XSP.yp"
 
 
 use ExtUtils::XSpp::Lexer;

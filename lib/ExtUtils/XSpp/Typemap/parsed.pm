@@ -8,13 +8,30 @@ sub init {
   my $this = shift;
   my %args = @_;
 
+  if( my $base = $args{base} ) {
+    %args = ( cpp_type => $base->{CPP_TYPE},
+              call_function_code => $base->{CALL_FUNCTION_CODE},
+              output_code => $base->{OUTPUT_CODE},
+              cleanup_code => $base->{CLEANUP_CODE},
+              precall_code => $base->{PRECALL_CODE},
+              output_list => $base->{OUTPUT_LIST},
+              xs_type => $base->{XS_TYPE},
+              xs_input_code => $base->{XS_INPUT_CODE},
+              xs_output_code => $base->{XS_OUTPUT_CODE},
+              %args );
+  }
+
   $this->{TYPE} = $args{type};
+  $this->{NAME} = $args{name};
   $this->{CPP_TYPE} = $args{cpp_type} || $args{arg1};
   $this->{CALL_FUNCTION_CODE} = _dl( $args{call_function_code} || $args{arg2} );
   $this->{OUTPUT_CODE} = _dl( $args{output_code} || $args{arg3} );
   $this->{CLEANUP_CODE} = _dl( $args{cleanup_code} || $args{arg4} );
   $this->{PRECALL_CODE} = _dl( $args{precall_code} || $args{arg5} );
   $this->{OUTPUT_LIST} = _dl( $args{output_list} );
+  $this->{XS_TYPE} = $args{xs_type};
+  $this->{XS_INPUT_CODE} = $args{xs_input_code};
+  $this->{XS_OUTPUT_CODE} = $args{xs_output_code};
 }
 
 sub cpp_type { $_[0]->{CPP_TYPE} || $_[0]->{TYPE}->print }

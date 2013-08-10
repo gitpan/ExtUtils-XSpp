@@ -17,7 +17,7 @@ class Foo : public Moo
     void foo();
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -52,7 +52,7 @@ class Foo : public %name{PlMoo} Moo, public Boo
     void foo();
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

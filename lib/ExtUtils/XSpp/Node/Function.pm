@@ -53,10 +53,17 @@ sub init {
   $this->{CATCH}     = $args{catch};
   $this->{CONDITION} = $args{condition};
   $this->{ALIAS}     = $args{alias};
+  $this->{TAGS}      = $args{tags};
   $this->{EMIT_CONDITION} = $args{emit_condition};
 
-  if (ref($this->{CATCH})
-      and @{$this->{CATCH}} > 1
+  my $index = 0;
+  foreach my $arg ( @{$this->{ARGUMENTS}} ) {
+      $arg->{FUNCTION} = $this;
+      $arg->{INDEX} = $index;
+      ++$index;
+  }
+
+  if (@{$this->catch} > 1
       and grep {$_ eq 'nothing'} @{$this->{CATCH}})
   {
     Carp::croak( ref($this) . " '" . $this->{CPP_NAME}
@@ -77,14 +84,15 @@ and stores a reference to those objects.
 
 sub resolve_typemaps {
   my $this = shift;
+  my $index = 0;
 
   if( $this->ret_type ) {
-    $this->{TYPEMAPS}{RET_TYPE} =
+    $this->{TYPEMAPS}{RET_TYPE} ||=
       ExtUtils::XSpp::Typemap::get_typemap_for_type( $this->ret_type );
   }
   foreach my $a ( @{$this->arguments} ) {
-    my $t = ExtUtils::XSpp::Typemap::get_typemap_for_type( $a->type );
-    push @{$this->{TYPEMAPS}{ARGUMENTS}}, $t;
+    $this->{TYPEMAPS}{ARGUMENTS}[$index++] ||=
+      ExtUtils::XSpp::Typemap::get_typemap_for_type( $a->type );
   }
 }
 
@@ -99,7 +107,7 @@ the C<%catch> directives associated with this function.
 sub resolve_exceptions {
   my $this = shift;
 
-  my @catch = @{$this->{CATCH} || []};
+  my @catch = @{$this->catch};
 
   my @exceptions;
 
@@ -144,13 +152,12 @@ sub add_exception_handlers {
   my $this = shift;
 
   # ignore class %catch'es if overridden with "nothing" in the method
-  if ($this->{CATCH} and @{$this->{CATCH}} == 1
-      and $this->{CATCH} eq 'nothing') {
+  if (@{$this->catch} == 1 and $this->{CATCH}[0] eq 'nothing') {
     return();
   }
 
   # ignore class %catch{nothing} if overridden in the method
-  if (@_ == 1 and $_[0] eq 'nothing' and @{$this->{CATCH}}) {
+  if (@_ == 1 and $_[0] eq 'nothing' and @{$this->catch}) {
     return();
   }
 
@@ -524,6 +531,7 @@ sub cleanup { $_[0]->{CLEANUP} }
 sub postcall { $_[0]->{POSTCALL} }
 sub catch { $_[0]->{CATCH} ? $_[0]->{CATCH} : [] }
 sub aliases { $_[0]->{ALIAS} ? $_[0]->{ALIAS} : {} }
+sub tags { $_[0]->{TAGS} }
 
 =head2 set_static
 
@@ -550,5 +558,51 @@ can be invoked as:
 sub set_static { $_[0]->{STATIC} = $_[1] }
 sub package_static { ( $_[0]->{STATIC} || '' ) eq 'package_static' }
 sub class_static { ( $_[0]->{STATIC} || '' ) eq 'class_static' }
+
+=head2 ret_typemap
+
+Returns the typemap for the return value of the function.
+
+=head2 set_ret_typemap( typemap )
+
+Sets the typemap for the return value of the function.
+
+=head2 arg_typemap( index )
+
+Returns the typemap for one function arguments.
+
+=head2 set_arg_typemap( index, typemap )
+
+Sets the typemap for one function argument.
+
+=cut
+
+sub ret_typemap {
+  my ($this) = @_;
+
+  die "Typemap not available yet" unless $this->{TYPEMAPS}{RET_TYPE};
+  return $this->{TYPEMAPS}{RET_TYPE};
+}
+
+sub set_ret_typemap {
+  my ($this, $typemap) = @_;
+
+  $this->{TYPEMAPS}{RET_TYPE} = $typemap;
+}
+
+sub arg_typemap {
+  my ($this, $index) = @_;
+
+  die "Invalid index" unless $index < @{$this->{ARGUMENTS}};
+  die "Typemap not available yet" unless $this->{TYPEMAPS}{ARGUMENTS};
+  return $this->{TYPEMAPS}{ARGUMENTS}[$index];
+}
+
+sub set_arg_typemap {
+  my ($this, $index, $typemap) = @_;
+
+  die "Invalid index" unless $index < @{$this->{ARGUMENTS}};
+  $this->{TYPEMAPS}{ARGUMENTS}[$index] = $typemap;
+}
 
 1;

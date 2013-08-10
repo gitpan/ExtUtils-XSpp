@@ -17,7 +17,7 @@ __DATA__
 int foo(int a);
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -44,7 +44,7 @@ int foo(int a)
   %catch{myException};
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -87,7 +87,7 @@ class Foo {
 };
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -169,7 +169,7 @@ int foo(int a)
   %catch{myException};
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -197,7 +197,7 @@ int foo(int a)
   %catch{myException};
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -232,7 +232,7 @@ int foo(int a)
   %catch{myException};
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -274,7 +274,7 @@ class Foo %catch{myException, myException3} {
 };
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -315,7 +315,7 @@ class Foo %catch{myException, myException3} {
 };
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -365,7 +365,7 @@ class Foo %catch{nothing} {
 };
 
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

@@ -17,7 +17,7 @@ __DATA__
 Straight to XS, no checks...
 %}
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -39,7 +39,7 @@ Straight to XS, no checks...
     int foo(int a);
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

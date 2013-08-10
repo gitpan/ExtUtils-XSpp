@@ -22,16 +22,12 @@ text
 
 int foo( int a, int b, int c );
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
 
 MODULE=Foo PACKAGE=Foo
-
-
-#include <exception>
-
 
 int
 foo( int a, int b, int c )
@@ -61,7 +57,7 @@ text
 
 int foo( int a, int b, int c );
 --- expected
-#include <exception>
+# XSP preamble
 
 
 
@@ -79,7 +75,7 @@ int bar( int x );
 
 int foo( int a, int b, int c );
 --- expected
-#include <exception>
+# XSP preamble
 
 
 int

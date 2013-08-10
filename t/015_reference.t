@@ -17,7 +17,7 @@ class Foo
     void foo( Foo& a );
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
@@ -46,7 +46,7 @@ class Foo
     Foo& foo();
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo

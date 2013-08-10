@@ -17,7 +17,7 @@ class Foo
     package_static int foo(int a);
 };
 --- expected
-#include <exception>
+# XSP preamble
 
 
 MODULE=Foo
