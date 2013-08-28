@@ -37,7 +37,7 @@
    "provides" : {
       "ExtUtils::XSpp" : {
          "file" : "lib/ExtUtils/XSpp.pm",
-         "version" : "0.17_01"
+         "version" : "0.17_02"
       },
       "ExtUtils::XSpp::Cmd" : {
          "file" : "lib/ExtUtils/XSpp/Cmd.pm",
@@ -198,5 +198,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.17_01"
+   "version" : "0.17_02"
 }

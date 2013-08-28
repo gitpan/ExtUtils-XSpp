@@ -47,6 +47,7 @@ sub init {
   $this->{ARGUMENTS} = $args{arguments} || [];
   $this->{RET_TYPE}  = $args{ret_type};
   $this->{CODE}      = $args{code};
+  $this->{CALL_CODE} = $args{call_code};
   $this->{CLEANUP}   = $args{cleanup};
   $this->{POSTCALL}  = $args{postcall};
   $this->{CLASS}     = $args{class};
@@ -136,6 +137,12 @@ sub resolve_exceptions {
     ExtUtils::XSpp::Exception::unknown->new( name => '', type => '' );
 
   $this->{EXCEPTIONS} = \@exceptions;
+}
+
+sub disable_exceptions {
+  my $this = shift;
+
+  $this->{EXCEPTIONS} = [];
 }
 
 =head2 add_exception_handlers
@@ -257,7 +264,9 @@ sub print {
   my $ppcode = $has_ret && $ret_typemap->output_list( '' ) ? 1 : 0;
   my $code_type = $ppcode ? "PPCODE" : "CODE";
   my $ccode = $this->_call_code( $call_arg_list );
-  if ($this->isa('ExtUtils::XSpp::Node::Destructor')) {
+  if ($this->{CALL_CODE}) {
+    $ccode = join( "\n", @{$this->{CALL_CODE}} );
+  } elsif ($this->isa('ExtUtils::XSpp::Node::Destructor')) {
     $ccode = 'delete THIS';
     $has_ret = 0;
   } elsif( $has_ret && defined $ret_typemap->call_function_code( '', '' ) ) {
@@ -272,12 +281,13 @@ sub print {
     $ccode = $this->_generate_alias_conditionals($call_arg_list, 0); # 0 == no RETVAL
   }
 
+  my @catchers = @{$this->{EXCEPTIONS}};
   $code .= "  $code_type:\n";
-  $code .= "    try {\n";
+  $code .= "    try {\n" if @catchers;
   if ($precall) {
     $code .= '      ' . $precall;
   }
-  $code .= '      ' . $ccode . ";\n";
+  $code .= (@catchers ? '  ' : '') . '    ' . $ccode . ";\n";
   if( $has_ret && defined $ret_typemap->output_code( '', '' ) ) {
     my $retcode = $ret_typemap->output_code( 'ST(0)', 'RETVAL' );
     $code .= '      ' . $retcode . ";\n";
@@ -286,8 +296,7 @@ sub print {
     my $retcode = $ret_typemap->output_list( 'RETVAL' );
     $code .= '      ' . $retcode . ";\n";
   }
-  $code .= "    }\n";
-  my @catchers = @{$this->{EXCEPTIONS}};
+  $code .= "    }\n" if @catchers;
   foreach my $exception_handler (@catchers) {
     my $handler_code = $exception_handler->handler_code;
     $code .= $handler_code;
@@ -303,8 +312,6 @@ sub print {
 
   if( $this->code ) {
     $code = "  $code_type:\n    " . join( "\n", @{$this->code} ) . "\n";
-    # cleanup potential multiple newlines because they break XSUBs
-    $code =~ s/^\s*\z//m;
     $output = "  OUTPUT: RETVAL\n" if $code =~ m/\bRETVAL\b/;
   }
   if( $this->postcall ) {
@@ -332,7 +339,12 @@ EOT
 
   my $head = "$retstr\n"
              . "$fname($arg_list)\n";
-  my $body = $alias . $init . $code . $postcall . $output . $cleanup . "\n";
+  my $body = $alias . $init . $code . $postcall . $output . $cleanup;
+
+  # cleanup potential multiple newlines because they break XSUBs
+  $body =~ s/^\s*\n//mg;
+  $body .= "\n";
+
   $this->_munge_code(\$body) if $this->has_argument_with_length;
 
   $out .= $head . $body;
