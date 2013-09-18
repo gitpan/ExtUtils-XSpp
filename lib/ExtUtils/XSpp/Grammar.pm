@@ -655,8 +655,8 @@ sub new {
 			"class" => 9,
 			"short" => 18,
 			"void" => 19,
-			"const" => 11,
 			"unsigned" => 50,
+			"const" => 11,
 			"long" => 23,
 			"int" => 40,
 			"char" => 27
@@ -783,8 +783,8 @@ sub new {
 	},
 	{#State 30
 		ACTIONS => {
-			'STAR' => 77,
-			'AMP' => 76
+			'AMP' => 76,
+			'STAR' => 77
 		},
 		DEFAULT => -128
 	},
@@ -986,8 +986,8 @@ sub new {
 	},
 	{#State 64
 		ACTIONS => {
-			'STAR' => 77,
-			'AMP' => 76
+			'AMP' => 76,
+			'STAR' => 77
 		},
 		DEFAULT => -127
 	},
@@ -1277,8 +1277,8 @@ sub new {
 			'ID' => 28,
 			"short" => 18,
 			"void" => 160,
-			"const" => 11,
 			"unsigned" => 50,
+			"const" => 11,
 			"long" => 23,
 			"int" => 40,
 			"char" => 27
@@ -2065,8 +2065,8 @@ sub new {
 			'looks_like_member' => 281,
 			'_vmethod' => 261,
 			'dtor' => 284,
-			'vmethod' => 282,
-			'type' => 247
+			'type' => 247,
+			'vmethod' => 282
 		}
 	},
 	{#State 236
@@ -2233,8 +2233,8 @@ sub new {
 			'ID' => 28,
 			'INTEGER' => 222,
 			'QUOTED_STRING' => 224,
-			'DASH' => 226,
-			'FLOAT' => 225
+			'FLOAT' => 225,
+			'DASH' => 226
 		},
 		DEFAULT => -175,
 		GOTOS => {
@@ -2390,8 +2390,8 @@ sub new {
 			'ID' => 28,
 			"short" => 18,
 			"void" => 160,
-			"const" => 11,
 			"unsigned" => 50,
+			"const" => 11,
 			"long" => 23,
 			"int" => 40,
 			"char" => 27

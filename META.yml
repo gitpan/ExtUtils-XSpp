@@ -8,7 +8,7 @@ build_requires:
 configure_requires:
   Module::Build: 0.40
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4007, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -17,7 +17,7 @@ name: ExtUtils-XSpp
 provides:
   ExtUtils::XSpp:
     file: lib/ExtUtils/XSpp.pm
-    version: 0.17_02
+    version: 0.18
   ExtUtils::XSpp::Cmd:
     file: lib/ExtUtils/XSpp/Cmd.pm
     version: 0
@@ -139,4 +139,4 @@ requires:
   perl: v5.6.1
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.17_02
+version: 0.18
